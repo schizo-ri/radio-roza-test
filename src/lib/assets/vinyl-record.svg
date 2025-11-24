@@ -1,0 +1,20 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Main record disc -->
+  <circle cx="100" cy="100" r="95" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+
+  <!-- Groove rings -->
+  <circle cx="100" cy="100" r="80" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.3"/>
+  <circle cx="100" cy="100" r="65" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.3"/>
+  <circle cx="100" cy="100" r="50" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.3"/>
+  <circle cx="100" cy="100" r="35" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.3"/>
+
+  <!-- Label area -->
+  <circle cx="100" cy="100" r="25" fill="#8B0000" stroke="#ffffff" stroke-width="0.5"/>
+
+  <!-- Center hole -->
+  <circle cx="100" cy="100" r="8" fill="#000000"/>
+
+  <!-- Label text (optional) -->
+  <text x="100" y="95" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#ffffff" opacity="0.8">VINYL</text>
+  <text x="100" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-size="6" fill="#ffffff" opacity="0.6">RECORD</text>
+</svg>
