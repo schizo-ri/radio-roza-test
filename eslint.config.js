@@ -26,6 +26,14 @@ export default [
   {
     files: ['**/*.svelte', '**/*.svelte.js'],
     languageOptions: { parserOptions: { svelteConfig } },
+    rules: {
+      'svelte/no-navigation-without-resolve': [
+        'error',
+        {
+          ignoreLinks: true, // Allow <a> tags without resolve() for external links
+        },
+      ],
+    },
   },
   ...storybook.configs['flat/recommended'],
 ];

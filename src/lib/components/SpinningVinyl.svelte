@@ -1,14 +1,12 @@
 <script>
-  let { size = 200, speed = 3, playing = $bindable(true) } = $props();
+  let { playing = $bindable(true), ...rest } = $props();
 </script>
 
-<div class="vinyl-container" style="width: {size}px; height: {size}px;">
+<div class="vinyl-container" {...rest}>
   <svg
     class="vinyl-record"
     class:spinning={playing}
-    style="--rotation-speed: {speed}s"
-    width={size}
-    height={size}
+    style="--rotation-speed: 3s"
     viewBox="0 0 200 200"
     xmlns="http://www.w3.org/2000/svg"
   >
@@ -22,22 +20,22 @@
         d="M 20 100 A 80 80 0 0 1 60 40"
         fill="none"
         stroke="#ffffff"
-        stroke-width="1"
-        opacity="0.3"
+        stroke-width="2"
+        opacity="0.6"
       />
       <path
         d="M 35 100 A 65 65 0 0 1 65 52"
         fill="none"
         stroke="#ffffff"
-        stroke-width="1"
-        opacity="0.3"
+        stroke-width="2"
+        opacity="0.6"
       />
       <path
         d="M 50 100 A 50 50 0 0 1 70 65"
         fill="none"
         stroke="#ffffff"
-        stroke-width="1"
-        opacity="0.3"
+        stroke-width="2"
+        opacity="0.6"
       />
 
       <!-- Right side grooves -->
@@ -45,22 +43,22 @@
         d="M 180 100 A 80 80 0 0 1 140 160"
         fill="none"
         stroke="#ffffff"
-        stroke-width="1"
-        opacity="0.3"
+        stroke-width="2"
+        opacity="0.6"
       />
       <path
         d="M 165 100 A 65 65 0 0 1 135 148"
         fill="none"
         stroke="#ffffff"
-        stroke-width="1"
-        opacity="0.3"
+        stroke-width="2"
+        opacity="0.6"
       />
       <path
         d="M 150 100 A 50 50 0 0 1 130 135"
         fill="none"
         stroke="#ffffff"
-        stroke-width="1"
-        opacity="0.3"
+        stroke-width="2"
+        opacity="0.6"
       />
     </g>
 
@@ -107,7 +105,7 @@
     }
     50%,
     75% {
-      opacity: 0.3;
+      opacity: 0.6;
     }
     100% {
       opacity: 1;
