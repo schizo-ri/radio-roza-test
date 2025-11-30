@@ -1,6 +1,6 @@
 const program = [
   {
-    title: 'Kamenolom LIGHT',
+    title: 'Kamenolom Light',
     day: 'Monday',
     show_start: '13:00',
     schedule_date: '24th November 2025',
@@ -245,7 +245,7 @@ const program = [
     full_date: '2025-11-27T17:00:00+01:00',
   },
   {
-    title: 'Kamenolom - DARK',
+    title: 'Kamenolom Dark',
     day: 'Thursday',
     show_start: '18:00',
     schedule_date: '27th November 2025',
@@ -294,7 +294,7 @@ const program = [
     full_date: '2025-11-28T10:00:00+01:00',
   },
   {
-    title: 'Kamenolom LIGHT',
+    title: 'Kamenolom Light',
     day: 'Tuesday',
     show_start: '13:00',
     schedule_date: '25th November 2025',
@@ -505,6 +505,59 @@ const program = [
   },
 ];
 
+const blocks = {
+  Fjaka: 'Kad ti je život previše stresan, a krevet predaleko - sjedni i slušaj.',
+  Kapuz: 'Glazba za one dane kad ni kava ne pomaže. Hoodie up, world out.',
+  'Kava sa šlagerom':
+    'Šlager hits koji idu uz jutarnju kavu - slatko, pjenjavo, možda malo lipkavo.',
+  'Kamenolom Light':
+    'Rock koji neće razbiti prozore, ali će razbuditi susjede. Odgovorno teškaštvo.',
+  'Kamenolom Dark': 'Kad Light nije dovoljno - full metal jacket za uši. Nosači slušalica, oprez!',
+  'Kamenolom - Dark':
+    'Kad Light nije dovoljno - full metal jacket za uši. Nosači slušalica, oprez!',
+  'Naše Gore Riff -Ri Rock': 'Domaći rock koji lupa jače od rakije. Balkanski riffovi bez granica.',
+  'Naše Gore Riff - Indie':
+    'Indie zvukovi s naših prostora - alternativa alternativama, hipsterski approved.',
+  'Naše Gore Riff - Electro':
+    'Kad rakija sretne sintetizator - električni Balkan za moderne nomade.',
+  'Naše gore riff ': 'Domaći riffovi koji lupe pravo u srce - balkanski zvukovi bez granica.',
+  'Naše gore riff - Rock': 'Domaći rock koji lupa jače od rakije. Balkanski riffovi bez granica.',
+  'Naše gore riff - Indie':
+    'Indie zvukovi s naših prostora - alternativa alternativama, hipsterski approved.',
+  'Don Eladio': 'Elegantno opasna glazba - kao dobar mezcal, glatko ide, ali ima punch.',
+  'Okolo naokolo - Afro': 'Afrički ritmovi koji te tjeraju da plešeš, čak i kad misliš da ne znaš.',
+  'Okolo Naokolo - Afro': 'Afrički ritmovi koji te tjeraju da plešeš, čak i kad misliš da ne znaš.',
+  'Okolo Naokolo - Istok': 'Putovanje na Istok bez vize - od Balkana do Bliskog istoka zvukom.',
+  Funkushima: 'Radioaktivno funkaran - groove koji se ne zaustavlja, možda i zarazno.',
+  Ritmologija: 'Znanstveno dokazano: ritam liječi. Doktor preporučuje bass i hi-hat.',
+  Kuplung: 'Glazba koja povezuje - kao dobar kuplung, sve ide glatko u pravom rhythm-u.',
+  'Chill Pill': 'Audio sedativ za preživljavanje modernog života. Nuspojave: smirenost.',
+  'Strujni vod - Electro Breakbeat': 'Visokonaponski breakbeats - pazi, udara pod 220V groovea!',
+  'Strujni Vod - Techno':
+    'Tehno koji prolazi kroz žile kao električna struja - underground pure energy.',
+  'Strujni Vod - Minimal House': 'Manje je više, ali bass je dovoljno. Minimalistički hedonizam.',
+  Potrensuljka: 'Glazba koja te trese kao dobar trening - cardio za uši, workout za dušu.',
+  'Space is the place': 'Cosmic sounds za zemaljske bića - Houston, imamo funky problem!',
+  'Space is the Place': 'Cosmic sounds za zemaljske bića - Houston, imamo funky problem!',
+  'Ras Pashoy - Reggae/Dub': 'One love, heavy bass - Jah blagoslovio ovaj soundsystem.',
+  'Ras Pashoy - Dubstep': 'Kad dub sretne 2010-e - reggae roots sa sub-bass terapijom.',
+  Izvorišta: 'Povratak korijenima - tradicijski zvukovi koji te vezuju za zemlju i predke.',
+  Depilacija: 'Glazba koja skida dlake i inhibicije - raw energy bez cenzure.',
+  'Roža info': 'Sve što trebaš znati, a nisi znao da trebaš - informacije začinjene muzikom.',
+  Yugofonija: 'Nostalgija na vinilu - kad je Balkan bio jedan, a glazba bila zajedničku.',
+  'Ja Biram': 'Demokratija na radiju - ti biraš, mi puštamo, svi uživamo.',
+  Dramorama: 'Teatar za uši - kad riječi postaju glazba, a glazba postaje priča.',
+  'Mutant Disco ': 'Disco koji je mutirao u nešto bolje - evolucija plesa kroz zvuk.',
+  'Bubanj i Bass': 'Dva najbolja prijatelja zvuka - jednostavno i nezaustavljivo.',
+  'HEX.': 'Šesterokutni zvukovi za digitalne duše - algoritmi koji groovaju.',
+  Naftalina: 'Vintage vibes iz babine škrinje - staro zlato koje nikad ne izlazi iz mode.',
+  Fader: 'Kad DJ postane dirigent, a mikseta postane orkestar - pure mixing magic.',
+  Štošta: 'Kad ne znaš što očekivati, ali znaš da će biti dobro - audio rulet.',
+  'Reality Check': 'Provjera stvarnosti kroz bass i melodiju - wake up call za uši.',
+  'Podzemna kulisa - Peperton specijal':
+    'Underground scena kroz piperov objektiv - kultura ispod radara.',
+};
+
 const sortedByDay = program.sort((a, b) => a.day.localeCompare(b.day));
 
 // get program on a weekday
@@ -540,4 +593,4 @@ function getNextShow() {
   return upcomingShows[0] || null;
 }
 
-export { program, sortedByDay, getProgramOnWeekday, getCurrentShow, getNextShow };
+export { program, blocks, sortedByDay, getProgramOnWeekday, getCurrentShow, getNextShow };

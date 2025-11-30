@@ -53,8 +53,7 @@
     overflow-x: auto;
     /* overflow-x: auto; */
     overflow-y: hidden;
-    /* Define axis and scroll type, where `mandatory` means any scroll attempt
-    will cause a scroll to the next item */
+    /* Define axis and scroll type, where `mandatory` means any scroll attempt will cause a scroll to the next item */
     scroll-snap-type: x mandatory;
     scroll-padding: 1rem;
 

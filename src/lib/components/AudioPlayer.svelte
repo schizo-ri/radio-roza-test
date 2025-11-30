@@ -60,8 +60,8 @@
               initialBufferLevel: 8,
               bufferTimeDefault: 16,
               bufferTimeAtTopQuality: 32,
-              bufferToKeep: 16,
-              bufferPruningInterval: 8,
+              bufferToKeep: 8,
+              bufferPruningInterval: 4,
               fastSwitchEnabled: true,
             },
             gaps: {

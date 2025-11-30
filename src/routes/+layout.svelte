@@ -2,6 +2,7 @@
   import favicon from '$lib/assets/favicon.svg';
   import '../app.css';
 
+  import Footer from '$lib/components/Footer.svelte';
   import AudioPlayer from '$lib/components/AudioPlayer.svelte';
 
   let { children } = $props();
@@ -66,6 +67,8 @@
   {@render children()}
 </main>
 
+<Footer />
+
 <style>
   .header {
     position: fixed;
@@ -96,19 +99,19 @@
     padding: 0 1rem;
   }
 
-  .expanded-content {
+  /*.expanded-content {
     padding: 0 1rem;
     transform: translateY(-20px);
     opacity: 0;
     transition:
       transform 0.3s ease-out,
       opacity 0.3s ease-out;
-  }
+  }*/
 
-  .header.expanded .expanded-content {
+  /*.header.expanded .expanded-content {
     transform: translateY(0);
     opacity: 1;
-  }
+  }*/
 
   .main-content {
     padding-top: var(--header-height, 70px);

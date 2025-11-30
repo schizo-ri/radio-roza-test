@@ -169,6 +169,9 @@
   --primary-h: 357;
   --primary-s: 65%;
 
+  --secondary-h: 177;
+  --secondary-s: 50%;
+
   /* Lightness scale */
   --primary-950: hsl(var(--primary-h), var(--primary-s), 15%); /* #4d1215 */
   --primary-900: hsl(var(--primary-h), var(--primary-s), 25%); /* #7f1e22 */
@@ -181,17 +184,30 @@
   --primary-200: hsl(var(--primary-h), var(--primary-s), 90%); /* #fdcfd1 */
   --primary-100: hsl(var(--primary-h), var(--primary-s), 95%); /* #fee7e8 */
   --primary-50: hsl(var(--primary-h), var(--primary-s), 98%); /* #fff5f5 */
+  --primary: #d3323a;
 
-  --secondary: #2fb6af;
+  --secondary-950: hsl(var(--secondary-h), var(--secondary-s), 15%); /* #4d1215 */
+  --secondary-900: hsl(var(--secondary-h), var(--secondary-s), 25%); /* #7f1e22 */
+  --secondary-800: hsl(var(--secondary-h), var(--secondary-s), 35%); /* #b12a30 */
+  --secondary-700: hsl(var(--secondary-h), var(--secondary-s), 45%); /* #d3323a */
+  --secondary-600: hsl(var(--secondary-h), var(--secondary-s), 55%); /* #e4555c */
+  --secondary-500: hsl(var(--secondary-h), var(--secondary-s), 65%); /* #ef787e */
+  --secondary-400: hsl(var(--secondary-h), var(--secondary-s), 75%); /* #f59ba0 */
+  --secondary-300: hsl(var(--secondary-h), var(--secondary-s), 85%); /* #fbbec1 */
+  --secondary-200: hsl(var(--secondary-h), var(--secondary-s), 90%); /* #fdcfd1 */
+  --secondary-100: hsl(var(--secondary-h), var(--secondary-s), 95%); /* #fee7e8 */
+  --secondary-50: hsl(var(--secondary-h), var(--secondary-s), 98%); /* #fff5f5 */
+  --secondary: #32d3cb;
 
   --green: hsl(152deg 76% 40% / 1);
   --blue: hsl(204deg 84% 40% / 1);
   --red: var(--primary-600);
   --orange: hsl(40deg 89% 52% / 1);
+  --yellow: hsl(50deg 89% 52% / 1); /* #d3cb32 */
 
   --dark: #1c1b1b;
-  --muted: #696666;
-  --light: #f5f3f3;
+  --muted: #696a6c;
+  --light: #f3f4f6;
 
   --font: 'Manrope', sans-serif;
   --display-font: 'Anybody', sans-serif;

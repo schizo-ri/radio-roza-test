@@ -1,0 +1,19 @@
+This directory contains placeholder images for articles.
+
+For actual implementation, replace these with:
+- thumb/ folder: 200x150px thumbnails
+- small/ folder: 400x300px small images
+- medium/ folder: 800x600px medium images
+- large/ folder: 1200x900px large images
+
+You can use public domain images from:
+- Unsplash.com
+- Pexels.com
+- Pixabay.com
+- Wikimedia Commons
+
+Example naming convention:
+- article-1-thumb.jpg
+- article-1-small.jpg
+- article-1-medium.jpg
+- article-1-large.jpg

@@ -1,0 +1,54 @@
+<svg width="200" height="150" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="4" stdDeviation="3" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="url(#bg-gradient)"/>
+
+  <!-- Decorative elements -->
+  <circle cx="160" cy="30" r="20" fill="#f093fb" opacity="0.3"/>
+  <circle cx="30" cy="127" r="30" fill="white" opacity="0.2"/>
+  <rect x="140" y="90" width="40" height="40" fill="white" opacity="0.1" rx="5"/>
+
+  <!-- Main icon -->
+  <text
+    x="100"
+    y="60"
+    text-anchor="middle"
+    fill="white"
+    font-family="Arial, sans-serif"
+    font-size="36"
+    opacity="0.8"
+  >
+    ♪
+  </text>
+
+  <!-- Title area -->
+  <rect x="20" y="100" width="160" height="30" fill="rgba(0,0,0,0.7)" rx="4" filter="url(#shadow)"/>
+  <text
+    x="100"
+    y="117"
+    text-anchor="middle"
+    fill="white"
+    font-family="Arial, sans-serif"
+    font-size="12"
+    font-weight="bold"
+  >
+    Article Thumbnail
+  </text>
+
+  <!-- Subtle pattern overlay -->
+  <pattern id="pattern" patternUnits="userSpaceOnUse" width="30" height="30" patternTransform="rotate(45)">
+    <rect width="30" height="30" fill="transparent"/>
+    <rect x="0" y="0" width="15" height="15" fill="rgba(255,255,255,0.02)"/>
+    <rect x="15" y="15" width="15" height="15" fill="rgba(255,255,255,0.02)"/>
+  </pattern>
+  <rect width="100%" height="100%" fill="url(#pattern)"/>
+</svg>

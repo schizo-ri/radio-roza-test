@@ -4,7 +4,9 @@
 
   // Create a reactive resource pattern
   async function fetchMixcloudData(limit) {
-    const response = await fetch(`https://api.mixcloud.com/RadioRoza/?limit=${limit}`);
+    const response = await fetch(
+      `https://api.mixcloud.com/${encodeURIComponent('RadioRoža')}/cloudcasts/?limit=${limit}`
+    );
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
