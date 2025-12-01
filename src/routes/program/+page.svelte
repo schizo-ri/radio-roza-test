@@ -192,6 +192,7 @@
     </div>
   </div>
 </main>
+git
 
 <style>
   .program-container {
@@ -307,16 +308,16 @@
     transition: all 0.3s ease;
   }
 
-  .program-content.slide-out {
+  /*.program-content.slide-out {
     opacity: 0;
     transform: translateX(-20px);
-  }
+  }*/
 
-  .program-content.slide-in {
+  /*.program-content.slide-in {
     opacity: 0;
     transform: translateX(20px);
     animation: slideInAnimation 0.3s ease forwards;
-  }
+  }*/
 
   @keyframes slideInAnimation {
     to {

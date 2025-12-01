@@ -1,10 +1,10 @@
 <script>
   import AudioPlayer from '$lib/components/AudioPlayer.svelte';
-  import AudioPlayerAdvanced from '$lib/components/AudioPlayerAdvanced.svelte';
-  import AudioPlayerSimple from '$lib/components/AudioPlayerSimple.svelte';
-  import AudioPlayerOptimized from '$lib/components/AudioPlayerOptimized.svelte';
-  import BufferedRadioPlayer from '$lib/components/BufferedRadioPlayer.svelte';
-  import ManifestExplainer from '$lib/components/ManifestExplainer.svelte';
+  import AudioPlayerAdvanced from '$lib/components/demo/AudioPlayerAdvanced.svelte';
+  import AudioPlayerSimple from '$lib/components/demo/AudioPlayerSimple.svelte';
+  import AudioPlayerOptimized from '$lib/components/demo/AudioPlayerOptimized.svelte';
+  import BufferedRadioPlayer from '$lib/components/demo/BufferedRadioPlayer.svelte';
+  import ManifestExplainer from '$lib/components/demo/ManifestExplainer.svelte';
   import { validateManifest, ManifestChecker } from '$lib/utils/manifestChecker.js';
 
   let selectedDemo = $state('buffered');

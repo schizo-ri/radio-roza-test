@@ -22,16 +22,16 @@
   let onAir = $state(false);
   let isPlaying = $state(false);
 
-  let volume = $state(1);
-  let muted = $state(false);
+  // let volume = $state(1);
+  // let muted = $state(false);
 
   let nowPlaying = $state({
     artist: 'Radio Roza',
     title: 'Live Stream',
   });
 
-  let currentShow = $state(getCurrentShow());
-  let nextShow = $state(getNextShow());
+  // let currentShow = $state(getCurrentShow());
+  // let nextShow = $state(getNextShow());
 
   // let musicMetadata = $state({
   //   artist: null,
@@ -152,8 +152,8 @@
 
         player.addEventListener('volumechange', () => {
           console.log('Volume changed - muted:', player.muted, 'volume:', player.volume);
-          volume = player.volume;
-          muted = player.muted;
+          // volume = player.volume;
+          // muted = player.muted;
         });
       } catch (error) {
         console.error('Failed to load dashjs:', error);
@@ -219,20 +219,20 @@
     }
   }
 
-  function setVolume(newVolume) {
-    if (player) {
-      const clampedVolume = Math.max(0, Math.min(1, newVolume));
-      player.volume = clampedVolume;
-      volume = clampedVolume;
-    }
-  }
+  // function setVolume(newVolume) {
+  //   if (player) {
+  //     const clampedVolume = Math.max(0, Math.min(1, newVolume));
+  //     player.volume = clampedVolume;
+  //     volume = clampedVolume;
+  //   }
+  // }
 
-  function toggleMute() {
-    if (player) {
-      player.muted = !player.muted;
-      muted = player.muted;
-    }
-  }
+  // function toggleMute() {
+  //   if (player) {
+  //     player.muted = !player.muted;
+  //     muted = player.muted;
+  //   }
+  // }
 
   function cleanup() {
     if (dash) {
@@ -576,15 +576,15 @@
     background: var(--primary-600);
   }
 
-  .volume-control {
+  /*.volume-control {
     grid-area: volume;
     display: flex;
     align-items: center;
     gap: 8px;
     position: relative;
-  }
+  }*/
 
-  .volume-btn {
+  /*.volume-btn {
     outline: 0;
     border: 0;
     background-color: transparent;
@@ -592,9 +592,9 @@
     cursor: pointer;
     aspect-ratio: 1;
     width: 16px;
-  }
+  }*/
 
-  .volume-slider {
+  /*.volume-slider {
     appearance: none;
     width: 80px;
     height: 4px;
@@ -602,19 +602,19 @@
     background: var(--primary-300);
     outline: none;
     cursor: pointer;
-  }
+  }*/
 
   /* WebKit browsers (Chrome, Safari, Edge) */
-  .volume-slider::-webkit-slider-track {
+  /*.volume-slider::-webkit-slider-track {
     width: 100%;
     height: 4px;
     cursor: pointer;
     background: var(--primary-400);
     border-radius: 4px;
     border: none;
-  }
+  }*/
 
-  .volume-slider::-webkit-slider-thumb {
+  /*.volume-slider::-webkit-slider-thumb {
     appearance: none;
     height: 8px;
     width: 8px;
@@ -624,24 +624,24 @@
     border: 2px solid var(--primary-600);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     transition: all 0.2s ease;
-  }
+  }*/
 
-  .volume-slider::-webkit-slider-thumb:hover {
+  /*.volume-slider::-webkit-slider-thumb:hover {
     background: var(--primary-700);
     transform: scale(1.1);
-  }
+  }*/
 
   /* Firefox */
-  .volume-slider::-moz-range-track {
+  /*.volume-slider::-moz-range-track {
     width: 100%;
     height: 4px;
     cursor: pointer;
     background: var(--primary-400);
     border-radius: 4px;
     border: none;
-  }
+  }*/
 
-  .volume-slider::-moz-range-thumb {
+  /*.volume-slider::-moz-range-thumb {
     height: 8px;
     width: 8px;
     border-radius: 50%;
@@ -650,36 +650,36 @@
     border: 2px solid var(--primary-600);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     transition: all 0.2s ease;
-  }
+  }*/
 
-  .volume-slider::-moz-range-thumb:hover {
+  /*.volume-slider::-moz-range-thumb:hover {
     background: var(--primary-700);
     transform: scale(1.1);
-  }
+  }*/
 
   /* Focus styles for accessibility */
-  .volume-slider:focus-visible {
+  /*.volume-slider:focus-visible {
     outline: 2px solid var(--primary-500);
     outline-offset: 2px;
-  }
+  }*/
 
-  .volume-slider:focus-visible::-webkit-slider-thumb {
+  /*.volume-slider:focus-visible::-webkit-slider-thumb {
     outline: 2px solid var(--primary-500);
     outline-offset: 1px;
-  }
+  }*/
 
-  .program {
+  /*.program {
     grid-area: program;
-  }
+  }*/
 
-  .current-show {
+  /*.current-show {
     font-weight: 500;
     font-size: 0.875rem;
     color: var(--dark);
-  }
+  }*/
 
-  .next-show {
+  /*.next-show {
     font-size: 0.75rem;
     color: var(--muted);
-  }
+  }*/
 </style>
