@@ -16,7 +16,7 @@
 
   // Stanje
   let today = $state('');
-  let currentTime = $state('');
+  // let currentTime = $state('');
   let selectedDay = $state('Monday');
   let currentShow = $state(null);
   let programContent = $state(null);
@@ -28,10 +28,10 @@
     // Ažuriraj trenutno vrijeme i trenutni show
     const updateTimeAndShow = () => {
       const now = new Date();
-      currentTime = now.toLocaleTimeString('hr-HR', {
-        hour: '2-digit',
-        minute: '2-digit',
-      });
+      // currentTime = now.toLocaleTimeString('hr-HR', {
+      //   hour: '2-digit',
+      //   minute: '2-digit',
+      // });
 
       // Pronađi trenutni show
       if (selectedDay === today) {
@@ -56,7 +56,7 @@
     };
 
     updateTimeAndShow();
-    const timeInterval = setInterval(updateTimeAndShow, 1000);
+    const timeInterval = setInterval(updateTimeAndShow, 10000);
 
     return () => {
       clearInterval(timeInterval);
@@ -122,11 +122,10 @@
 <main class="program-container">
   <div class="header">
     <h1>Tjedni Program</h1>
-    <p class="subtitle">Radio Roža</p>
-    <div class="current-time">
+    <!-- <div class="current-time">
       <span class="time-label">Trenutno vrijeme:</span>
       <span class="time-value">{currentTime}</span>
-    </div>
+    </div> -->
   </div>
 
   <!-- Tab Navigation -->
@@ -151,20 +150,16 @@
   <!-- Program Content -->
   <div class="program-content" bind:this={programContent}>
     <div class="day-column">
-      <div class="day-header">
+      <!-- <div class="day-header">
         <h2>{dayNames[selectedDay]}</h2>
         {#if selectedDay === today}
           <span class="live-indicator">🔴 UŽIVO</span>
         {/if}
-      </div>
+      </div> -->
 
       <div class="shows-list">
         {#each groupedProgram[selectedDay] as show (show.full_date + show.title)}
-          <div
-            class="show-item"
-            class:current-show={isCurrentShow(show)}
-            class:past-show={selectedDay === today && new Date(show.full_date) < new Date()}
-          >
+          <div class="show-item" class:current-show={isCurrentShow(show)}>
             <div class="show-time">
               {show.show_start}
               {#if isCurrentShow(show)}
@@ -192,17 +187,17 @@
     </div>
   </div>
 </main>
-git
 
 <style>
   .program-container {
-    padding: var(--whitespace);
-    max-width: var(--max-content-width);
+    /*max-width: var(--max-content-width);*/
+    max-width: 1000px;
     margin: 0 auto;
   }
 
   .header {
     text-align: center;
+    margin-top: 2rem;
     margin-bottom: 2rem;
   }
 
@@ -211,74 +206,78 @@ git
     font-size: 3rem;
     font-weight: 800;
     color: var(--primary-700);
-    margin-bottom: 0.5rem;
   }
 
-  .subtitle {
-    font-size: 1.25rem;
-    color: var(--muted);
-    font-weight: 500;
-  }
-
-  .current-time {
+  /*.current-time {
     margin-top: 1rem;
     font-size: 1rem;
     color: var(--dark);
-  }
+  }*/
 
-  .time-label {
+  /*.time-label {
     color: var(--muted);
     margin-right: 0.5rem;
-  }
+  }*/
 
-  .time-value {
+  /*.time-value {
     font-family: var(--display-font);
     font-weight: 800;
     color: var(--primary-700);
     font-size: 1.25rem;
-  }
+  }*/
 
   /* Tab Navigation */
   .tabs-container {
-    margin-bottom: 2rem;
     overflow-x: auto;
     overflow-y: hidden;
     scroll-behavior: smooth;
   }
 
   .tabs {
-    display: flex;
-    gap: 0.5rem;
-    min-width: fit-content;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    align-items: end;
+    /*grid-gap: 0.5rem;*/
     padding-bottom: 0.5rem;
   }
 
   .tab {
     background: white;
-    border: 2px solid var(--primary-200);
-    border-radius: 12px 12px 0 0;
-    padding: 1rem 1.5rem;
+    border-top: 2px solid var(--primary-200);
+    border-right: 2px solid var(--primary-200);
+    border-bottom: 2px solid var(--primary-200);
+    border-left: 0;
+    /*border-radius: 12px 12px 0 0;*/
+    padding: 0.75rem 1rem;
     font-family: var(--display-font);
     font-weight: 600;
     color: var(--primary-600);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.15s ease;
     position: relative;
     min-width: 140px;
     text-align: center;
   }
 
+  .tab:first-child {
+    border-left: 2px solid var(--primary-200);
+  }
+
   .tab:hover {
     background: var(--primary-50);
-    border-color: var(--primary-400);
+    /*border-color: var(--primary-400);*/
   }
 
   .tab.active {
     background: var(--primary-600);
     color: white;
     border-color: var(--primary-600);
-    transform: translateY(-2px);
+    /*transform: translateY(-2px);*/
     box-shadow: 0 4px 12px rgba(211, 50, 58, 0.3);
+  }
+
+  .tab.today {
+    border-radius: 8px 8px 0 0;
   }
 
   .tab.today:not(.active) {
@@ -305,7 +304,7 @@ git
 
   /* Program Content */
   .program-content {
-    transition: all 0.3s ease;
+    transition: all 0.15s ease;
   }
 
   /*.program-content.slide-out {
@@ -316,7 +315,7 @@ git
   /*.program-content.slide-in {
     opacity: 0;
     transform: translateX(20px);
-    animation: slideInAnimation 0.3s ease forwards;
+    animation: slideInAnimation 0.15s ease forwards;
   }*/
 
   @keyframes slideInAnimation {
@@ -327,41 +326,44 @@ git
   }
 
   .day-column {
-    background: white;
-    border-radius: 12px;
+    /*background: white;*/
+    border-radius: 0 0 12px 12px;
+    border-left: 1px solid var(--light);
+    border-right: 1px solid var(--light);
+    border-bottom: 1px solid var(--light);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     overflow: hidden;
   }
 
-  .day-header {
+  /*.day-header {
     background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
     padding: 1.5rem;
     color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
+  }*/
 
-  .day-header h2 {
+  /*.day-header h2 {
     font-family: var(--display-font);
     font-size: 1.5rem;
     font-weight: 800;
     margin: 0;
-  }
+  }*/
 
-  .live-indicator {
+  /*.live-indicator {
     background: var(--red);
     padding: 0.5rem 1rem;
     border-radius: 20px;
     font-size: 0.8rem;
     font-weight: 800;
     animation: pulse 2s infinite;
-  }
+  }*/
 
   .shows-list {
     padding: 1rem;
-    max-height: 70vh;
-    overflow-y: auto;
+    /*max-height: 70vh;*/
+    /*overflow-y: auto;*/
   }
 
   .show-item {
@@ -370,38 +372,43 @@ git
     padding: 1rem;
     margin-bottom: 0.5rem;
     border-radius: 8px;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     border-left: 4px solid transparent;
+  }
+
+  .show-item:not(:last-child) {
+    border-bottom: 1px solid var(--light);
   }
 
   .show-item:hover {
     background-color: var(--primary-50);
+    border-left: 4px solid var(--primary-200);
   }
 
   .show-item.current-show {
-    background: linear-gradient(135deg, var(--green) 0%, hsl(152deg 76% 45% / 1) 100%);
+    background: linear-gradient(135deg, var(--secondary-800) 0%, var(--secondary-600) 100%);
     color: white;
     border-left-color: var(--yellow);
     animation: currentShowPulse 3s ease-in-out infinite;
-    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+    box-shadow: 0 4px 12px hsl(177deg 50% 65% / 0.2);
   }
 
-  .show-item.past-show {
+  /*.show-item.past-show {
     opacity: 0.6;
     background-color: var(--light);
-  }
+  }*/
 
   .show-item.current-show:hover {
-    background: linear-gradient(135deg, hsl(152deg 76% 45% / 1) 0%, hsl(152deg 76% 50% / 1) 100%);
+    background: linear-gradient(135deg, var(--secondary-700) 0%, var(--secondary-600) 100%);
   }
 
   @keyframes currentShowPulse {
     0%,
     100% {
-      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+      box-shadow: 0 4px 12px hsl(177deg 50% 65% / 0.2);
     }
     50% {
-      box-shadow: 0 6px 20px rgba(76, 175, 80, 0.5);
+      box-shadow: 0 6px 20px hsl(177deg 50% 70% / 0.6);
     }
   }
 
@@ -520,11 +527,11 @@ git
       padding: 0.8rem 1rem;
     }
 
-    .day-header {
+    /*.day-header {
       flex-direction: column;
       gap: 0.5rem;
       align-items: flex-start;
-    }
+    }*/
 
     .shows-list {
       max-height: none;

@@ -1,4 +1,5 @@
 <script>
+  import { page } from '$app/state';
   import favicon from '$lib/assets/favicon.svg';
   import '../app.css';
 
@@ -22,12 +23,46 @@
     </AudioPlayer>
     <nav>
       <ul>
-        <li><a href="/" class="link">Home</a></li>
-        <li><a href="/citaj-radio" class="link">Čitaj radio</a></li>
-        <li><a href="/program" class="link">Program</a></li>
-        <li><a href="/emisije" class="link">Emisije</a></li>
-        <li><a href="/o-nama" class="link">O nama</a></li>
-        <li><a href="/projekti" class="link">Projekti</a></li>
+        <li>
+          <a href="/" class="link" aria-current={page.url.pathname === '/' ? 'page' : undefined}
+            >Home</a
+          >
+        </li>
+        <li>
+          <a
+            href="/citaj-radio"
+            class="link"
+            aria-current={page.url.pathname === '/citaj-radio' ? 'page' : undefined}>Čitaj radio</a
+          >
+        </li>
+        <li>
+          <a
+            href="/program"
+            class="link"
+            aria-current={page.url.pathname === '/program' ? 'page' : undefined}>Program</a
+          >
+        </li>
+        <li>
+          <a
+            href="/emisije"
+            class="link"
+            aria-current={page.url.pathname === '/emisije' ? 'page' : undefined}>Emisije</a
+          >
+        </li>
+        <li>
+          <a
+            href="/o-nama"
+            class="link"
+            aria-current={page.url.pathname === '/o-nama' ? 'page' : undefined}>O nama</a
+          >
+        </li>
+        <li>
+          <a
+            href="/projekti"
+            class="link"
+            aria-current={page.url.pathname === '/projekti' ? 'page' : undefined}>Projekti</a
+          >
+        </li>
         <li>
           <a href="https://facebook.com/radiorozha" class="social-icons">
             <span class="sr-only">Facebook</span>
@@ -63,7 +98,7 @@
   </div>
 </section>
 
-<main class="main-content">
+<main>
   {@render children()}
 </main>
 
@@ -113,7 +148,7 @@
     opacity: 1;
   }*/
 
-  .main-content {
+  main {
     padding-top: var(--header-height, 70px);
     min-height: 100vh;
     transition: padding-top 0.3s ease-out;
@@ -174,8 +209,7 @@
   }
 
   .link:hover {
-    color: var(--primary-600);
-    border-bottom-color: var(--primary-600);
+    color: var(--primary-700);
   }
 
   .link:hover::after {
@@ -184,6 +218,10 @@
 
   .link:focus::after {
     transform: scaleX(1);
+  }
+
+  .link[aria-current='page'] {
+    color: var(--primary-600);
   }
 
   .social-icons {

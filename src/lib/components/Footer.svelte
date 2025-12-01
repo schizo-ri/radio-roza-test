@@ -91,8 +91,12 @@
 <style>
   footer {
     text-align: center;
-    padding-top: 6rem;
+    margin-top: 4rem;
+    padding-top: 4rem;
     padding-bottom: 4rem;
+    padding-left: 16px;
+    padding-right: 16px;
+    /*border-top: 6px solid var(--primary-600);*/
   }
 
   p {
