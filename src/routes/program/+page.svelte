@@ -14,81 +14,54 @@
     Sunday: 'Nedjelja',
   };
 
-  // Dohvati današnji dan
+  // Stanje
   let today = $state('');
   let currentTime = $state('');
-  let programContainer = $state(null);
-  let showScrollHint = $state(true);
-  let canScrollLeft = $state(false);
-  let canScrollRight = $state(true);
+  let selectedDay = $state('Monday');
+  let currentShow = $state(null);
+  let programContent = $state(null);
 
   onMount(() => {
     today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+    selectedDay = today; // Postavi današnji dan kao default
 
-    // Ažuriraj trenutno vrijeme
-    const updateTime = () => {
-      currentTime = new Date().toLocaleTimeString('hr-HR', {
+    // Ažuriraj trenutno vrijeme i trenutni show
+    const updateTimeAndShow = () => {
+      const now = new Date();
+      currentTime = now.toLocaleTimeString('hr-HR', {
         hour: '2-digit',
         minute: '2-digit',
       });
+
+      // Pronađi trenutni show
+      if (selectedDay === today) {
+        const todayProgram = getGroupedProgram()[today];
+        const currentTimeMinutes = now.getHours() * 60 + now.getMinutes();
+
+        let activeShow = null;
+        for (const show of todayProgram) {
+          const [hours, minutes] = show.show_start.split(':').map(Number);
+          const showTimeMinutes = hours * 60 + minutes;
+
+          if (showTimeMinutes <= currentTimeMinutes) {
+            activeShow = show;
+          } else {
+            break;
+          }
+        }
+        currentShow = activeShow;
+      } else {
+        currentShow = null;
+      }
     };
 
-    updateTime();
-    const timeInterval = setInterval(updateTime, 1000);
+    updateTimeAndShow();
+    const timeInterval = setInterval(updateTimeAndShow, 1000);
 
-    // Auto-centriranje na današnji dan
-    if (programContainer && today) {
-      const todayIndex = daysOrder.indexOf(today);
-      if (todayIndex !== -1) {
-        // Čekamo da se komponente rendiraju
-        setTimeout(() => {
-          const dayColumn = programContainer.querySelector(`[data-day="${today}"]`);
-          if (dayColumn) {
-            dayColumn.scrollIntoView({
-              behavior: 'smooth',
-              block: 'nearest',
-              inline: 'center',
-            });
-            // Sakrij hint nakon auto-skroliranja
-            setTimeout(() => {
-              showScrollHint = false;
-            }, 2000);
-          }
-        }, 100);
-      }
-    }
-
-    // Event listener za praćenje scroll pozicije
-    if (programContainer) {
-      const updateScrollButtons = () => {
-        const { scrollLeft, scrollWidth, clientWidth } = programContainer;
-        canScrollLeft = scrollLeft > 0;
-        canScrollRight = scrollLeft < scrollWidth - clientWidth - 10;
-      };
-
-      programContainer.addEventListener('scroll', updateScrollButtons);
-      // Provjeri na početku
-      setTimeout(updateScrollButtons, 200);
-
-      return () => {
-        programContainer.removeEventListener('scroll', updateScrollButtons);
-        clearInterval(timeInterval);
-      };
-    }
+    return () => {
+      clearInterval(timeInterval);
+    };
   });
-
-  // Funkcije za skroliranje lijevo/desno
-  function scrollLeft() {
-    if (programContainer) {
-      programContainer.scrollBy({ left: -340, behavior: 'smooth' });
-    }
-  }
-
-  function scrollRight() {
-    if (programContainer) {
-      programContainer.scrollBy({ left: 340, behavior: 'smooth' });
-    }
-  }
 
   // Grupa program po danima i sortiraj po vremenu
   function getGroupedProgram() {
@@ -110,6 +83,35 @@
   function getShowDescription(title) {
     return blocks[title] || 'Radijski program';
   }
+
+  // Funkcija za prebacivanje dana sa animacijom
+  function switchToDay(day) {
+    if (day === selectedDay) return;
+
+    // Dodaj slide-out animaciju
+    if (programContent) {
+      programContent.classList.add('slide-out');
+
+      setTimeout(() => {
+        selectedDay = day;
+        programContent.classList.remove('slide-out');
+        programContent.classList.add('slide-in');
+
+        setTimeout(() => {
+          programContent.classList.remove('slide-in');
+        }, 300);
+      }, 150);
+    } else {
+      selectedDay = day;
+    }
+  }
+
+  // Provjeri da li je show trenutno aktivan
+  function isCurrentShow(show) {
+    return (
+      currentShow && show.full_date === currentShow.full_date && show.title === currentShow.title
+    );
+  }
 </script>
 
 <svelte:head>
@@ -127,63 +129,66 @@
     </div>
   </div>
 
-  <!-- Scroll hint -->
-  {#if showScrollHint}
-    <div class="scroll-hint">
-      <span>← Pomjeri za pregled ostalih dana →</span>
+  <!-- Tab Navigation -->
+  <div class="tabs-container">
+    <div class="tabs">
+      {#each daysOrder as day (day)}
+        <button
+          class="tab"
+          class:active={selectedDay === day}
+          class:today={today === day}
+          onclick={() => switchToDay(day)}
+        >
+          <span class="tab-name">{dayNames[day]}</span>
+          {#if today === day}
+            <span class="today-indicator">DANAS</span>
+          {/if}
+        </button>
+      {/each}
     </div>
-  {/if}
-
-  <!-- Navigation buttons -->
-  <div class="scroll-controls">
-    <button
-      class="scroll-btn scroll-btn-left"
-      class:visible={canScrollLeft}
-      onclick={scrollLeft}
-      aria-label="Skrolaj lijevo"
-    >
-      ←
-    </button>
-    <button
-      class="scroll-btn scroll-btn-right"
-      class:visible={canScrollRight}
-      onclick={scrollRight}
-      aria-label="Skrolaj desno"
-    >
-      →
-    </button>
   </div>
 
-  <div class="program-wrapper" bind:this={programContainer}>
-    <div class="program-grid">
-      {#each daysOrder as day (day)}
-        <div class="day-column" class:today={today === day} data-day={day}>
-          <div class="day-header">
-            <h2>{dayNames[day]}</h2>
-            {#if today === day}
-              <span class="today-indicator">DANAS</span>
-            {/if}
-          </div>
+  <!-- Program Content -->
+  <div class="program-content" bind:this={programContent}>
+    <div class="day-column">
+      <div class="day-header">
+        <h2>{dayNames[selectedDay]}</h2>
+        {#if selectedDay === today}
+          <span class="live-indicator">🔴 UŽIVO</span>
+        {/if}
+      </div>
 
-          <div class="shows-list">
-            {#each groupedProgram[day] as show (show.full_date + show.title)}
-              <div class="show-item">
-                <div class="show-time">{show.show_start}</div>
-                <div class="show-info">
-                  <h3 class="show-title">{show.title}</h3>
-                  <p class="show-description">{getShowDescription(show.title)}</p>
-                </div>
-              </div>
-            {/each}
-
-            {#if groupedProgram[day].length === 0}
-              <div class="no-shows">
-                <p>Nema programa</p>
-              </div>
-            {/if}
+      <div class="shows-list">
+        {#each groupedProgram[selectedDay] as show (show.full_date + show.title)}
+          <div
+            class="show-item"
+            class:current-show={isCurrentShow(show)}
+            class:past-show={selectedDay === today && new Date(show.full_date) < new Date()}
+          >
+            <div class="show-time">
+              {show.show_start}
+              {#if isCurrentShow(show)}
+                <span class="live-dot"></span>
+              {/if}
+            </div>
+            <div class="show-info">
+              <h3 class="show-title">
+                {show.title}
+                {#if isCurrentShow(show)}
+                  <span class="current-label">SADA</span>
+                {/if}
+              </h3>
+              <p class="show-description">{getShowDescription(show.title)}</p>
+            </div>
           </div>
-        </div>
-      {/each}
+        {/each}
+
+        {#if groupedProgram[selectedDay].length === 0}
+          <div class="no-shows">
+            <p>Nema programa za ovaj dan</p>
+          </div>
+        {/if}
+      </div>
     </div>
   </div>
 </main>
@@ -197,7 +202,7 @@
 
   .header {
     text-align: center;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
   }
 
   .header h1 {
@@ -232,83 +237,260 @@
     font-size: 1.25rem;
   }
 
-  .program-wrapper {
+  /* Tab Navigation */
+  .tabs-container {
+    margin-bottom: 2rem;
     overflow-x: auto;
     overflow-y: hidden;
-    margin-top: 2rem;
-    padding-bottom: 1rem;
     scroll-behavior: smooth;
   }
 
-  .program-grid {
+  .tabs {
     display: flex;
-    gap: 1.5rem;
+    gap: 0.5rem;
     min-width: fit-content;
-    padding: 0 1rem;
+    padding-bottom: 0.5rem;
   }
 
-  @media (max-width: 767px) {
-    .program-wrapper {
-      overflow-x: visible;
-    }
+  .tab {
+    background: white;
+    border: 2px solid var(--primary-200);
+    border-radius: 12px 12px 0 0;
+    padding: 1rem 1.5rem;
+    font-family: var(--display-font);
+    font-weight: 600;
+    color: var(--primary-600);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    min-width: 140px;
+    text-align: center;
+  }
 
-    .program-grid {
-      flex-direction: column;
-      padding: 0;
+  .tab:hover {
+    background: var(--primary-50);
+    border-color: var(--primary-400);
+  }
+
+  .tab.active {
+    background: var(--primary-600);
+    color: white;
+    border-color: var(--primary-600);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(211, 50, 58, 0.3);
+  }
+
+  .tab.today:not(.active) {
+    border-color: var(--yellow);
+    background: var(--primary-50);
+  }
+
+  .tab-name {
+    display: block;
+    font-size: 1rem;
+  }
+
+  .today-indicator {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 800;
+    margin-top: 0.25rem;
+    color: var(--yellow);
+  }
+
+  .tab.active .today-indicator {
+    color: var(--yellow);
+  }
+
+  /* Program Content */
+  .program-content {
+    transition: all 0.3s ease;
+  }
+
+  .program-content.slide-out {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  .program-content.slide-in {
+    opacity: 0;
+    transform: translateX(20px);
+    animation: slideInAnimation 0.3s ease forwards;
+  }
+
+  @keyframes slideInAnimation {
+    to {
+      opacity: 1;
+      transform: translateX(0);
     }
   }
 
   .day-column {
     background: white;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    transition: all 0.3s ease;
-    min-width: 320px;
-    flex-shrink: 0;
-  }
-
-  .day-column:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-
-  .day-column.today {
-    border: 3px solid var(--primary-600);
-    box-shadow: 0 4px 16px rgba(211, 50, 58, 0.2);
   }
 
   .day-header {
     background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
-    padding: 1rem;
+    padding: 1.5rem;
     color: white;
-    position: relative;
-  }
-
-  .day-column.today .day-header {
-    background: linear-gradient(135deg, var(--primary-700) 0%, var(--primary-800) 100%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .day-header h2 {
     font-family: var(--display-font);
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     font-weight: 800;
     margin: 0;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
   }
 
-  .today-indicator {
-    position: absolute;
-    top: 0.5rem;
-    right: 1rem;
-    background: var(--yellow);
-    color: var(--dark);
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.75rem;
+  .live-indicator {
+    background: var(--red);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
     font-weight: 800;
     animation: pulse 2s infinite;
+  }
+
+  .shows-list {
+    padding: 1rem;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  .show-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+  }
+
+  .show-item:hover {
+    background-color: var(--primary-50);
+  }
+
+  .show-item.current-show {
+    background: linear-gradient(135deg, var(--green) 0%, hsl(152deg 76% 45% / 1) 100%);
+    color: white;
+    border-left-color: var(--yellow);
+    animation: currentShowPulse 3s ease-in-out infinite;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+  }
+
+  .show-item.past-show {
+    opacity: 0.6;
+    background-color: var(--light);
+  }
+
+  .show-item.current-show:hover {
+    background: linear-gradient(135deg, hsl(152deg 76% 45% / 1) 0%, hsl(152deg 76% 50% / 1) 100%);
+  }
+
+  @keyframes currentShowPulse {
+    0%,
+    100% {
+      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+    }
+    50% {
+      box-shadow: 0 6px 20px rgba(76, 175, 80, 0.5);
+    }
+  }
+
+  .show-time {
+    font-weight: 800;
+    color: var(--primary-700);
+    font-family: var(--display-font);
+    font-size: 1.1rem;
+    min-width: 70px;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .current-show .show-time {
+    color: white;
+  }
+
+  .live-dot {
+    position: absolute;
+    top: -2px;
+    right: -10px;
+    width: 8px;
+    height: 8px;
+    background: var(--red);
+    border-radius: 50%;
+    animation: liveBlink 1s infinite;
+  }
+
+  @keyframes liveBlink {
+    0%,
+    50% {
+      opacity: 1;
+    }
+    51%,
+    100% {
+      opacity: 0.3;
+    }
+  }
+
+  .show-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .show-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--dark);
+    margin: 0 0 0.5rem 0;
+    line-height: 1.3;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .current-show .show-title {
+    color: white;
+  }
+
+  .current-label {
+    background: var(--yellow);
+    color: var(--dark);
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    animation: pulse 2s infinite;
+  }
+
+  .show-description {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .current-show .show-description {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .no-shows {
+    padding: 3rem 1rem;
+    text-align: center;
+  }
+
+  .no-shows p {
+    color: var(--muted);
+    font-style: italic;
+    margin: 0;
+    font-size: 1.1rem;
   }
 
   @keyframes pulse {
@@ -321,191 +503,69 @@
     }
   }
 
-  .shows-list {
-    padding: 0.5rem;
-    max-height: 80vh;
-    overflow-y: auto;
-  }
-
-  .show-item {
-    display: flex;
-    gap: 1rem;
-    padding: 0.75rem;
-    margin-bottom: 0.5rem;
-    border-radius: 8px;
-    transition: background-color 0.2s ease;
-  }
-
-  .show-item:hover {
-    background-color: var(--primary-50);
-  }
-
-  .day-column.today .show-item:hover {
-    background-color: var(--primary-100);
-  }
-
-  .show-time {
-    font-weight: 800;
-    color: var(--primary-700);
-    font-family: var(--display-font);
-    font-size: 1rem;
-    min-width: 50px;
-    flex-shrink: 0;
-  }
-
-  .show-info {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .show-title {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--dark);
-    margin: 0 0 0.25rem 0;
-    line-height: 1.3;
-  }
-
-  .show-description {
-    font-size: 0.8rem;
-    color: var(--muted);
-    margin: 0;
-    line-height: 1.4;
-  }
-
-  .no-shows {
-    padding: 2rem 1rem;
-    text-align: center;
-  }
-
-  .no-shows p {
-    color: var(--muted);
-    font-style: italic;
-    margin: 0;
-  }
-
   /* Responsive adjustments */
   @media (max-width: 767px) {
     .header h1 {
       font-size: 2rem;
     }
 
-    .day-column {
-      margin-bottom: 1rem;
-      min-width: auto;
+    .tabs-container {
+      margin: 0 -var(--whitespace) 2rem;
+      padding: 0 var(--whitespace);
+    }
+
+    .tab {
+      min-width: 120px;
+      padding: 0.8rem 1rem;
+    }
+
+    .day-header {
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: flex-start;
     }
 
     .shows-list {
       max-height: none;
     }
-  }
 
-  /* Scroll hint */
-  .scroll-hint {
-    text-align: center;
-    margin: 1rem 0;
-    animation: fadeInOut 4s ease-in-out;
-  }
-
-  .scroll-hint span {
-    background: var(--primary-100);
-    color: var(--primary-700);
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: 500;
-  }
-
-  @keyframes fadeInOut {
-    0%,
-    100% {
-      opacity: 0;
-    }
-    20%,
-    80% {
-      opacity: 1;
-    }
-  }
-
-  /* Scroll controls */
-  .scroll-controls {
-    position: relative;
-    height: 0;
-  }
-
-  .scroll-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: var(--primary-600);
-    color: white;
-    border: none;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    font-size: 1.5rem;
-    cursor: pointer;
-    z-index: 10;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .scroll-btn:hover {
-    background: var(--primary-700);
-    transform: translateY(-50%) scale(1.1);
-  }
-
-  .scroll-btn.visible {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .scroll-btn-left {
-    left: -24px;
-  }
-
-  .scroll-btn-right {
-    right: -24px;
-  }
-
-  @media (max-width: 767px) {
-    .scroll-controls {
-      display: none;
+    .show-item {
+      flex-direction: column;
+      gap: 0.5rem;
     }
 
-    .scroll-hint {
-      display: none;
+    .show-time {
+      min-width: auto;
     }
   }
 
   /* Scroll styling */
   .shows-list::-webkit-scrollbar,
-  .program-wrapper::-webkit-scrollbar {
+  .tabs-container::-webkit-scrollbar {
     width: 4px;
-    height: 6px;
+    height: 4px;
   }
 
   .shows-list::-webkit-scrollbar-track,
-  .program-wrapper::-webkit-scrollbar-track {
+  .tabs-container::-webkit-scrollbar-track {
     background: var(--light);
-    border-radius: 3px;
+    border-radius: 2px;
   }
 
   .shows-list::-webkit-scrollbar-thumb,
-  .program-wrapper::-webkit-scrollbar-thumb {
+  .tabs-container::-webkit-scrollbar-thumb {
     background: var(--primary-300);
-    border-radius: 3px;
+    border-radius: 2px;
   }
 
   .shows-list::-webkit-scrollbar-thumb:hover,
-  .program-wrapper::-webkit-scrollbar-thumb:hover {
+  .tabs-container::-webkit-scrollbar-thumb:hover {
     background: var(--primary-400);
   }
 
-  /* Firefox scrollbar styling */
-  .program-wrapper {
+  /* Firefox scrollbar */
+  .shows-list,
+  .tabs-container {
     scrollbar-width: thin;
     scrollbar-color: var(--primary-300) var(--light);
   }
