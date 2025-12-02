@@ -1,6 +1,7 @@
 <script>
-  import { getProgramOnWeekday, blocks } from '$lib/utils/program.js';
   import { onMount } from 'svelte';
+  import PageTitle from '$lib/components/PageTitle.svelte';
+  import { getProgramOnWeekday, blocks } from '$lib/utils/program.js';
 
   // Grupa program po danima
   const daysOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -120,13 +121,7 @@
 </svelte:head>
 
 <main class="program-container">
-  <div class="header">
-    <h1>Tjedni Program</h1>
-    <!-- <div class="current-time">
-      <span class="time-label">Trenutno vrijeme:</span>
-      <span class="time-value">{currentTime}</span>
-    </div> -->
-  </div>
+  <PageTitle title="Tjedni Program" />
 
   <!-- Tab Navigation -->
   <div class="tabs-container">
@@ -190,41 +185,9 @@
 
 <style>
   .program-container {
-    /*max-width: var(--max-content-width);*/
     max-width: 1000px;
     margin: 0 auto;
   }
-
-  .header {
-    text-align: center;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-  }
-
-  .header h1 {
-    font-family: var(--display-font);
-    font-size: 3rem;
-    font-weight: 800;
-    color: var(--primary-700);
-  }
-
-  /*.current-time {
-    margin-top: 1rem;
-    font-size: 1rem;
-    color: var(--dark);
-  }*/
-
-  /*.time-label {
-    color: var(--muted);
-    margin-right: 0.5rem;
-  }*/
-
-  /*.time-value {
-    font-family: var(--display-font);
-    font-weight: 800;
-    color: var(--primary-700);
-    font-size: 1.25rem;
-  }*/
 
   /* Tab Navigation */
   .tabs-container {
@@ -237,7 +200,6 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     align-items: end;
-    /*grid-gap: 0.5rem;*/
     padding-bottom: 0.5rem;
   }
 
@@ -294,7 +256,7 @@
     display: block;
     font-size: 0.7rem;
     font-weight: 800;
-    margin-top: 0.25rem;
+    margin-top: 0.1rem;
     color: var(--yellow);
   }
 

@@ -29,23 +29,29 @@
   <ArticlesLatest />
 </div>
 
-<FullBleed variant="split">
-  <div class="join-donate">
-    <section class="join">
-      <h3>Želiš li nam se pridružiti?</h3>
-      <a class="join-donate-link" href="/o-nama/kontakt">
-        <img src="/icons/lightbulb.png" alt="Idea" width="32" height="32" />
-        <span>Pošalji nam svoju ideju</span>
-      </a>
-    </section>
-    <section class="donate">
-      <h3>Sviđa ti se što radimo?</h3>
-      <a href="/donate" class="join-donate-link donate-link">
-        <img src="/icons/socials/bmc-full-logo.svg" alt="Donate" width="146" height="32" />
-        <span class="sr-only">Podrži nas</span>
-      </a>
-    </section>
-  </div>
+<Wrapper>
+  <section class="join">
+    <h3>Želiš nam se pridružiti?</h3>
+    <p>
+      Imaš ideju za emisiju ili želiš biti dio emisije? Lorem ipsum dolor sit amet, consectetur
+      adipiscing elit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
+      doloremque laudantium.
+    </p>
+    <a class="join-donate-link join-link" href="/o-nama/kontakt">
+      <img src="/icons/lightbulb.png" alt="Idea" width="32" height="32" />
+      <span>Pošalji nam svoju ideju</span>
+    </a>
+  </section>
+</Wrapper>
+
+<FullBleed variant="secondary">
+  <section class="donate">
+    <h3>Sviđa ti se što radimo?</h3>
+    <a href="/donate" class="join-donate-link donate-link">
+      <img src="/icons/socials/bmc-full-logo.svg" alt="Donate" width="146" height="32" />
+      <span class="sr-only">Podrži nas</span>
+    </a>
+  </section>
 </FullBleed>
 
 <style>
@@ -96,28 +102,30 @@
     padding-bottom: 4rem;
   }
 
-  .join-donate {
-    padding: 6rem 0;
-    display: grid;
-    grid-template-columns: repeat(2, 50%);
-  }
-
   .join {
-    text-align: right;
-    padding-right: 2rem;
-    /*border-right: 1px solid white;*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 4rem;
   }
 
-  .donate {
-    padding-left: 2rem;
-  }
-  /*
-  .join,
-  .donate {
+  .join h3 {
+    color: var(--primary-700);
+    font-family: var(--display-font);
+    font-size: 2.4rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
     text-align: center;
-  }*/
+  }
 
-  .join h3,
+  .join p {
+    font-size: 1.2rem;
+    color: var(--dark);
+    margin-bottom: 1rem;
+    max-width: 600px;
+    text-align: center;
+  }
+
   .donate h3 {
     color: white;
     font-family: var(--display-font);
@@ -145,9 +153,5 @@
 
   .join-donate-link:hover {
     transform: scale(1.05);
-  }
-
-  .donate-link {
-    /*border: 2px solid var(--primary);*/
   }
 </style>

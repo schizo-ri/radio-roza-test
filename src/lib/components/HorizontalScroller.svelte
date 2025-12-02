@@ -30,10 +30,10 @@
   <Wrapper>
     <div class="controls">
       <button type="button" class="arrow" onclick={scrollLeft}>
-        <img src="/icons/arrow-left-red.svg" width="16" height="16" alt="Scroll left" />
+        <img src="/icons/arrow-fat-left.svg" width="32" height="32" alt="Scroll left" />
       </button>
       <button type="button" class="arrow" onclick={scrollRight}>
-        <img src="/icons/arrow-right-red.svg" width="16" height="16" alt="Scroll right" />
+        <img src="/icons/arrow-fat-right.svg" width="32" height="32" alt="Scroll right" />
       </button>
     </div>
   </Wrapper>
@@ -68,6 +68,7 @@
     margin-left: 0;
 
     max-width: 100cqw;
+    position: relative;
 
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
@@ -83,6 +84,8 @@
   }
 
   .controls {
+    position: absolute;
+    inset: 0;
     align-items: center;
     display: flex;
     justify-content: space-between;
@@ -92,22 +95,37 @@
   }
 
   .controls button {
+    position: absolute;
     cursor: pointer;
     flex-shrink: 0;
+  }
+
+  .controls button:nth-child(1) {
+    left: calc(var(--whitespace) - 32px);
+  }
+
+  .controls button:nth-child(2) {
+    right: calc(var(--whitespace) - 32px);
   }
 
   .arrow {
     all: unset;
     align-items: center;
-    /*background: var(--primary-100);*/
+    background: var(--primary-600);
     border: 1px solid var(--primary-600);
-    color: var(--primary-600);
+    color: white;
     border-radius: 50%;
-    box-shadow: 0px 4px 12px rgba(164, 164, 164, 0.1);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4);
     display: flex;
     justify-content: center;
-    height: 32px;
-    width: 32px;
+    height: 64px;
+    width: 64px;
+    opacity: 0.5;
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  .arrow:hover {
+    opacity: 1;
   }
 
   @media (min-width: 1344px) {

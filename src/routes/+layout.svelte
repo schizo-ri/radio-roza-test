@@ -90,7 +90,7 @@
         <li>
           <a href="https://buymeacoffee.com//RadioRoza" class="social-icons">
             <span class="sr-only">Buy me a coffee</span>
-            <img src="/icons/socials/bmc-logo.svg" alt="Buy me a coffee" />
+            <img src="/icons/socials/bmc-logo.svg" alt="Buy me a coffee" height="24" />
           </a>
         </li>
       </ul>
@@ -236,5 +236,9 @@
   .social-icons img {
     width: auto;
     height: 100%;
+  }
+
+  nav ul li:last-child > .social-icons > img {
+    height: 24px;
   }
 </style>

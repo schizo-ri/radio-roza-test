@@ -49,14 +49,30 @@ export const mockAuthors = [
 ];
 
 export const mockCategories = [
-  { id: 1, name: 'Electronic', slug: 'electronic', color: '#3B82F6' },
-  { id: 2, name: 'Ambient', slug: 'ambient', color: '#8B5CF6' },
-  { id: 3, name: 'Indie Rock', slug: 'indie-rock', color: '#EF4444' },
-  { id: 4, name: 'Experimental', slug: 'experimental', color: '#10B981' },
-  { id: 5, name: 'Jazz', slug: 'jazz', color: '#F59E0B' },
-  { id: 6, name: 'Folk', slug: 'folk', color: '#84CC16' },
-  { id: 7, name: 'Hip Hop', slug: 'hip-hop', color: '#6366F1' },
-  { id: 8, name: 'Review', slug: 'review', color: '#EC4899' },
+  {
+    id: 1,
+    slug: 'aktualno',
+    title: 'Aktualno',
+    description: 'Novo na Radio Roži',
+  },
+  {
+    id: 2,
+    slug: 'album-tjedna',
+    title: 'Album tjedna',
+    description: 'Album tjedna je radio program koji se bavi najnovijim albumima i izdanjima.',
+  },
+  {
+    id: 3,
+    slug: 'komentar',
+    title: 'Komentar',
+    description: 'Komentar je radio program koji se bavi najnovijim komentarima i izdanjima.',
+  },
+  {
+    id: 4,
+    slug: 'cakule',
+    title: 'Čakule',
+    description: 'Čakule je radio program koji se bavi najnovijim čakulama i izdanjima.',
+  },
 ];
 
 export const mockTags = [
@@ -181,7 +197,7 @@ export const mockArticles = [
       alt: 'Person with headphones holding a field recorder in a forest',
     },
     author: mockAuthors[1],
-    category: mockCategories[3], // Experimental
+    category: mockCategories[1], // Experimental
     tags: ['field-recording', 'ambient', 'soundscape', 'experimental', 'found-sound'],
     publishedDate: '2024-01-22T14:30:00Z',
     readTime: 6,
@@ -249,7 +265,7 @@ export const mockArticles = [
       alt: 'Luna Collective band members in moody lighting',
     },
     author: mockAuthors[3],
-    category: mockCategories[7], // Review
+    category: mockCategories[2], // Review
     tags: ['album-review', 'indie-rock', 'shoegaze', 'post-rock', 'chicago'],
     publishedDate: '2024-02-01T09:15:00Z',
     readTime: 5,
@@ -424,7 +440,7 @@ export const mockArticles = [
       alt: 'Jazz musician playing electric piano with laptop and effects pedals',
     },
     author: mockAuthors[2],
-    category: mockCategories[4], // Jazz
+    category: mockCategories[3], // Jazz
     tags: ['jazz', 'fusion', 'electronic', 'improvisation', 'london-jazz'],
     publishedDate: '2024-02-12T11:20:00Z',
     readTime: 6,

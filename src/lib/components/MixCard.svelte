@@ -12,7 +12,7 @@
   <button class="mix-link" onclick={handleClick} type="button">
     <picture class="mix-cover">
       <source srcset={mix.pictures['320wx320h']} type="image/jpeg" />
-      <img src={mix.pictures['320wx320h']} width="260" height="260" alt="{mix.name} cover" />
+      <img src={mix.pictures['320wx320h']} width="200" height="200" alt="{mix.name} cover" />
     </picture>
     <div class="hug">
       <h3 class="mix-name">{mix.name}</h3>
@@ -21,16 +21,19 @@
 
   {#if showTags && mix.tags && mix.tags.length > 0}
     <div class="mix-tags hug">
-      {#each mix.tags as tag (tag.key)}
+      {#each mix.tags.slice(0, 3) as tag (tag.key)}
         <button
           type="button"
           class="mix-tag"
           onclick={(e) => {
             e.stopPropagation();
             window.open(tag.url, '_blank', 'noopener,noreferrer');
-          }}>#{tag.name}</button
+          }}>{tag.name}</button
         >
       {/each}
+      {#if mix.tags.length > 3}
+        <span class="mix-tag">+{mix.tags.length - 3}</span>
+      {/if}
     </div>
   {/if}
 
@@ -42,7 +45,7 @@
       </span>
     {/if}
     <span class="mix-date">
-      <img src="/icons/calendar.svg" alt="Published" width="12" height="12" />
+      <!-- <img src="/icons/calendar.svg" alt="Published" width="12" height="12" /> -->
       {formatDate(new Date(mix.created_time))}
     </span>
   </div>
@@ -52,7 +55,7 @@
   .mix-card {
     border: 2px solid transparent;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    width: 260px;
+    width: 200px;
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -133,7 +136,6 @@
 
   .mix-date {
     margin: 0;
-    margin-top: auto;
     font-size: 0.9rem;
     color: var(--muted);
     display: flex;

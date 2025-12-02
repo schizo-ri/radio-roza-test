@@ -20,12 +20,12 @@
 
 <article class="card">
   <!-- Article image -->
-  <div class="image">
+  <!-- <div class="image">
     <img src={images.medium} alt={images.alt} loading="lazy" />
     <div class="category-tag" style="background-color: {article.category.color}">
       {article.category.name}
     </div>
-  </div>
+  </div> -->
 
   <!-- Article content -->
   <div class="content">
@@ -69,7 +69,7 @@
     {/if}
 
     <!-- Embeds indicator -->
-    {#if article.embeds}
+    <!-- {#if article.embeds}
       <div class="embeds-indicator">
         {#if article.embeds.bandcamp}
           <span class="embed-badge bandcamp">🎵 Bandcamp</span>
@@ -78,19 +78,19 @@
           <span class="embed-badge youtube">▶️ Video</span>
         {/if}
       </div>
-    {/if}
+    {/if} -->
   </div>
 </article>
 
 <style>
   .card {
     border: 2px solid transparent;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    width: 320px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    width: clamp(280px, 320px, 400px);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    transition: border-color 0.2s;
+    transition: border-color 0.15s;
     position: relative;
   }
 
@@ -112,7 +112,7 @@
     display: block;
   }
 
-  .category-tag {
+  /*.category-tag {
     position: absolute;
     bottom: 1rem;
     left: 1rem;
@@ -122,7 +122,7 @@
     font-size: 0.75rem;
     font-weight: 600;
     backdrop-filter: blur(4px);
-  }
+  }*/
 
   .content {
     padding: 1.5rem;
@@ -135,17 +135,17 @@
   }
 
   .title a {
-    color: #1f2937;
+    color: var(--dark);
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: color 0.15s ease;
   }
 
   .title a:hover {
-    color: #3b82f6;
+    color: var(--secondary-700);
   }
 
   .excerpt {
-    color: #6b7280;
+    color: var(--muted);
     line-height: 1.6;
     margin: 0 0 1rem 0;
     display: -webkit-box;

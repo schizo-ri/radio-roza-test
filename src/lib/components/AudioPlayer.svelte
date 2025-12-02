@@ -1,8 +1,8 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
   import { browser } from '$app/environment';
-  import { getCurrentShow, getNextShow } from '$lib/utils/program';
-  // import SpinningVinyl from './SpinningVinyl.svelte';
+  // import { getCurrentShow, getNextShow } from '$lib/utils/program';
+  import SpinningVinyl from './SpinningVinyl.svelte';
   // import { getNowPlayingInfo, getBestImageUrl } from '$lib/utils/musicScraper.js';
 
   // Component props
@@ -21,6 +21,8 @@
   let bufferSeconds = $state(0);
   let onAir = $state(false);
   let isPlaying = $state(false);
+
+  let bufferingStuckTimer = $state(null);
 
   // let volume = $state(1);
   // let muted = $state(false);
@@ -42,6 +44,40 @@
   let hasError = $state(false);
   let errorMessage = $state('');
 
+  const dashSettings = (dashjs) => ({
+    streaming: {
+      // cacheInitSegments: true,
+      delay: {
+        liveDelay: 8,
+        liveDelayFragmentCount: 4,
+      },
+      buffer: {
+        // initialBufferLevel: 8,
+        bufferTimeDefault: 16,
+        bufferTimeAtTopQuality: 32,
+        bufferToKeep: 4,
+        bufferPruningInterval: 2,
+        fastSwitchEnabled: true,
+      },
+      gaps: {
+        // jumpGaps: true,
+        // jumpLargeGaps: true,
+        // smallGapLimit: 1.5,
+      },
+      abr: {
+        initialBitrate: {
+          audio: 64000,
+        },
+        autoSwitchBitrate: {
+          audio: true,
+        },
+      },
+    },
+    debug: {
+      logLevel: dashjs.Debug.LOG_LEVEL_WARN,
+    },
+  });
+
   onMount(async () => {
     if (browser && player) {
       try {
@@ -49,47 +85,15 @@
         dash = dashjs.MediaPlayer().create();
 
         // Configure buffering settings for better prebuffering
-        dash.updateSettings({
-          streaming: {
-            // cacheInitSegments: true,
-            delay: {
-              liveDelay: 8,
-              liveDelayFragmentCount: 4,
-            },
-            buffer: {
-              initialBufferLevel: 8,
-              bufferTimeDefault: 16,
-              bufferTimeAtTopQuality: 32,
-              bufferToKeep: 8,
-              bufferPruningInterval: 4,
-              fastSwitchEnabled: true,
-            },
-            gaps: {
-              // jumpGaps: true,
-              // jumpLargeGaps: true,
-              // smallGapLimit: 1.5,
-            },
-            abr: {
-              initialBitrate: {
-                audio: 64000,
-              },
-              autoSwitchBitrate: {
-                audio: true,
-              },
-            },
-          },
-          debug: {
-            logLevel: dashjs.Debug.LOG_LEVEL_WARN,
-          },
-        });
+        dash.updateSettings(dashSettings(dashjs));
 
         dash.initialize(player, url, false); // Don't auto-play initially
 
         dash.on(dashjs.MediaPlayer.events.ERROR, (e) => {
           console.log('Dash error', e.error?.message);
           // if connection error or resource missing fallback to mp3
-          if (e.error?.code === dashjs.MediaPlayer.errorCodes.RESOURCE_MISSING) {
-            console.log('Falling back to mp3');
+          if (e.error?.code === dashjs.MediaPlayer.errorCodes?.RESOURCE_MISSING) {
+            console.log('Falling back to mp3', e.error?.code);
             player.src = fallbackUrl;
             onAir = true;
           }
@@ -107,6 +111,17 @@
 
         dash.on(dashjs.MediaPlayer.events.PLAYBACK_WAITING, () => {
           console.log('Playback waiting (buffering)');
+          // add timeout to check if buffering is stuck
+          // if timeout is reached after 4 seconds
+          // then reinitialze player
+          // on play start clear timeout
+          bufferingStuckTimer = setTimeout(() => {
+            console.log('Buffering stuck');
+            dash.destroy();
+            dash = dashjs.MediaPlayer().create();
+            dash.updateSettings(dashSettings(dashjs));
+            dash.initialize(player, url, true);
+          }, 4000);
         });
 
         dash.on(dashjs.MediaPlayer.events.BUFFER_LEVEL_UPDATED, () => {
@@ -144,6 +159,7 @@
         player.addEventListener('playing', () => {
           console.log('Audio element playing');
           // isPlaying = true;
+          clearTimeout(bufferingStuckTimer);
         });
 
         player.addEventListener('waiting', () => {
@@ -356,12 +372,12 @@
 
   <div class="controls">
     <div class="toggle-container">
-      <!-- <SpinningVinyl bind:playing={isPlaying} style="position: absolute; inset: 0; z-index: 1;" /> -->
+      <SpinningVinyl bind:playing={isPlaying} style="position: absolute; inset: 0; z-index: 1;" />
       <button class="play" onclick={togglePlay} disabled={!onAir}>
         {#if isPlaying}
-          <img src="/icons/stop.svg" alt="Stop" />
+          <img src="/icons/stop_fill_white.svg" alt="Stop" />
         {:else}
-          <img src="/icons/play.svg" alt="Play" />
+          <img src="/icons/play_fill_white.svg" alt="Play" />
         {/if}
       </button>
     </div>
@@ -495,8 +511,10 @@
 
   .play {
     outline: none;
-    border: 1px solid black;
-    background-color: white;
+    /*background-color: var(--primary-600);*/
+    background-color: transparent;
+    /*border: 1px solid black;*/
+    border: none;
     border-radius: 50%;
     aspect-ratio: 1;
     width: 100%;

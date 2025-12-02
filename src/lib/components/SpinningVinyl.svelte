@@ -11,7 +11,7 @@
     xmlns="http://www.w3.org/2000/svg"
   >
     <!-- Main record disc -->
-    <circle cx="100" cy="100" r="95" fill="#1a1a1a" stroke="#333" stroke-width="1" />
+    <circle cx="100" cy="100" r="95" fill="var(--primary-600)" stroke="#333" stroke-width="1" />
 
     <!-- Partial groove rings - visible only on opposite sides -->
     <g class="grooves">
@@ -105,7 +105,7 @@
     }
     50%,
     75% {
-      opacity: 0.6;
+      opacity: 0.8;
     }
     100% {
       opacity: 1;

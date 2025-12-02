@@ -1,5 +1,5 @@
 export async function load({ fetch }) {
-  const url = `https://api.mixcloud.com/${encodeURIComponent('RadioRoža')}/cloudcasts/?limit=8`;
+  const url = `https://api.mixcloud.com/${encodeURIComponent('RadioRoža')}/cloudcasts/?limit=12`;
 
   try {
     const response = await fetch(url);
