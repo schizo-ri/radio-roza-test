@@ -7,18 +7,30 @@
   import AudioPlayer from '$lib/components/AudioPlayer.svelte';
 
   let { children } = $props();
-  let expanded = $state(false);
+  let expanded = $state(page.url.pathname === '/');
+
+  function handleScroll() {
+    if (expanded) {
+      expanded = false;
+    }
+  }
 </script>
 
 <svelte:head>
   <link rel="icon" href={favicon} />
 </svelte:head>
 
+<svelte:window onscroll={handleScroll} />
+
 <section class="header" class:expanded>
   <div class="header-content">
     <AudioPlayer>
       <button class="expand-btn" onclick={() => (expanded = !expanded)}>
-        {expanded ? '−' : '+'}
+        {#if expanded}
+          <img src="/icons/caret_up.svg" alt="Up" width="20" height="20" />
+        {:else}
+          <img src="/icons/caret_down.svg" alt="Down" width="20" height="20" />
+        {/if}
       </button>
     </AudioPlayer>
     <nav>
@@ -121,7 +133,7 @@
   }
 
   .header.expanded {
-    --header-height: 150px; /* ili koliko treba */
+    --header-height: 240px; /* ili koliko treba */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   }
 
@@ -155,16 +167,24 @@
   }
 
   .expand-btn {
+    margin: 0;
+    padding: 0;
     background: none;
     border: 0;
     outline: 0;
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     cursor: pointer;
-    font-size: 16px;
-    font-weight: 800;
+    font-size: 20px;
+    /*font-weight: 800;*/
     line-height: 1;
-    color: var(--muted);
+    /*color: var(--muted);*/
+  }
+
+  .expand-btn img {
+    display: block;
+    width: 20px;
+    height: 20px;
   }
 
   nav {

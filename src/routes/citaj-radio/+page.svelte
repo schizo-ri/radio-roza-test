@@ -1,59 +1,31 @@
 <script>
-  import { onMount } from 'svelte';
+  import { page } from '$app/stores';
   import PageTitle from '$lib/components/PageTitle.svelte';
   import Wrapper from '$lib/components/Wrapper.svelte';
   import ArticleCard from '$lib/components/ArticleCard.svelte';
-  import { getArticles } from '$lib/data/mockArticles.js';
 
-  const categories = [
-    {
-      id: 1,
-      slug: 'aktualno',
-      title: 'Aktualno',
-      description: 'Novo na Radio Roži',
-    },
-    {
-      id: 2,
-      slug: 'album-tjedna',
-      title: 'Album tjedna',
-      description: 'Album tjedna je radio program koji se bavi najnovijim albumima i izdanjima.',
-    },
-    {
-      id: 3,
-      slug: 'komentar',
-      title: 'Komentar',
-      description: 'Komentar je radio program koji se bavi najnovijim komentarima i izdanjima.',
-    },
-    {
-      id: 4,
-      slug: 'cakule',
-      title: 'Čakule',
-      description: 'Čakule je radio program koji se bavi najnovijim čakulama i izdanjima.',
-    },
-  ];
+  export let data;
 
-  // Props
-  let featured = false;
-  let category = null;
-  let limit = 8;
+  $: articles = data.articles;
+  $: categories = data.categories;
+  $: authors = data.authors;
+  $: filters = data.filters;
 
-  // State
-  let articles = [];
-  // Categories loaded for potential future use
-  let loading = true;
+  function getFeaturedToggleUrl() {
+    const url = new URL($page.url);
+    if (filters.featured) {
+      url.searchParams.delete('featured');
+    } else {
+      url.searchParams.set('featured', 'true');
+    }
+    return url.toString();
+  }
 
-  onMount(() => {
-    // Load articles based on props
-    articles = getArticles({
-      featured,
-      category,
-      limit,
-    });
-
-    // Categories available for future filtering functionality
-
-    loading = false;
-  });
+  function getRemoveFilterUrl(filterName) {
+    const url = new URL($page.url);
+    url.searchParams.delete(filterName);
+    return url.toString();
+  }
 </script>
 
 <PageTitle title="Čitaj radio" />
@@ -61,7 +33,7 @@
 <Wrapper>
   <section class="categories">
     {#each categories as category (category.id)}
-      <a href={`/citaj-radio/${category.slug}`} class="category">
+      <a href={`/citaj-radio/?kategorija=${category.slug}`} class="category">
         <h2>{category.title}</h2>
         <p>{category.description}</p>
       </a>
@@ -125,6 +97,33 @@
     row-gap: 2rem;
     padding-top: 2rem;
     padding-bottom: 2rem;
+  }
+
+  .no-articles {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--muted);
+  }
+
+  .no-articles p {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+
+  .clear-btn {
+    background: var(--primary-600);
+    color: white;
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: inline-block;
+  }
+
+  .clear-btn:hover {
+    background: var(--primary-700);
   }
 
   @media (min-width: 700px) {

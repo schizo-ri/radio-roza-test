@@ -61,7 +61,7 @@
       <li><a href="/citaj-radio">Čitaj radio</a></li>
       {#if article}
         <li>
-          <a href="/citaj-radio?category={article.category.slug}">{article.category.name}</a>
+          <a href="/citaj-radio?kategorija={article.category.slug}">{article.category.name}</a>
         </li>
         <li aria-current="page">{article.title}</li>
       {/if}

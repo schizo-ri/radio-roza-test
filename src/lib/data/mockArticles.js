@@ -9,6 +9,7 @@ export const mockAuthors = [
   {
     id: 1,
     name: 'Elena Rodriguez',
+    slug: 'elena-rodriguez',
     bio: 'Music journalist and electronic music enthusiast with over 10 years of experience covering underground scenes.',
     avatar: '/images/authors/elena-rodriguez.svg',
     social: {
@@ -19,6 +20,7 @@ export const mockAuthors = [
   {
     id: 2,
     name: 'Marcus Chen',
+    slug: 'marcus-chen',
     bio: 'Sound engineer turned writer, specializing in ambient and experimental music.',
     avatar: '/images/authors/marcus-chen.svg',
     social: {
@@ -29,6 +31,7 @@ export const mockAuthors = [
   {
     id: 3,
     name: 'Zara Al-Mahmoud',
+    slug: 'zara-al-mahmoud',
     bio: 'Cultural critic and DJ focusing on the intersection of technology and traditional music.',
     avatar: '/images/authors/zara-mahmoud.svg',
     social: {
@@ -39,6 +42,7 @@ export const mockAuthors = [
   {
     id: 4,
     name: 'Alex Thompson',
+    slug: 'alex-thompson',
     bio: 'Freelance music writer covering indie rock, shoegaze, and post-punk revival.',
     avatar: '/images/authors/alex-thompson.svg',
     social: {
@@ -603,7 +607,10 @@ export function getArticles(options = {}) {
 
   if (options.author) {
     articles = articles.filter(
-      (article) => article.author.id === options.author || article.author.name === options.author
+      (article) =>
+        article.author.id === options.author ||
+        article.author.name === options.author ||
+        article.author.slug === options.author
     );
   }
 

@@ -1,32 +1,13 @@
 <script>
-  import {
-    generateAuthorAvatarUrl,
-    generateArticleImageSet,
-    getThemeFromCategory,
-  } from '$lib/utils/placeholders.js';
+  import { generateAuthorAvatarUrl } from '$lib/utils/placeholders.js';
   import { formatDate } from '$lib/utils/dates.js';
 
   let { article } = $props();
 
-  // Generate placeholder images for articles
-  function getArticleImages(article) {
-    const theme = getThemeFromCategory(article.category.slug);
-    return generateArticleImageSet(article.title, theme);
-  }
-
-  const images = getArticleImages(article);
   const authorAvatar = generateAuthorAvatarUrl(article.author.name, 48);
 </script>
 
 <article class="card">
-  <!-- Article image -->
-  <!-- <div class="image">
-    <img src={images.medium} alt={images.alt} loading="lazy" />
-    <div class="category-tag" style="background-color: {article.category.color}">
-      {article.category.name}
-    </div>
-  </div> -->
-
   <!-- Article content -->
   <div class="content">
     <h2 class="title">
@@ -44,7 +25,9 @@
       <div class="author-info">
         <img src={authorAvatar} alt="{article.author.name} avatar" class="author-avatar" />
         <div class="author-details">
-          <span class="author-name">{article.author.name}</span>
+          <a href="/citaj-radio?autor={article.author.slug}" class="author-name">
+            {article.author.name}
+          </a>
           <time class="publish-date" datetime={article.publishedDate}>
             {formatDate(article.publishedDate)}
           </time>
@@ -60,25 +43,13 @@
     {#if article.tags && article.tags.length > 0}
       <div class="tags">
         {#each article.tags.slice(0, 3) as tag (tag)}
-          <span class="tag">#{tag}</span>
+          <a href="/citaj-radio?tag={encodeURIComponent(tag)}" class="tag">#{tag}</a>
         {/each}
         {#if article.tags.length > 3}
           <span class="tag-more">+{article.tags.length - 3} more</span>
         {/if}
       </div>
     {/if}
-
-    <!-- Embeds indicator -->
-    <!-- {#if article.embeds}
-      <div class="embeds-indicator">
-        {#if article.embeds.bandcamp}
-          <span class="embed-badge bandcamp">🎵 Bandcamp</span>
-        {/if}
-        {#if article.embeds.youtube}
-          <span class="embed-badge youtube">▶️ Video</span>
-        {/if}
-      </div>
-    {/if} -->
   </div>
 </article>
 
@@ -183,8 +154,15 @@
 
   .author-name {
     font-weight: 600;
-    color: #1f2937;
+    color: var(--dark);
     font-size: 0.875rem;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .author-name:hover {
+    color: var(--secondary-600);
+    text-decoration: underline;
   }
 
   .publish-date {
@@ -212,6 +190,15 @@
     border-radius: 12px;
     font-size: 0.75rem;
     font-weight: 500;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+  }
+
+  .tag:hover {
+    background: var(--secondary-700);
+    color: white;
+    transform: translateY(-1px);
   }
 
   .tag-more {
@@ -220,7 +207,7 @@
     font-style: italic;
   }
 
-  .embeds-indicator {
+  /*.embeds-indicator {
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
@@ -241,5 +228,5 @@
   .embed-badge.youtube {
     background: #ff0000;
     color: white;
-  }
+  }*/
 </style>

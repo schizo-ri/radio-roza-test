@@ -7,7 +7,7 @@
 
   // Component props
   let {
-    children,
+    children = null,
     streamUrl = 'https://radio-roza.org/stream/dash/live.mpd',
     fallbackUrl = 'https://stream.radio-roza.org/live.mp3',
   } = $props();
@@ -23,6 +23,11 @@
   let isPlaying = $state(false);
 
   let bufferingStuckTimer = $state(null);
+  let dataStuckTimer = $state(null);
+  let lastKnownTime = $state(0);
+  let interruptionCheckTimer = $state(null);
+  let audioContext = $state(null);
+  let isRecovering = $state(false);
 
   // let volume = $state(1);
   // let muted = $state(false);
@@ -81,6 +86,30 @@
   onMount(async () => {
     if (browser && player) {
       try {
+        // Create AudioContext for interruption monitoring
+        try {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+          // Monitor AudioContext state changes
+          audioContext.addEventListener('statechange', () => {
+            // Guard against null audioContext
+            if (!audioContext) {
+              return;
+            }
+            console.log('AudioContext state changed to:', audioContext.state);
+            if (audioContext.state === 'suspended' && isPlaying) {
+              console.warn('AudioContext suspended - audio likely interrupted');
+              isPlaying = false;
+              handleError('Audio context suspended');
+            } else if (audioContext.state === 'running' && !isPlaying && onAir) {
+              console.log('AudioContext resumed');
+            }
+          });
+        } catch (audioError) {
+          console.warn('Failed to create AudioContext:', audioError);
+          audioContext = null;
+        }
+
         const dashjs = await import('dashjs');
         dash = dashjs.MediaPlayer().create();
 
@@ -89,59 +118,8 @@
 
         dash.initialize(player, url, false); // Don't auto-play initially
 
-        dash.on(dashjs.MediaPlayer.events.ERROR, (e) => {
-          console.log('Dash error', e.error?.message);
-          // if connection error or resource missing fallback to mp3
-          if (e.error?.code === dashjs.MediaPlayer.errorCodes?.RESOURCE_MISSING) {
-            console.log('Falling back to mp3', e.error?.code);
-            player.src = fallbackUrl;
-            onAir = true;
-          }
-        });
-
-        dash.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED, async () => {
-          console.log('Stream initialized');
-          // player.muted = true;
-          // await player.play();
-          updateBufferStatus();
-          // await player.pause();
-          // player.muted = false;
-          onAir = true;
-        });
-
-        dash.on(dashjs.MediaPlayer.events.PLAYBACK_WAITING, () => {
-          console.log('Playback waiting (buffering)');
-          // add timeout to check if buffering is stuck
-          // if timeout is reached after 4 seconds
-          // then reinitialze player
-          // on play start clear timeout
-          bufferingStuckTimer = setTimeout(() => {
-            console.log('Buffering stuck');
-            dash.destroy();
-            dash = dashjs.MediaPlayer().create();
-            dash.updateSettings(dashSettings(dashjs));
-            dash.initialize(player, url, true);
-          }, 4000);
-        });
-
-        dash.on(dashjs.MediaPlayer.events.BUFFER_LEVEL_UPDATED, () => {
-          updateBufferStatus();
-        });
-
-        dash.on(dashjs.MediaPlayer.events.CAN_PLAY, () => {
-          console.log('Dash can play');
-          onAir = true;
-        });
-
-        dash.on(dashjs.MediaPlayer.events.QUALITY_CHANGE_REQUESTED, function (e) {
-          const quality = e.newRepresentation?.bitrateInKbit || 'unknown';
-          console.log('Promena kvaliteta zahtevana:', quality, 'za tip:', e.mediaType);
-        });
-
-        dash.on(dashjs.MediaPlayer.events.QUALITY_CHANGE_RENDERED, function (e) {
-          const quality = e.newRepresentation?.bitrateInKbit || 'unknown';
-          console.log('Novi kvalitet aktiviran:', quality, 'buffer:', bufferSeconds);
-        });
+        // Setup all dash event listeners
+        setupDashEventListeners(dashjs);
 
         // Check if audio is muted or volume is 0
         player.addEventListener('loadedmetadata', () => {
@@ -160,11 +138,12 @@
           console.log('Audio element playing');
           // isPlaying = true;
           clearTimeout(bufferingStuckTimer);
+          clearTimeout(dataStuckTimer);
         });
 
         player.addEventListener('waiting', () => {
           console.log('Audio waiting for data');
-          bufferingStuckTimer = setTimeout(() => {
+          dataStuckTimer = setTimeout(() => {
             console.log('Waiting data too long');
             dash.destroy();
             dash = dashjs.MediaPlayer().create();
@@ -178,6 +157,38 @@
           // volume = player.volume;
           // muted = player.muted;
         });
+
+        // Listen for audio device changes
+        if (navigator.mediaDevices) {
+          navigator.mediaDevices.addEventListener('devicechange', () => {
+            console.log('Audio devices changed');
+            // Check if playback is still working after device change
+            if (isPlaying && player && !player.paused) {
+              setTimeout(() => checkForInterruption(), 1000);
+            }
+          });
+        }
+
+        // Listen for when audio becomes interrupted (like device disconnect)
+        player.addEventListener('pause', () => {
+          console.log('Audio paused');
+          // Only update state if we didn't pause it ourselves
+          if (isPlaying && !player.ended) {
+            console.warn('Audio paused unexpectedly - likely interrupted');
+            isPlaying = false;
+          }
+        });
+
+        // Listen for when audio resumes after interruption
+        player.addEventListener('play', () => {
+          console.log('Audio play event');
+          lastKnownTime = player.currentTime;
+        });
+
+        // Start periodic interruption checking only once
+        if (!interruptionCheckTimer) {
+          interruptionCheckTimer = setInterval(checkForInterruption, 1000);
+        }
       } catch (error) {
         console.error('Failed to load dashjs:', error);
       }
@@ -206,6 +217,183 @@
     }
   }
 
+  // Function to detect audio interruption by monitoring playback progress
+  function checkForInterruption() {
+    if (!player || player.paused || player.ended || !isPlaying) {
+      return;
+    }
+
+    // If currentTime hasn't changed but player claims to be playing, likely interrupted
+    if (player.currentTime === lastKnownTime && isPlaying && !player.paused) {
+      console.warn('Audio interruption detected - playback stuck');
+      isPlaying = false;
+      handleError('Audio output interrupted - click play to resume');
+
+      // Attempt automatic recovery (only once)
+      setTimeout(() => {
+        if (hasError && !isPlaying && !isRecovering) {
+          attemptRecovery();
+        }
+      }, 2000);
+    }
+
+    lastKnownTime = player.currentTime;
+  }
+
+  // Function to attempt recovery from audio interruption
+  async function attemptRecovery() {
+    if (isRecovering) {
+      console.log('Recovery already in progress, skipping...');
+      return;
+    }
+
+    isRecovering = true;
+    console.log('Attempting audio recovery...');
+
+    try {
+      // Clear error state
+      hasError = false;
+      errorMessage = '';
+
+      // Resume AudioContext if suspended
+      if (audioContext && audioContext.state === 'suspended') {
+        await audioContext.resume();
+      }
+
+      // Reinitialize dash player if needed
+      if (dash && player) {
+        dash.destroy();
+        const dashjs = await import('dashjs');
+        dash = dashjs.MediaPlayer().create();
+        dash.updateSettings(dashSettings(dashjs));
+        dash.initialize(player, url, false);
+
+        // Re-add all dash event listeners
+        setupDashEventListeners(dashjs);
+
+        // Wait a moment then try to play
+        setTimeout(async () => {
+          try {
+            await player.play();
+            console.log('Audio recovery successful');
+          } catch (error) {
+            console.error('Recovery play failed:', error);
+            handleError('Recovery failed - please try manually');
+          }
+        }, 1000);
+      }
+    } catch (error) {
+      console.error('Recovery attempt failed:', error);
+      handleError('Auto-recovery failed - please refresh');
+    } finally {
+      isRecovering = false;
+    }
+  }
+
+  // Extract dash event listener setup into reusable function
+  function setupDashEventListeners(dashjs) {
+    // Add safety checks for event constants
+    if (!dashjs.MediaPlayer?.events) {
+      console.error('Dash.js events not available');
+      return;
+    }
+
+    const events = dashjs.MediaPlayer.events;
+
+    if (events.ERROR) {
+      dash.on(events.ERROR, (e) => {
+        console.log('Dash error', e.error?.message);
+        if (e.error?.code === dashjs.MediaPlayer.errorCodes?.RESOURCE_MISSING) {
+          console.log('Falling back to mp3', e.error?.code);
+          player.src = fallbackUrl;
+          onAir = true;
+        }
+      });
+    }
+
+    if (events.STREAM_INITIALIZED) {
+      dash.on(events.STREAM_INITIALIZED, async () => {
+        console.log('Stream initialized');
+        updateBufferStatus();
+        onAir = true;
+      });
+    }
+
+    if (events.PLAYBACK_WAITING) {
+      dash.on(events.PLAYBACK_WAITING, () => {
+        console.log('Playback waiting (buffering)');
+        bufferingStuckTimer = setTimeout(() => {
+          console.log('Buffering stuck');
+          attemptRecovery();
+        }, 4000);
+      });
+    }
+
+    if (events.PLAYBACK_PAUSED) {
+      dash.on(events.PLAYBACK_PAUSED, () => {
+        console.log('Dash playback paused');
+        if (isPlaying) {
+          console.warn('Dash playback interrupted unexpectedly');
+          isPlaying = false;
+        }
+      });
+    }
+
+    if (events.PLAYBACK_PLAYING) {
+      dash.on(events.PLAYBACK_PLAYING, () => {
+        console.log('Dash playback playing');
+        isPlaying = true;
+        lastKnownTime = player.currentTime;
+        clearTimeout(bufferingStuckTimer);
+        clearTimeout(dataStuckTimer);
+      });
+    }
+
+    if (events.PLAYBACK_STALLED) {
+      dash.on(events.PLAYBACK_STALLED, () => {
+        console.log('Dash playback stalled');
+        if (isPlaying && !player.paused) {
+          console.warn('Playback stalled - possible audio interruption');
+          handleError('Audio playback stalled');
+        }
+      });
+    }
+
+    if (events.CONNECTION_CLOSED) {
+      dash.on(events.CONNECTION_CLOSED, () => {
+        console.log('Dash connection closed');
+        handleError('Audio connection lost');
+      });
+    }
+
+    if (events.BUFFER_LEVEL_UPDATED) {
+      dash.on(events.BUFFER_LEVEL_UPDATED, () => {
+        updateBufferStatus();
+      });
+    }
+
+    if (events.CAN_PLAY) {
+      dash.on(events.CAN_PLAY, () => {
+        console.log('Dash can play');
+        onAir = true;
+      });
+    }
+
+    if (events.QUALITY_CHANGE_REQUESTED) {
+      dash.on(events.QUALITY_CHANGE_REQUESTED, function (e) {
+        const quality = e.newRepresentation?.bitrateInKbit || 'unknown';
+        console.log('Promena kvaliteta zahtevana:', quality, 'za tip:', e.mediaType);
+      });
+    }
+
+    if (events.QUALITY_CHANGE_RENDERED) {
+      dash.on(events.QUALITY_CHANGE_RENDERED, function (e) {
+        const quality = e.newRepresentation?.bitrateInKbit || 'unknown';
+        console.log('Novi kvalitet aktiviran:', quality, 'buffer:', bufferSeconds);
+      });
+    }
+  }
+
   function handleError(message) {
     hasError = true;
     errorMessage = message;
@@ -219,8 +407,17 @@
     }
 
     try {
+      // Resume AudioContext if suspended
+      if (audioContext && audioContext.state === 'suspended') {
+        await audioContext.resume();
+      }
+
       await player.play();
       isPlaying = true;
+      hasError = false; // Clear any previous interruption errors
+      onAir = true;
+      lastKnownTime = player.currentTime;
+      updateMediaSessionPlaybackState();
     } catch (error) {
       console.error('Play failed:', error);
       handleError('Playback failed');
@@ -231,6 +428,7 @@
     if (player && isPlaying) {
       await player.pause();
       isPlaying = false;
+      updateMediaSessionPlaybackState();
     }
   }
 
@@ -258,6 +456,26 @@
   // }
 
   function cleanup() {
+    if (interruptionCheckTimer) {
+      clearInterval(interruptionCheckTimer);
+      interruptionCheckTimer = null;
+    }
+    if (bufferingStuckTimer) {
+      clearTimeout(bufferingStuckTimer);
+    }
+    if (dataStuckTimer) {
+      clearTimeout(dataStuckTimer);
+    }
+    if (audioContext) {
+      try {
+        if (audioContext.state !== 'closed') {
+          audioContext.close();
+        }
+      } catch (e) {
+        console.warn('Error closing AudioContext:', e);
+      }
+      audioContext = null;
+    }
     if (dash) {
       try {
         dash.destroy();
@@ -266,64 +484,149 @@
       }
       dash = null;
     }
+    // Reset recovery flag
+    isRecovering = false;
   }
 
-  $effect(() => {
-    const nowPlayingUrl = 'https://stream.radio-roza.org/status-json.xsl';
+  // Media Session API functions
+  function setupMediaSessionHandlers() {
+    if (!browser || !('mediaSession' in navigator)) {
+      return;
+    }
 
-    const fetchNowPlaying = async () => {
-      try {
-        const res = await fetch(nowPlayingUrl);
-        const data = await res.json();
+    try {
+      navigator.mediaSession.setActionHandler('play', () => {
+        play();
+      });
 
-        if (!data?.icestats) {
-          return;
-        }
+      navigator.mediaSession.setActionHandler('pause', () => {
+        pause();
+      });
 
-        const sources = data.icestats.source;
-        const source = sources.find((s) => s.artist);
-        if (!source) {
-          console.log('No source found');
-          return;
-        }
-        const artist = source.artist;
-        const title = source.title;
+      navigator.mediaSession.setActionHandler('stop', () => {
+        pause();
+      });
 
-        // Update basic now playing info
-        nowPlaying = { artist, title };
+      // For radio streams, we don't typically support seeking
+      // navigator.mediaSession.setActionHandler('seekbackward', null);
+      // navigator.mediaSession.setActionHandler('seekforward', null);
+      // navigator.mediaSession.setActionHandler('previoustrack', null);
+      // navigator.mediaSession.setActionHandler('nexttrack', null);
+    } catch (error) {
+      console.warn('Error setting up Media Session handlers:', error);
+    }
+  }
 
-        // Fetch extended metadata (artist images, album covers)
-        // if (artist && artist !== 'Radio Roza') {
-        //   try {
-        //     const metadata = await getNowPlayingInfo(artist, title);
-        //     musicMetadata = {
-        //       artist: metadata.artist,
-        //       album: metadata.album,
-        //       track: title
-        //     };
-        //     console.log('Music metadata:', musicMetadata);
-        //   } catch (metadataError) {
-        //     console.error('Error fetching music metadata:', metadataError);
-        //   }
-        // } else {
-        //   // Reset metadata for generic content
-        //   musicMetadata = { artist: null, album: null, track: '' };
-        // }
-      } catch (error) {
-        console.error('Error fetching now playing:', error);
+  function updateMediaSessionMetadata() {
+    if (!browser || !('mediaSession' in navigator)) {
+      return;
+    }
+
+    try {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: nowPlaying.title,
+        artist: nowPlaying.artist,
+        album: 'Radio Roza Live Stream',
+        artwork: [
+          {
+            src: '/images/rr_logo-square_red_192.png',
+            sizes: '192x192',
+            type: 'image/png',
+          },
+          {
+            src: '/images/rr_logo-square_red_512.png',
+            sizes: '512x512',
+            type: 'image/png',
+          },
+        ],
+      });
+    } catch (error) {
+      console.warn('Error updating Media Session metadata:', error);
+    }
+  }
+
+  function updateMediaSessionPlaybackState() {
+    if (!browser || !('mediaSession' in navigator)) {
+      return;
+    }
+
+    try {
+      navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused';
+    } catch (error) {
+      console.warn('Error updating Media Session playback state:', error);
+    }
+  }
+
+  // Move nowPlaying fetch outside of $effect to avoid reactive loops
+  const nowPlayingUrl = 'https://stream.radio-roza.org/status-json.xsl';
+
+  const fetchNowPlaying = async () => {
+    try {
+      const res = await fetch(nowPlayingUrl);
+      const data = await res.json();
+
+      if (!data?.icestats) {
+        return;
       }
-    };
+
+      const sources = data.icestats.source;
+      const source = sources.find((s) => s.artist);
+      if (!source) {
+        console.log('No source found');
+        return;
+      }
+      const artist = source.artist;
+      const title = source.title;
+
+      // Update basic now playing info
+      nowPlaying = { artist, title };
+
+      // Update Media Session metadata when nowPlaying changes
+      updateMediaSessionMetadata();
+
+      // Fetch extended metadata (artist images, album covers)
+      // if (artist && artist !== 'Radio Roza') {
+      //   try {
+      //     const metadata = await getNowPlayingInfo(artist, title);
+      //     musicMetadata = {
+      //       artist: metadata.artist,
+      //       album: metadata.album,
+      //       track: title
+      //     };
+      //     console.log('Music metadata:', musicMetadata);
+      //   } catch (metadataError) {
+      //     console.error('Error fetching music metadata:', metadataError);
+      //   }
+      // } else {
+      //   // Reset metadata for generic content
+      //   musicMetadata = { artist: null, album: null, track: '' };
+      // }
+    } catch (error) {
+      console.error('Error fetching now playing:', error);
+    }
+  };
+
+  // Reactive effect to update Media Session metadata when nowPlaying changes
+  $effect(() => {
+    updateMediaSessionMetadata();
+  });
+
+  // Set up nowPlaying fetch interval - separate onMount to avoid conflicts
+  onMount(() => {
+    // Setup Media Session API
+    setupMediaSessionHandlers();
+    updateMediaSessionMetadata();
 
     // Fetch immediately
     fetchNowPlaying();
 
     // Then fetch every 5 seconds
-    const interval = setInterval(fetchNowPlaying, 5000);
+    const nowPlayingInterval = setInterval(fetchNowPlaying, 5000);
 
-    // Cleanup function
-    return () => {
-      clearInterval(interval);
-    };
+    // Cleanup
+    onDestroy(() => {
+      clearInterval(nowPlayingInterval);
+    });
   });
 
   // Function to start playback (can be called by parent component)
@@ -348,63 +651,69 @@
   // }
 </script>
 
-<div class="container">
-  {#if hasError}
-    <div class="error-message">
-      <img src="/icons/error.svg" alt="Error" />
-      <span>{errorMessage}</span>
-    </div>
-  {/if}
-
-  <div class="actions">
-    <div class="on-air">
-      {#if onAir}
-        <div class="player-status">
-          <span class="dot green"></span> <span class="sr-only">On Air</span>
-        </div>
-      {:else if hasError}
-        <div class="player-status">
-          <span class="dot red"></span> <span class="sr-only">Error</span>
-        </div>
-      {:else}
-        <div class="player-status">
-          <span class="dot warning"></span> <span class="sr-only">Connecting...</span>
-        </div>
-      {/if}
-    </div>
-    <div class="expand">
-      {@render children()}
-    </div>
-  </div>
-
-  <div class="controls">
-    <div class="toggle-container">
-      <SpinningVinyl bind:playing={isPlaying} style="position: absolute; inset: 0; z-index: 1;" />
-      <button class="play" onclick={togglePlay} disabled={!onAir}>
-        {#if isPlaying}
-          <img src="/icons/stop_fill_white.svg" alt="Stop" />
-        {:else}
-          <img src="/icons/play_fill_white.svg" alt="Play" />
+<div class="wrapper">
+  <div class="container">
+    {#if hasError}
+      <div class="error-message">
+        <img src="/icons/error.svg" alt="Error" />
+        <span>{errorMessage}</span>
+        {#if errorMessage.includes('interrupted') || errorMessage.includes('stalled') || errorMessage.includes('connection')}
+          <button class="recovery-btn" onclick={attemptRecovery}> Try Recovery </button>
         {/if}
-      </button>
-    </div>
-  </div>
+      </div>
+    {/if}
 
-  <section class="now-playing" aria-label="Now playing">
-    <dl class="track-info" aria-live="polite">
-      <dt class="sr-only">Track title</dt>
-      <dd class="track-title">{nowPlaying.title}</dd>
-      <dt class="sr-only">Artist</dt>
-      <dd class="track-artist">{nowPlaying.artist}</dd>
-    </dl>
-    <!-- Buffer status indicator -->
-    <div class="buffer">
-      <progress class="buffer-progress" value={bufferProgress} max="100"></progress>
+    <div class="actions">
+      <div class="on-air">
+        {#if onAir}
+          <div class="player-status">
+            <span class="dot green"></span> <span class="sr-only">On Air</span>
+          </div>
+        {:else if hasError}
+          <div class="player-status">
+            <span class="dot red"></span> <span class="sr-only">Error</span>
+          </div>
+        {:else}
+          <div class="player-status">
+            <span class="dot warning"></span> <span class="sr-only">Connecting...</span>
+          </div>
+        {/if}
+      </div>
+      <div class="expand">
+        {#if children}
+          {@render children()}
+        {/if}
+      </div>
     </div>
-  </section>
 
-  <!-- Current program -->
-  <!-- {#if currentShow?.title}
+    <div class="controls">
+      <div class="toggle-container">
+        <SpinningVinyl bind:playing={isPlaying} style="position: absolute; inset: 0; z-index: 1;" />
+        <button class="play" onclick={togglePlay} disabled={!onAir}>
+          {#if isPlaying}
+            <img src="/icons/stop_fill_white.svg" alt="Stop" width="20" height="20" />
+          {:else}
+            <img src="/icons/play_fill_white.svg" alt="Play" width="24" height="24" />
+          {/if}
+        </button>
+      </div>
+    </div>
+
+    <section class="now-playing" aria-label="Now playing">
+      <dl class="track-info" aria-live="polite">
+        <dt class="sr-only">Track title</dt>
+        <dd class="track-title">{nowPlaying.title}</dd>
+        <dt class="sr-only">Artist</dt>
+        <dd class="track-artist">{nowPlaying.artist}</dd>
+      </dl>
+      <!-- Buffer status indicator -->
+      <div class="buffer">
+        <progress class="buffer-progress" value={bufferProgress} max="100"></progress>
+      </div>
+    </section>
+
+    <!-- Current program -->
+    <!-- {#if currentShow?.title}
     <div class="program">
       <dl class="program-info" aria-live="polite">
         <dt class="sr-only">Trenutno</dt>
@@ -421,7 +730,7 @@
     </div>
   {/if} -->
 
-  <!-- <div class="volume-control">
+    <!-- <div class="volume-control">
     <button class="volume-btn" onclick={toggleMute}>
       {#if muted}
         <img src="/icons/volume-x.svg" alt="Muted" />
@@ -444,8 +753,15 @@
     />
   </div> -->
 
-  <!-- Audio element (hidden controls since we're managing playback) -->
-  <audio id="audioPlayer" src={url} bind:this={player} preload="none"></audio>
+    <!-- Audio element (hidden controls since we're managing playback) -->
+    <audio id="audioPlayer" src={url} bind:this={player} preload="none"></audio>
+  </div>
+
+  <p>some info</p>
+  <p>some info</p>
+  <p>some info</p>
+  <p>some info</p>
+  <p>some info</p>
 </div>
 
 <style>
@@ -459,6 +775,46 @@
     padding-top: 8px;
     padding-bottom: 8px;
     padding-right: 16px;
+  }
+
+  .error-message {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fee2e2;
+    border: 1px solid #fecaca;
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    font-size: 0.875rem;
+    color: #dc2626;
+  }
+
+  .error-message img {
+    width: 16px;
+    height: 16px;
+    opacity: 0.8;
+  }
+
+  .recovery-btn {
+    background: #dc2626;
+    color: white;
+    border: none;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    margin-left: auto;
+    transition: background-color 0.2s ease;
+  }
+
+  .recovery-btn:hover {
+    background: #b91c1c;
+  }
+
+  .recovery-btn:active {
+    transform: translateY(1px);
   }
 
   .actions {

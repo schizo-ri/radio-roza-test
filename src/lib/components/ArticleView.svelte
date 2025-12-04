@@ -70,7 +70,9 @@
         <div class="author-section">
           <img src={authorAvatar} alt="{article.author.name} avatar" class="author-avatar" />
           <div class="author-info">
-            <h3 class="author-name">{article.author.name}</h3>
+            <a href="/citaj-radio?autor={article.author.slug}" class="author-name"
+              >{article.author.name}</a
+            >
             <p class="author-bio">{article.author.bio}</p>
 
             <!-- Social links -->
@@ -139,6 +141,7 @@
 
     <!-- Article content -->
     <div class="article-content">
+      <!-- Content is sanitized in mockArticles.js -->
       {@html article.content}
     </div>
 
@@ -150,6 +153,7 @@
         {#if article.embeds.bandcamp}
           <div class="embed-container">
             <h3>🎵 Listen on Bandcamp</h3>
+            <!-- Bandcamp embed URLs are controlled and safe -->
             {@html renderBandcampEmbed(article.embeds.bandcamp)}
           </div>
         {/if}
@@ -157,6 +161,7 @@
         {#if article.embeds.youtube}
           <div class="embed-container">
             <h3>▶️ Watch on YouTube</h3>
+            <!-- YouTube embed URLs are controlled and safe -->
             {@html renderYouTubeEmbed(article.embeds.youtube)}
           </div>
         {/if}
@@ -169,7 +174,7 @@
         <h3>Tags</h3>
         <div class="tags-list">
           {#each article.tags as tag (tag)}
-            <span class="tag">#{tag}</span>
+            <a href="/citaj-radio?tag={encodeURIComponent(tag)}" class="tag">#{tag}</a>
           {/each}
         </div>
       </div>
@@ -232,18 +237,6 @@
     /*box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);*/
   }
 
-  .featured-badge {
-    display: inline-block;
-    background: linear-gradient(135deg, #fbbf24, #f59e0b);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 25px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
-
   .article-header {
     border-bottom: 1px solid #e5e7eb;
     padding-bottom: 2rem;
@@ -303,7 +296,15 @@
   .author-name {
     font-size: 1.125rem;
     color: var(--dark);
+    font-weight: 500;
     margin: 0 0 0.5rem 0;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .author-name:hover {
+    color: var(--secondary-600);
+    text-decoration: underline;
   }
 
   .author-bio {
@@ -491,12 +492,15 @@
     border-radius: 16px;
     font-size: 0.875rem;
     font-weight: 500;
+    text-decoration: none;
+    display: inline-block;
     transition: all 0.2s;
   }
 
   .tag:hover {
-    background: #cbd5e1;
-    cursor: pointer;
+    background: var(--secondary-700);
+    color: white;
+    transform: translateY(-1px);
   }
 
   .article-footer {
