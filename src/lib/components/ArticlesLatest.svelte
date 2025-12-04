@@ -31,18 +31,13 @@
 
 {#if loading}
   <Wrapper>
-    <section class="articles-latest">
-      <h2>Čitaj radio</h2>
+    <section class="placeholders">
       <p>Učitavanje članaka...</p>
     </section>
   </Wrapper>
 {:else}
   <section class="articles-latest">
     <Wrapper>
-      <header class="header">
-        <h2>Čitaj radio</h2>
-        <a href="/citaj-radio" class="link">Pogledaj sve</a>
-      </header>
       {#if articles && articles.length > 0}
         <!-- <HorizontalScroller> -->
         <div class="grid">

@@ -24,22 +24,23 @@
   <section class="container {className}" bind:this={containerRef} {...rest}>
     {@render children()}
   </section>
-</div>
-
-{#if controls}
-  <Wrapper>
+  {#if controls}
     <div class="controls">
-      <button type="button" class="arrow" onclick={scrollLeft}>
-        <img src="/icons/arrow-fat-left.svg" width="32" height="32" alt="Scroll left" />
+      <button type="button" class="arrow left" onclick={scrollLeft}>
+        <img src="/icons/arrow-fat-left.svg" width="16" height="16" alt="Scroll left" />
       </button>
-      <button type="button" class="arrow" onclick={scrollRight}>
-        <img src="/icons/arrow-fat-right.svg" width="32" height="32" alt="Scroll right" />
+      <button type="button" class="arrow right" onclick={scrollRight}>
+        <img src="/icons/arrow-fat-right.svg" width="16" height="16" alt="Scroll right" />
       </button>
     </div>
-  </Wrapper>
-{/if}
+  {/if}
+</div>
 
 <style>
+  .wrap {
+    position: relative;
+  }
+
   .container {
     --space: var(--whitespace);
     --negative-space: calc(-1 * var(--space));
@@ -84,48 +85,49 @@
   }
 
   .controls {
-    position: absolute;
-    inset: 0;
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    /*gap: 0.5rem;*/
-    padding-bottom: 1.5rem;
-    padding-top: 1.5rem;
-  }
-
-  .controls button {
-    position: absolute;
-    cursor: pointer;
-    flex-shrink: 0;
-  }
-
-  .controls button:nth-child(1) {
-    left: calc(var(--whitespace) - 32px);
-  }
-
-  .controls button:nth-child(2) {
-    right: calc(var(--whitespace) - 32px);
+    position: relative;
+    height: 64px;
   }
 
   .arrow {
     all: unset;
+    display: none;
+    position: absolute;
+    /*top: calc(50% - 32px);*/
+    top: 16px;
+    cursor: pointer;
+    flex-shrink: 0;
     align-items: center;
     background: var(--primary-600);
     border: 1px solid var(--primary-600);
     color: white;
     border-radius: 50%;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4);
-    display: flex;
     justify-content: center;
-    height: 64px;
-    width: 64px;
-    opacity: 0.5;
+    height: 32px;
+    width: 32px;
+    opacity: 0.6;
     transition: opacity 0.2s ease-in-out;
   }
 
   .arrow:hover {
     opacity: 1;
+  }
+
+  .left {
+    /*left: 12px;*/
+    left: calc(50% - 64px);
+  }
+
+  .right {
+    /*right: 12px;*/
+    right: calc(50% - 64px);
+  }
+
+  @media (min-width: 768px) {
+    .arrow {
+      display: flex;
+    }
   }
 
   @media (min-width: 1344px) {
@@ -140,5 +142,15 @@
       margin-left: var(--whitespace);
       margin-right: var(--whitespace);
     }
+  }
+
+  @media (min-width: 1440px) {
+    /*.left {
+      left: -32px;
+    }*/
+
+    /*.right {
+      right: -32px;
+    }*/
   }
 </style>

@@ -1,5 +1,5 @@
 /* Manrope font - Latin extended */
-@font-face {
+/*@font-face {
   font-family: 'Manrope';
   font-style: normal;
   font-weight: 400;
@@ -36,10 +36,10 @@
   src:
     url('/fonts/manrope/webfonts/manrope-latin-ext-800-normal.woff2') format('woff2'),
     url('/fonts/manrope/ttf/manrope-latin-ext-800-normal.ttf') format('truetype');
-}
+}*/
 
 /* Manrope font - Latin */
-@font-face {
+/*@font-face {
   font-family: 'Manrope';
   font-style: normal;
   font-weight: 400;
@@ -79,10 +79,96 @@
     url('/fonts/manrope/webfonts/manrope-latin-800-normal.woff2') format('woff2'),
     url('/fonts/manrope/webfonts/manrope-latin-800-normal.woff') format('woff'),
     url('/fonts/manrope/ttf/manrope-latin-800-normal.ttf') format('truetype');
+}*/
+
+/* Poppins font - Latin extended */
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  unicode-range:
+    U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+  src:
+    url('/fonts/poppins/webfonts/poppins-latin-ext-400-normal.woff2') format('woff2'),
+    url('/fonts/poppins/webfonts/poppins-latin-ext-400-normal.woff') format('woff'),
+    url('/fonts/poppins/ttf/poppins-latin-ext-400-normal.ttf') format('truetype');
 }
 
-/* Gabarito font - Latin extended */
 @font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  unicode-range:
+    U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+  src:
+    url('/fonts/poppins/webfonts/poppins-latin-ext-500-normal.woff2') format('woff2'),
+    url('/fonts/poppins/webfonts/poppins-latin-ext-500-normal.woff') format('woff'),
+    url('/fonts/poppins/ttf/poppins-latin-ext-500-normal.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  unicode-range:
+    U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+  src:
+    url('/fonts/poppins/webfonts/poppins-latin-ext-800-normal.woff2') format('woff2'),
+    url('/fonts/poppins/webfonts/poppins-latin-ext-800-normal.woff') format('woff'),
+    url('/fonts/poppins/ttf/poppins-latin-ext-800-normal.ttf') format('truetype');
+}
+
+/* Poppins font - Latin */
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074,
+    U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  src:
+    url('/fonts/poppins/webfonts/poppins-latin-400-normal.woff2') format('woff2'),
+    url('/fonts/poppins/webfonts/poppins-latin-400-normal.woff') format('woff'),
+    url('/fonts/poppins/ttf/poppins-latin-400-normal.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074,
+    U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  src:
+    url('/fonts/poppins/webfonts/poppins-latin-500-normal.woff2') format('woff2'),
+    url('/fonts/poppins/webfonts/poppins-latin-500-normal.woff') format('woff'),
+    url('/fonts/poppins/ttf/poppins-latin-500-normal.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074,
+    U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  src:
+    url('/fonts/poppins/webfonts/poppins-latin-800-normal.woff2') format('woff2'),
+    url('/fonts/poppins/webfonts/poppins-latin-800-normal.woff') format('woff'),
+    url('/fonts/poppins/ttf/poppins-latin-800-normal.ttf') format('truetype');
+}
+
+/* Anybody font - Latin extended */
+/*@font-face {
   font-family: 'Anybody';
   font-style: normal;
   font-weight: 400;
@@ -93,9 +179,9 @@
   src:
     url('/fonts/anybody/webfonts/anybody-latin-ext-400-normal.woff2') format('woff2'),
     url('/fonts/anybody/ttf/anybody-latin-ext-400-normal.ttf') format('truetype');
-}
+}*/
 
-@font-face {
+/*@font-face {
   font-family: 'Anybody';
   font-style: normal;
   font-weight: 500;
@@ -106,7 +192,7 @@
   src:
     url('/fonts/anybody/webfonts/anybody-latin-ext-500-normal.woff2') format('woff2'),
     url('/fonts/anybody/ttf/anybody-latin-ext-500-normal.ttf') format('truetype');
-}
+}*/
 
 @font-face {
   font-family: 'Anybody';
@@ -122,7 +208,7 @@
 }
 
 /* anybody font - Latin */
-@font-face {
+/*@font-face {
   font-family: 'Anybody';
   font-style: normal;
   font-weight: 400;
@@ -134,9 +220,9 @@
     url('/fonts/anybody/webfonts/anybody-latin-400-normal.woff2') format('woff2'),
     url('/fonts/anybody/webfonts/anybody-latin-400-normal.woff') format('woff'),
     url('/fonts/anybody/ttf/anybody-latin-400-normal.ttf') format('truetype');
-}
+}*/
 
-@font-face {
+/*@font-face {
   font-family: 'Anybody';
   font-style: normal;
   font-weight: 500;
@@ -148,7 +234,7 @@
     url('/fonts/anybody/webfonts/anybody-latin-500-normal.woff2') format('woff2'),
     url('/fonts/anybody/webfonts/anybody-latin-500-normal.woff') format('woff'),
     url('/fonts/anybody/ttf/anybody-latin-500-normal.ttf') format('truetype');
-}
+}*/
 
 @font-face {
   font-family: 'Anybody';
@@ -209,7 +295,7 @@
   --muted: #696a6c;
   --light: #f3f4f6;
 
-  --font: 'Manrope', sans-serif;
+  --font: 'Poppins', sans-serif;
   --display-font: 'Anybody', sans-serif;
 
   --max-content-width: min(100%, 1440px);

@@ -30,7 +30,7 @@
   <!-- Article content -->
   <div class="content">
     <h2 class="title">
-      <a href="/demo/articles/{article.slug}">
+      <a href="/citaj-radio/{article.slug}">
         {article.title}
       </a>
     </h2>
@@ -85,7 +85,7 @@
 <style>
   .card {
     border: 2px solid transparent;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 16px -4px rgba(0, 0, 0, 0.05);
     width: clamp(280px, 320px, 400px);
     display: flex;
     flex-direction: column;
@@ -95,7 +95,6 @@
   }
 
   .card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
     border-color: var(--secondary-500);
   }
 

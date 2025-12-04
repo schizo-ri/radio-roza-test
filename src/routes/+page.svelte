@@ -3,6 +3,7 @@
   import ArticlesLatest from '$lib/components/ArticlesLatest.svelte';
   import FullBleed from '$lib/components/FullBleed.svelte';
   import Wrapper from '$lib/components/Wrapper.svelte';
+  import SectionHeader from '$lib/components/SectionHeader.svelte';
 
   let { data } = $props();
 </script>
@@ -23,9 +24,17 @@
   </header>
 </FullBleed>
 
-<MixcloudLatest data={data.mixcloudData} />
+<div class="spacer">
+  <Wrapper>
+    <SectionHeader title="Novo na Radio Roži" link="Pogledaj sve" href="/emisije" />
+  </Wrapper>
+  <MixcloudLatest data={data.mixcloudData} />
+</div>
 
 <div class="spacer">
+  <Wrapper>
+    <SectionHeader title="Čitaj radio" link="Pogledaj sve" href="/citaj-radio" />
+  </Wrapper>
   <ArticlesLatest />
 </div>
 
@@ -80,7 +89,7 @@
 
   .title {
     grid-area: title;
-    font-family: var(--display-font);
+    /*font-family: var(--display-font);*/
     font-size: 3.2rem;
     font-weight: 500;
     /*letter-spacing: -2px;*/
@@ -90,7 +99,7 @@
 
   .description {
     grid-area: description;
-    font-family: var(--display-font);
+    /*font-family: var(--display-font);*/
     font-size: 1.6rem;
     font-weight: 400;
     letter-spacing: 2px;
@@ -99,7 +108,8 @@
   }
 
   .spacer {
-    padding-bottom: 4rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
   }
 
   .join {
@@ -122,7 +132,13 @@
     font-size: 1.2rem;
     color: var(--dark);
     margin-bottom: 1rem;
-    max-width: 600px;
+    max-width: 640px;
+    text-align: center;
+  }
+
+  .donate {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
     text-align: center;
   }
 

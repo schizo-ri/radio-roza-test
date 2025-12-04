@@ -9,12 +9,6 @@
 
 {#if data}
   <section class="mixcloud-latest">
-    <Wrapper>
-      <header class="header">
-        <h2>Novo na Radio Roži</h2>
-        <a href="/emisije" class="link">Pogledaj sve</a>
-      </header>
-    </Wrapper>
     {#if data.data && data.data.length > 0}
       <HorizontalScroller>
         {#each data.data as mix (mix.key)}
@@ -26,26 +20,16 @@
     {/if}
   </section>
 {:else}
-  <section class="mixcloud-latest">
-    <h2>Novo na Radio Roži</h2>
-    <p>Loading mixes...</p>
-  </section>
+  <Wrapper>
+    <section class="placeholders">
+      <p>Učitavanje emisija...</p>
+    </section>
+  </Wrapper>
 {/if}
 
 <style>
   .mixcloud-latest {
     padding-top: 2rem;
     padding-bottom: 2rem;
-  }
-
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 1.5rem;
-  }
-
-  .mixcloud-latest h2 {
-    font-size: 2rem;
   }
 </style>

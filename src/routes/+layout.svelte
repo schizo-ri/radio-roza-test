@@ -187,11 +187,11 @@
     position: relative;
     padding: 0.5rem;
     text-decoration: none;
-    font-family: var(--display-font);
+    /*font-family: var(--display-font);*/
     color: var(--dark);
     font-weight: 400;
     font-size: 1.1rem;
-    /*letter-spacing: -0.5px;*/
+    letter-spacing: -0.5px;
     text-transform: uppercase;
     white-space: nowrap;
   }

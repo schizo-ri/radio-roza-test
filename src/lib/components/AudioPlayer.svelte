@@ -164,6 +164,13 @@
 
         player.addEventListener('waiting', () => {
           console.log('Audio waiting for data');
+          bufferingStuckTimer = setTimeout(() => {
+            console.log('Waiting data too long');
+            dash.destroy();
+            dash = dashjs.MediaPlayer().create();
+            dash.updateSettings(dashSettings(dashjs));
+            dash.initialize(player, url, true);
+          }, 4000);
         });
 
         player.addEventListener('volumechange', () => {
