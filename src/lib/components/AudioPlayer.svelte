@@ -25,7 +25,11 @@
   let bufferingStuckTimer = $state(null);
   let dataStuckTimer = $state(null);
   let lastKnownTime = $state(0);
+  // Track when playback last occurred to detect stale buffers
+  let lastPlaybackTime = $state(0);
   let interruptionCheckTimer = $state(null);
+  // Timer to periodically check if buffer has become stale
+  let bufferStaleCheckTimer = $state(null);
   let audioContext = $state(null);
   let isRecovering = $state(false);
 
@@ -57,17 +61,22 @@
         liveDelayFragmentCount: 4,
       },
       buffer: {
+        // Optimized buffer settings for live radio streaming
         // initialBufferLevel: 8,
         bufferTimeDefault: 16,
-        bufferTimeAtTopQuality: 32,
-        bufferToKeep: 4,
-        bufferPruningInterval: 2,
+        bufferTimeAtTopQuality: 20,
+        bufferToKeep: 2, // Reduced from 4 to keep less old buffer for live radio
+        bufferPruningInterval: 1, // More frequent pruning (every 1 second instead of 2)
         fastSwitchEnabled: true,
+        // Additional settings for better live streaming buffer management
+        stallThreshold: 0.5, // Lower threshold before considering stalled
+        bufferTimeAtTopQualityLongForm: 20,
+        longFormContentDurationThreshold: 600, // Treat as long form after 10 minutes
       },
       gaps: {
-        // jumpGaps: true,
-        // jumpLargeGaps: true,
-        // smallGapLimit: 1.5,
+        jumpGaps: true, // Enable gap jumping for live streams
+        jumpLargeGaps: true,
+        smallGapLimit: 1.0, // Jump smaller gaps more aggressively
       },
       abr: {
         initialBitrate: {
@@ -86,6 +95,8 @@
   onMount(async () => {
     if (browser && player) {
       try {
+        // Initialize lastPlaybackTime to track buffer staleness
+        lastPlaybackTime = Date.now();
         // Create AudioContext for interruption monitoring
         try {
           audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -176,6 +187,7 @@
           if (isPlaying && !player.ended) {
             console.warn('Audio paused unexpectedly - likely interrupted');
             isPlaying = false;
+            lastPlaybackTime = Date.now();
           }
         });
 
@@ -183,11 +195,18 @@
         player.addEventListener('play', () => {
           console.log('Audio play event');
           lastKnownTime = player.currentTime;
+          lastPlaybackTime = Date.now();
         });
 
         // Start periodic interruption checking only once
         if (!interruptionCheckTimer) {
-          interruptionCheckTimer = setInterval(checkForInterruption, 1000);
+          interruptionCheckTimer = setInterval(checkForInterruption, 5000);
+        }
+
+        // Start periodic buffer staleness checking for live radio
+        // This prevents stale audio from being played after long idle periods
+        if (!bufferStaleCheckTimer) {
+          bufferStaleCheckTimer = setInterval(checkBufferStaleness, 10000); // Check every 10 seconds
         }
       } catch (error) {
         console.error('Failed to load dashjs:', error);
@@ -238,6 +257,26 @@
     }
 
     lastKnownTime = player.currentTime;
+  }
+
+  /**
+   * Checks if the audio buffer has become stale due to inactivity.
+   * For live radio, old buffered content should not be played after long idle periods.
+   */
+  function checkBufferStaleness() {
+    if (!player || !lastPlaybackTime) {
+      return;
+    }
+
+    const now = Date.now();
+    const timeSinceLastPlayback = (now - lastPlaybackTime) / 1000;
+
+    // If buffer has been idle for more than 16 seconds and we're not currently playing
+    if (timeSinceLastPlayback > 16 && !isPlaying) {
+      console.log(`Buffer stale for ${timeSinceLastPlayback.toFixed(1)}s, will purge on next play`);
+      // We could optionally purge here, but it's better to wait until play() is called
+      // to avoid interrupting any potential background processes
+    }
   }
 
   // Function to attempt recovery from audio interruption
@@ -335,6 +374,7 @@
         if (isPlaying) {
           console.warn('Dash playback interrupted unexpectedly');
           isPlaying = false;
+          lastPlaybackTime = Date.now();
         }
       });
     }
@@ -344,6 +384,7 @@
         console.log('Dash playback playing');
         isPlaying = true;
         lastKnownTime = player.currentTime;
+        lastPlaybackTime = Date.now();
         clearTimeout(bufferingStuckTimer);
         clearTimeout(dataStuckTimer);
       });
@@ -401,12 +442,49 @@
     console.error('❌ Player error:', message);
   }
 
+  /**
+   * Resets the dash.js buffer by destroying and recreating the player instance.
+   * This ensures that stale audio content is purged and fresh live content is loaded.
+   * Essential for live radio to prevent playing cached audio from hours ago.
+   */
+  async function resetDashBuffer() {
+    if (dash) {
+      console.log('Resetting dash buffer for fresh streaming');
+
+      // Store current URL and destroy player
+      const currentUrl = url;
+      dash.destroy();
+
+      // Create new player instance with fresh buffer
+      const dashjs = await import('dashjs');
+      dash = dashjs.MediaPlayer().create();
+      dash.updateSettings(dashSettings(dashjs));
+      dash.initialize(player, currentUrl, false);
+      setupDashEventListeners(dashjs);
+
+      // Wait a bit for initialization
+      return new Promise((resolve) => {
+        setTimeout(resolve, 100);
+      });
+    }
+  }
+
   async function play() {
     if (!player) {
       return;
     }
 
     try {
+      // Buffer staleness check: Prevent playing old cached audio in live radio
+      // If more than 16 seconds have passed since last playback, purge the buffer
+      const now = Date.now();
+      const timeSinceLastPlayback = (now - lastPlaybackTime) / 1000;
+
+      if (lastPlaybackTime > 0 && timeSinceLastPlayback > 16) {
+        console.log(`Buffer idle for ${timeSinceLastPlayback.toFixed(1)}s, purging stale buffer`);
+        await resetDashBuffer();
+      }
+
       // Resume AudioContext if suspended
       if (audioContext && audioContext.state === 'suspended') {
         await audioContext.resume();
@@ -417,6 +495,7 @@
       hasError = false; // Clear any previous interruption errors
       onAir = true;
       lastKnownTime = player.currentTime;
+      lastPlaybackTime = now;
       updateMediaSessionPlaybackState();
     } catch (error) {
       console.error('Play failed:', error);
@@ -428,6 +507,7 @@
     if (player && isPlaying) {
       await player.pause();
       isPlaying = false;
+      lastPlaybackTime = Date.now();
       updateMediaSessionPlaybackState();
     }
   }
@@ -459,6 +539,10 @@
     if (interruptionCheckTimer) {
       clearInterval(interruptionCheckTimer);
       interruptionCheckTimer = null;
+    }
+    if (bufferStaleCheckTimer) {
+      clearInterval(bufferStaleCheckTimer);
+      bufferStaleCheckTimer = null;
     }
     if (bufferingStuckTimer) {
       clearTimeout(bufferingStuckTimer);

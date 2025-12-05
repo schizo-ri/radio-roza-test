@@ -1,1 +1,5 @@
-<h1>emisije</h1>
+<script>
+  import PageTitle from '$lib/components/PageTitle.svelte';
+</script>
+
+<PageTitle title="Emisije" />

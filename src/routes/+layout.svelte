@@ -125,6 +125,7 @@
     z-index: 1000;
     border-bottom: 1px solid #eee;
     background-color: white;
+    box-shadow: 0 8px 48px hsl(4deg 5% 2% / 0.2);
     transition:
       height 0.15s ease-out,
       box-shadow 0.15s ease-out;
