@@ -6,6 +6,40 @@
 
   $: article = data.article;
   $: relatedArticles = article ? getRelatedArticles(article, 3) : [];
+
+  function addStructuredData(node) {
+    if (!article) return;
+
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: article.title,
+      description: article.excerpt,
+      author: {
+        '@type': 'Person',
+        name: article.author.name,
+        description: article.author.bio,
+      },
+      datePublished: article.publishedDate,
+      dateModified: article.publishedDate,
+      articleSection: article.category.name,
+      keywords: article.tags.join(', '),
+      wordCount: article.content.replace(/<[^>]*>/g, '').split(' ').length,
+      timeRequired: `PT${article.readTime}M`,
+    });
+
+    document.head.appendChild(script);
+
+    return {
+      destroy() {
+        if (document.head.contains(script)) {
+          document.head.removeChild(script);
+        }
+      },
+    };
+  }
 </script>
 
 <svelte:head>
@@ -31,26 +65,8 @@
     <meta name="twitter:title" content={article.title} />
     <meta name="twitter:description" content={article.excerpt} />
 
-    <!-- Schema.org structured data -->
-    <script type="application/ld+json">
-      {JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": article.title,
-        "description": article.excerpt,
-        "author": {
-          "@type": "Person",
-          "name": article.author.name,
-          "description": article.author.bio
-        },
-        "datePublished": article.publishedDate,
-        "dateModified": article.publishedDate,
-        "articleSection": article.category.name,
-        "keywords": article.tags.join(', '),
-        "wordCount": article.content.replace(/<[^>]*>/g, '').split(' ').length,
-        "timeRequired": `PT${article.readTime}M`
-      })}
-    </script>
+    <!-- Schema.org structured data added via action -->
+    <div use:addStructuredData></div>
   {/if}
 </svelte:head>
 
