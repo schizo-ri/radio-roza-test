@@ -57,25 +57,25 @@ export const mockCategories = [
     id: 1,
     slug: 'aktualno',
     title: 'Aktualno',
-    description: 'Novo na Radio Roži',
+    description: 'Najnovije objave redakcije Radio Rože',
   },
   {
     id: 2,
     slug: 'album-tjedna',
     title: 'Album tjedna',
-    description: 'Album tjedna je radio program koji se bavi najnovijim albumima i izdanjima.',
+    description: 'Radio Roža svesrdno preporuča dobru glazbu',
   },
   {
     id: 3,
     slug: 'komentar',
     title: 'Komentar',
-    description: 'Komentar je radio program koji se bavi najnovijim komentarima i izdanjima.',
+    description: 'Komentiramo aktualno i važno',
   },
   {
     id: 4,
     slug: 'cakule',
     title: 'Čakule',
-    description: 'Čakule je radio program koji se bavi najnovijim čakulama i izdanjima.',
+    description: 'Preferiraš li pisano izdanje imamo koju čakulu za tebe',
   },
 ];
 

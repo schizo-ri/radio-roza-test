@@ -1,11 +1,14 @@
 <script>
+  import Wrapper from '$lib/components/Wrapper.svelte';
   const { title, subtitle } = $props();
 </script>
 
-<header>
-  <h1>{title}</h1>
-  <p>{subtitle}</p>
-</header>
+<Wrapper>
+  <header>
+    <h1>{title}</h1>
+    <p>{subtitle}</p>
+  </header>
+</Wrapper>
 
 <style>
   header {
@@ -24,6 +27,6 @@
   header p {
     font-size: 1.25rem;
     font-weight: 400;
-    color: var(--primary-500);
+    color: var(--dark);
   }
 </style>

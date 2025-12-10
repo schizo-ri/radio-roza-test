@@ -10,6 +10,7 @@
     children = null,
     streamUrl = 'https://radio-roza.org/stream/dash/live.mpd',
     fallbackUrl = 'https://stream.radio-roza.org/live.mp3',
+    expanded,
   } = $props();
 
   // Svelte 5 runes for reactive state
@@ -841,11 +842,13 @@
     <audio id="audioPlayer" src={url} bind:this={player} preload="none"></audio>
   </div>
 
-  <p>some info</p>
-  <p>some info</p>
-  <p>some info</p>
-  <p>some info</p>
-  <p>some info</p>
+  <div style:visibility={expanded ? 'visible' : 'hidden'}>
+    <p>some info</p>
+    <p>some info</p>
+    <p>some info</p>
+    <p>some info</p>
+    <p>some info</p>
+  </div>
 </div>
 
 <style>

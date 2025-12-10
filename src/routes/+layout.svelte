@@ -8,10 +8,17 @@
 
   let { children } = $props();
   let expanded = $state(page.url.pathname === '/');
+  let projectsVisible = $state(false);
 
   function handleScroll() {
     if (expanded) {
       expanded = false;
+    }
+  }
+
+  function handleClickOutside(event) {
+    if (projectsVisible && !event.target.closest('.projects')) {
+      projectsVisible = false;
     }
   }
 </script>
@@ -20,11 +27,11 @@
   <link rel="icon" href={favicon} />
 </svelte:head>
 
-<svelte:window onscroll={handleScroll} />
+<svelte:window onscroll={handleScroll} onclick={handleClickOutside} />
 
 <section class="header" class:expanded>
   <div class="header-content">
-    <AudioPlayer>
+    <AudioPlayer {expanded}>
       <button class="expand-btn" onclick={() => (expanded = !expanded)}>
         {#if expanded}
           <img src="/icons/caret_up.svg" alt="Up" width="20" height="20" />
@@ -68,12 +75,36 @@
             aria-current={page.url.pathname === '/o-nama' ? 'page' : undefined}>O nama</a
           >
         </li>
-        <li>
+        <li class="projects">
           <a
             href="/projekti"
             class="link"
             aria-current={page.url.pathname === '/projekti' ? 'page' : undefined}>Projekti</a
           >
+          <button
+            type="button"
+            class="submenu-toggle"
+            aria-label="Toggle submenu"
+            onclick={() => (projectsVisible = !projectsVisible)}
+          >
+            <span class="sr-only">Pokaži projekte</span>
+            <img src="/icons/caret_down.svg" alt="Down" width="20" height="20" />
+          </button>
+          <ul class="submenu" style:visibility={projectsVisible ? 'visible' : 'hidden'}>
+            <li>
+              <a href="/projekti/ziroskop" onclick={() => (projectsVisible = false)}>Žiroskop</a>
+            </li>
+            <li>
+              <a href="/projekti/korona-kid" onclick={() => (projectsVisible = false)}>Korona kid</a
+              >
+            </li>
+            <li>
+              <a href="/projekti/odasiljac" onclick={() => (projectsVisible = false)}>Odašiljač</a>
+            </li>
+            <li>
+              <a href="/projekti/17-bitnih" onclick={() => (projectsVisible = false)}>17-bitnih</a>
+            </li>
+          </ul>
         </li>
         <li>
           <a href="https://facebook.com/radiorozha" class="social-icons">
@@ -125,12 +156,12 @@
     z-index: 1000;
     border-bottom: 1px solid #eee;
     background-color: white;
-    box-shadow: 0 8px 48px hsl(4deg 5% 2% / 0.2);
+    box-shadow: 0 4px 32px hsl(4deg 5% 2% / 0.1);
     transition:
       height 0.15s ease-out,
       box-shadow 0.15s ease-out;
     height: var(--header-height, 70px);
-    overflow: hidden;
+    /*overflow: hidden;*/
   }
 
   .header.expanded {
@@ -195,7 +226,7 @@
     padding: 1rem 0;
   }
 
-  nav ul {
+  nav > ul {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -243,6 +274,67 @@
 
   .link[aria-current='page'] {
     color: var(--primary-600);
+  }
+
+  .projects {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .submenu-toggle {
+    outline: none;
+    border: 0;
+    background-color: transparent;
+    padding-top: 0;
+    padding-bottom: 0;
+    width: 28px;
+    height: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .submenu-toggle:focus-visible {
+    outline: 2px solid var(--primary-600);
+  }
+
+  .submenu-toggle > * {
+    pointer-events: none;
+  }
+
+  .submenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--white, white);
+    border: 1px solid #eee;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 0.5rem 0;
+    margin: 0;
+    list-style: none;
+    z-index: 1001;
+    min-width: 150px;
+  }
+
+  .submenu li {
+    margin: 0;
+  }
+
+  .submenu a {
+    display: block;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    color: var(--dark);
+    white-space: nowrap;
+    transition: background-color 0.15s ease;
+  }
+
+  .submenu a:hover {
+    background-color: var(--primary-50);
+    color: var(--primary-700);
   }
 
   .social-icons {
