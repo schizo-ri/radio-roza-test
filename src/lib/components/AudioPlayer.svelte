@@ -1,7 +1,7 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
   import { browser } from '$app/environment';
-  // import { getCurrentShow, getNextShow } from '$lib/utils/program';
+  import { getCurrentShow, getNextShow } from '$lib/utils/program';
   import SpinningVinyl from './SpinningVinyl.svelte';
   // import { getNowPlayingInfo, getBestImageUrl } from '$lib/utils/musicScraper.js';
 
@@ -13,7 +13,6 @@
     expanded,
   } = $props();
 
-  // Svelte 5 runes for reactive state
   let player = $state();
   let dash = $state();
   let url = $state(streamUrl);
@@ -34,16 +33,16 @@
   let audioContext = $state(null);
   let isRecovering = $state(false);
 
-  // let volume = $state(1);
-  // let muted = $state(false);
+  let volume = $state(1);
+  let muted = $state(false);
 
   let nowPlaying = $state({
     artist: 'Radio Roza',
     title: 'Live Stream',
   });
 
-  // let currentShow = $state(getCurrentShow());
-  // let nextShow = $state(getNextShow());
+  let currentShow = $state(getCurrentShow());
+  let nextShow = $state(getNextShow());
 
   // let musicMetadata = $state({
   //   artist: null,
@@ -58,26 +57,28 @@
     streaming: {
       // cacheInitSegments: true,
       delay: {
-        liveDelay: 8,
-        liveDelayFragmentCount: 4,
+        liveDelay: 16,
+      },
+      liveCatchup: {
+        enabled: true,
+        playbackRate: 0.5,
       },
       buffer: {
-        // Optimized buffer settings for live radio streaming
-        // initialBufferLevel: 8,
+        initialBufferLevel: 4,
         bufferTimeDefault: 16,
-        bufferTimeAtTopQuality: 20,
-        bufferToKeep: 2, // Reduced from 4 to keep less old buffer for live radio
-        bufferPruningInterval: 1, // More frequent pruning (every 1 second instead of 2)
+        bufferToKeep: 12,
+        bufferPruningInterval: 8,
         fastSwitchEnabled: true,
-        // Additional settings for better live streaming buffer management
         stallThreshold: 0.5, // Lower threshold before considering stalled
-        bufferTimeAtTopQualityLongForm: 20,
-        longFormContentDurationThreshold: 600, // Treat as long form after 10 minutes
       },
       gaps: {
         jumpGaps: true, // Enable gap jumping for live streams
         jumpLargeGaps: true,
         smallGapLimit: 1.0, // Jump smaller gaps more aggressively
+      },
+      retryAttempts: {
+        MPD: 5,
+        MediaSegment: 5,
       },
       abr: {
         initialBitrate: {
@@ -521,20 +522,20 @@
     }
   }
 
-  // function setVolume(newVolume) {
-  //   if (player) {
-  //     const clampedVolume = Math.max(0, Math.min(1, newVolume));
-  //     player.volume = clampedVolume;
-  //     volume = clampedVolume;
-  //   }
-  // }
+  function setVolume(newVolume) {
+    if (player) {
+      const clampedVolume = Math.max(0, Math.min(1, newVolume));
+      player.volume = clampedVolume;
+      volume = clampedVolume;
+    }
+  }
 
-  // function toggleMute() {
-  //   if (player) {
-  //     player.muted = !player.muted;
-  //     muted = player.muted;
-  //   }
-  // }
+  function toggleMute() {
+    if (player) {
+      player.muted = !player.muted;
+      muted = player.muted;
+    }
+  }
 
   function cleanup() {
     if (interruptionCheckTimer) {
@@ -740,7 +741,7 @@
   <div class="container">
     {#if hasError}
       <div class="error-message">
-        <img src="/icons/error.svg" alt="Error" />
+        <img src="/icons/warning.svg" alt="Error" />
         <span>{errorMessage}</span>
         {#if errorMessage.includes('interrupted') || errorMessage.includes('stalled') || errorMessage.includes('connection')}
           <button class="recovery-btn" onclick={attemptRecovery}> Try Recovery </button>
@@ -797,57 +798,51 @@
       </div>
     </section>
 
-    <!-- Current program -->
-    <!-- {#if currentShow?.title}
-    <div class="program">
-      <dl class="program-info" aria-live="polite">
-        <dt class="sr-only">Trenutno</dt>
-        <dd class="current-show">
-          {currentShow?.show_start}
-          {currentShow?.title || '-'}
-        </dd>
-        <dt class="sr-only">Slijedi</dt>
-        <dd class="next-show">
-          {nextShow?.show_start}
-          {nextShow?.title || '-'}
-        </dd>
-      </dl>
-    </div>
-  {/if} -->
-
-    <!-- <div class="volume-control">
-    <button class="volume-btn" onclick={toggleMute}>
-      {#if muted}
-        <img src="/icons/volume-x.svg" alt="Muted" />
-      {:else if volume < 0.25}
-        <img src="/icons/volume.svg" alt="Low Volume" />
-      {:else if volume > 0.75}
-        <img src="/icons/volume-2.svg" alt="High Volume" />
-      {:else}
-        <img src="/icons/volume-1.svg" alt="Medium Volume" />
-      {/if}
-    </button>
-    <input
-      type="range"
-      class="volume-slider"
-      min="0"
-      max="1"
-      step="0.1"
-      value={volume}
-      oninput={(e) => setVolume(parseFloat(e.target.value))}
-    />
-  </div> -->
-
     <!-- Audio element (hidden controls since we're managing playback) -->
     <audio id="audioPlayer" src={url} bind:this={player} preload="none"></audio>
   </div>
 
   <div style:visibility={expanded ? 'visible' : 'hidden'}>
-    <p>some info</p>
-    <p>some info</p>
-    <p>some info</p>
-    <p>some info</p>
-    <p>some info</p>
+    <!-- Current program -->
+    {#if currentShow?.title}
+      <div class="program">
+        <dl class="program-info" aria-live="polite">
+          <dt class="sr-only">Trenutno</dt>
+          <dd class="current-show">
+            {currentShow?.show_start}
+            {currentShow?.title || '-'}
+          </dd>
+          <dt class="sr-only">Slijedi</dt>
+          <dd class="next-show">
+            {nextShow?.show_start}
+            {nextShow?.title || '-'}
+          </dd>
+        </dl>
+      </div>
+    {/if}
+
+    <div class="volume-control">
+      <button class="volume-btn" onclick={toggleMute}>
+        {#if muted}
+          <img src="/icons/volume-x.svg" alt="Muted" />
+        {:else if volume < 0.25}
+          <img src="/icons/volume.svg" alt="Low Volume" />
+        {:else if volume > 0.75}
+          <img src="/icons/volume-2.svg" alt="High Volume" />
+        {:else}
+          <img src="/icons/volume-1.svg" alt="Medium Volume" />
+        {/if}
+      </button>
+      <input
+        type="range"
+        class="volume-slider"
+        min="0"
+        max="1"
+        step="0.1"
+        value={volume}
+        oninput={(e) => setVolume(parseFloat(e.target.value))}
+      />
+    </div>
   </div>
 </div>
 
@@ -1044,15 +1039,15 @@
     background: var(--primary-600);
   }
 
-  /*.volume-control {
+  .volume-control {
     grid-area: volume;
     display: flex;
     align-items: center;
     gap: 8px;
     position: relative;
-  }*/
+  }
 
-  /*.volume-btn {
+  .volume-btn {
     outline: 0;
     border: 0;
     background-color: transparent;
@@ -1060,9 +1055,9 @@
     cursor: pointer;
     aspect-ratio: 1;
     width: 16px;
-  }*/
+  }
 
-  /*.volume-slider {
+  .volume-slider {
     appearance: none;
     width: 80px;
     height: 4px;
@@ -1070,84 +1065,84 @@
     background: var(--primary-300);
     outline: none;
     cursor: pointer;
-  }*/
+  }
 
   /* WebKit browsers (Chrome, Safari, Edge) */
-  /*.volume-slider::-webkit-slider-track {
+  .volume-slider::-webkit-slider-track {
     width: 100%;
     height: 4px;
     cursor: pointer;
     background: var(--primary-400);
     border-radius: 4px;
     border: none;
-  }*/
+  }
 
-  /*.volume-slider::-webkit-slider-thumb {
+  .volume-slider::-webkit-slider-thumb {
     appearance: none;
     height: 8px;
     width: 8px;
     border-radius: 50%;
-    background: white;
+    background: var(--dark);
     cursor: pointer;
     border: 2px solid var(--primary-600);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    transition: all 0.2s ease;
-  }*/
+    transition: all 0.1s ease;
+  }
 
-  /*.volume-slider::-webkit-slider-thumb:hover {
+  .volume-slider::-webkit-slider-thumb:hover {
     background: var(--primary-700);
     transform: scale(1.1);
-  }*/
+  }
 
   /* Firefox */
-  /*.volume-slider::-moz-range-track {
+  .volume-slider::-moz-range-track {
     width: 100%;
     height: 4px;
     cursor: pointer;
     background: var(--primary-400);
     border-radius: 4px;
     border: none;
-  }*/
+  }
 
-  /*.volume-slider::-moz-range-thumb {
+  .volume-slider::-moz-range-thumb {
     height: 8px;
     width: 8px;
     border-radius: 50%;
-    background: white;
+    background: var(--dark);
     cursor: pointer;
     border: 2px solid var(--primary-600);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    transition: all 0.2s ease;
-  }*/
+    transition: all 0.1s ease;
+  }
 
-  /*.volume-slider::-moz-range-thumb:hover {
+  .volume-slider::-moz-range-thumb:hover {
     background: var(--primary-700);
     transform: scale(1.1);
-  }*/
+  }
 
   /* Focus styles for accessibility */
-  /*.volume-slider:focus-visible {
+  .volume-slider:focus-visible {
     outline: 2px solid var(--primary-500);
     outline-offset: 2px;
-  }*/
+  }
 
-  /*.volume-slider:focus-visible::-webkit-slider-thumb {
+  .volume-slider:focus-visible::-webkit-slider-thumb {
     outline: 2px solid var(--primary-500);
     outline-offset: 1px;
-  }*/
+  }
 
-  /*.program {
+  .program {
     grid-area: program;
-  }*/
+  }
 
-  /*.current-show {
+  .current-show {
     font-weight: 500;
     font-size: 0.875rem;
     color: var(--dark);
-  }*/
+  }
 
-  /*.next-show {
+  .next-show {
     font-size: 0.75rem;
     color: var(--muted);
-  }*/
+  }
 </style>

@@ -4,6 +4,7 @@
   import FullBleed from '$lib/components/FullBleed.svelte';
   import Wrapper from '$lib/components/Wrapper.svelte';
   import SectionHeader from '$lib/components/SectionHeader.svelte';
+  import Player from '$lib/components/Player.svelte';
 
   let { data } = $props();
 </script>
@@ -17,11 +18,14 @@
 </svelte:head>
 
 <FullBleed>
-  <header class="header">
+  <div class="player-container">
+    <Player src="https://radio.radio-roza.org/hls/radioroza/live.m3u8" />
+  </div>
+  <!-- <header class="header">
     <img src="/images/rr_logo.png" alt="Radio Roža Logo" class="logo" />
     <h1 class="title">Radio zajednice</h1>
     <p class="description">Internetski radio | Rijeka</p>
-  </header>
+  </header> -->
 </FullBleed>
 
 <div class="spacer">
@@ -169,5 +173,12 @@
 
   .join-donate-link:hover {
     transform: scale(1.05);
+  }
+
+  .player-container {
+    /*display: flex;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
+    padding: 2rem;
   }
 </style>

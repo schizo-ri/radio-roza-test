@@ -46,6 +46,7 @@
     "vitest-browser-svelte": "^2.0.1"
   },
   "dependencies": {
-    "dashjs": "^5.1.0"
+    "dashjs": "^5.1.0",
+    "hls.js": "^1.6.15"
   }
 }

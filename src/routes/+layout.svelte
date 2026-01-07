@@ -4,17 +4,17 @@
   import '../app.css';
 
   import Footer from '$lib/components/Footer.svelte';
-  import AudioPlayer from '$lib/components/AudioPlayer.svelte';
+  // import AudioPlayer from '$lib/components/AudioPlayer.svelte';
 
   let { children } = $props();
-  let expanded = $state(page.url.pathname === '/');
+  // let expanded = $state(page.url.pathname === '/');
   let projectsVisible = $state(false);
 
-  function handleScroll() {
-    if (expanded) {
-      expanded = false;
-    }
-  }
+  // function handleScroll() {
+  //   if (expanded) {
+  //     expanded = false;
+  //   }
+  // }
 
   function handleClickOutside(event) {
     if (projectsVisible && !event.target.closest('.projects')) {
@@ -27,11 +27,13 @@
   <link rel="icon" href={favicon} />
 </svelte:head>
 
-<svelte:window onscroll={handleScroll} onclick={handleClickOutside} />
+<!-- <svelte:window onscroll={handleScroll} onclick={handleClickOutside} /> -->
+<svelte:window onclick={handleClickOutside} />
 
-<section class="header" class:expanded>
+<!-- <section class="header" class:expanded> -->
+<section class="header">
   <div class="header-content">
-    <AudioPlayer {expanded}>
+    <!-- <AudioPlayer {expanded}>
       <button class="expand-btn" onclick={() => (expanded = !expanded)}>
         {#if expanded}
           <img src="/icons/caret_up.svg" alt="Up" width="20" height="20" />
@@ -39,7 +41,15 @@
           <img src="/icons/caret_down.svg" alt="Down" width="20" height="20" />
         {/if}
       </button>
-    </AudioPlayer>
+    </AudioPlayer> -->
+    <a
+      href="/about"
+      class="logo-link"
+      aria-current={page.url.pathname === '/about' ? 'page' : undefined}
+    >
+      <img src="/brand/rr_red_outline_transparent_rounded.svg" alt="Logo" width="50" height="50" />
+      <span class="sr-only">Radio Roža</span></a
+    >
     <nav>
       <ul>
         <li>
@@ -164,10 +174,10 @@
     /*overflow: hidden;*/
   }
 
-  .header.expanded {
-    --header-height: 240px; /* ili koliko treba */
+  /*.header.expanded {
+    --header-height: 240px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
+  }*/
 
   .header-content {
     position: relative;
@@ -176,6 +186,16 @@
     background-color: white;
     height: 70px; /* bazna visina */
     padding: 0 1rem;
+  }
+
+  .logo-link {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  .logo-link img {
+    display: block;
   }
 
   /*.expanded-content {
@@ -198,7 +218,7 @@
     transition: padding-top 0.3s ease-out;
   }
 
-  .expand-btn {
+  /*.expand-btn {
     margin: 0;
     padding: 0;
     background: none;
@@ -208,16 +228,14 @@
     height: 20px;
     cursor: pointer;
     font-size: 20px;
-    /*font-weight: 800;*/
     line-height: 1;
-    /*color: var(--muted);*/
-  }
+  }*/
 
-  .expand-btn img {
+  /*.expand-btn img {
     display: block;
     width: 20px;
     height: 20px;
-  }
+  }*/
 
   nav {
     display: flex;
