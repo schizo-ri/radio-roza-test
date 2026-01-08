@@ -7,12 +7,11 @@
   import { getCurrentShow, getNextShow } from '$lib/utils/program';
   import { getAlbumArt } from '$lib/utils/artwork';
 
-  let {
-    src = 'https://radio.radio-roza.org/hls/radioroza/live.m3u8',
-    autoplay = false,
-    fullsize = false,
-    ...props
-  } = $props();
+  const src = 'https://radio.radio-roza.org/hls/radioroza/live.m3u8';
+  let { autoplay = false, fullsize = false, ...props } = $props();
+
+  let showStickyPlayer = $state(false);
+  let mainPlayerElement;
 
   let audioElement = $state();
   let hls = $state();
@@ -37,6 +36,27 @@
     currentTimeForShows; // Access the reactive variable to trigger the effect
     currentShow = getCurrentShow();
     nextShow = getNextShow();
+  });
+
+  // Intersection Observer za detekciju kada glavni player izlazi iz viewport-a
+  $effect(() => {
+    if (typeof window !== 'undefined' && mainPlayerElement) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            // Pokazuj sticky player kada glavni izađe iz viewport-a
+            showStickyPlayer = !entry.isIntersecting;
+          });
+        },
+        {
+          rootMargin: '0px 0px -100px 0px', // Trigger malo prije nego što potpuno izađe
+        }
+      );
+
+      observer.observe(mainPlayerElement);
+
+      return () => observer.disconnect();
+    }
   });
 
   let nowPlayingInterval = $state(null);
@@ -434,9 +454,10 @@
   });
 </script>
 
-<div class="audio-player" {...props}>
-  <audio bind:this={audioElement} bind:volume bind:muted preload="none"></audio>
+<audio bind:this={audioElement} bind:volume bind:muted preload="none"></audio>
 
+<!-- Main Player -->
+<div class="audio-player" class:fullsize bind:this={mainPlayerElement} {...props}>
   <div class="toggle-container">
     <SpinningVinyl bind:playing={isPlaying} style="position: absolute; inset: 0; z-index: 1;" />
     <button class="play" onclick={togglePlay} disabled={loading}>
@@ -525,21 +546,45 @@
       class="volume-slider"
       min="0"
       max="1"
-      step="0.1"
-      value={volume}
-      oninput={(e) => setVolume(parseFloat(e.target.value))}
+      step="0.01"
+      bind:value={volume}
+      onchange={() => setVolume(volume)}
+      aria-label="Volume"
     />
   </section>
 
   {#if error}
     <div class="error">
-      <span><img src="/icons/warning-white.svg" alt="Error" /> {error}</span>
-      <!-- reload page button -->
-      <!-- <button class="reload-btn" onclick={reloadPage}>
-        <img src="/icons/reload-white.svg" alt="Reload" />
-      </button> -->
+      <span>
+        <img src="/icons/warning-white.svg" alt="Error" />
+        {error}
+      </span>
     </div>
   {/if}
+</div>
+
+<!-- Sticky Mini Player -->
+<div class="sticky-player" class:visible={showStickyPlayer}>
+  <div class="mini-content">
+    <img
+      class="mini-cover"
+      src={getArtworkSrc('thumbnail')}
+      alt={nowPlaying.title}
+      width="40"
+      height="40"
+    />
+    <button class="mini-play" onclick={togglePlay} disabled={loading}>
+      {#if isPlaying}
+        <img src="/icons/stop_fill_white.svg" alt="Stop" width="20" height="20" />
+      {:else}
+        <img src="/icons/play_fill_white.svg" alt="Play" width="24" height="24" />
+      {/if}
+    </button>
+    <div class="mini-info">
+      <div class="mini-title">{nowPlaying.title}</div>
+      <div class="mini-artist">{nowPlaying.artist}</div>
+    </div>
+  </div>
 </div>
 
 <style>
@@ -852,8 +897,95 @@
   }
 
   .volume-slider:focus-visible::-webkit-slider-thumb {
-    outline: 2px solid var(--primary-500);
-    outline-offset: 1px;
-    transform: scale(1.2);
+    outline: 2px solid var(--primary-600);
+    outline-offset: 2px;
+  }
+
+  /* Mini Player Styles */
+  .sticky-player {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    background: var(--white, white);
+    border-top: 1px solid #eee;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(100%);
+    transition: transform 0.2s ease-out;
+  }
+
+  .sticky-player.visible {
+    transform: translateY(0);
+  }
+
+  .mini-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0.75rem 1rem;
+    max-height: 70px;
+  }
+
+  .mini-cover {
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    object-fit: cover;
+  }
+
+  .mini-info {
+    flex: 1;
+    min-width: 0; /* Za text truncation */
+  }
+
+  .mini-title {
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+  }
+
+  .mini-artist {
+    font-size: 0.9rem;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+  }
+
+  .mini-play {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--primary-600);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .mini-play:hover {
+    background: var(--primary-700);
+  }
+
+  .mini-play:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .mini-play > * {
+    pointer-events: none;
   }
 </style>

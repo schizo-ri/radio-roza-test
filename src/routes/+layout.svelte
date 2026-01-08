@@ -12,12 +12,6 @@
   // let expanded = $state(page.url.pathname === '/');
   let projectsVisible = $state(false);
 
-  // function handleScroll() {
-  //   if (expanded) {
-  //     expanded = false;
-  //   }
-  // }
-
   function handleClickOutside(event) {
     if (projectsVisible && !event.target.closest('.projects')) {
       projectsVisible = false;
