@@ -11,7 +11,7 @@
   <section class="mixcloud-latest">
     {#if data.data && data.data.length > 0}
       <HorizontalScroller>
-        {#each data.data as mix (mix.key)}
+        {#each data.data as mix, index (`${mix.url}-${index}`)}
           <MixCard {mix} showTags={true} />
         {/each}
       </HorizontalScroller>

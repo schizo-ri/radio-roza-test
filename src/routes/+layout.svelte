@@ -1,5 +1,7 @@
 <script>
   import { page } from '$app/state';
+  import Player from '$lib/components/Player.svelte';
+  import FullBleed from '$lib/components/FullBleed.svelte';
   import favicon from '$lib/assets/favicon.svg';
   import '../app.css';
 
@@ -151,6 +153,15 @@
   </div>
 </section>
 
+<FullBleed>
+  <div class="player-container">
+    <Player
+      src="https://radio.radio-roza.org/hls/radioroza/live.m3u8"
+      fullsize={page.url.pathname === '/'}
+    />
+  </div>
+</FullBleed>
+
 <main>
   {@render children()}
 </main>
@@ -171,13 +182,7 @@
       height 0.15s ease-out,
       box-shadow 0.15s ease-out;
     height: var(--header-height, 70px);
-    /*overflow: hidden;*/
   }
-
-  /*.header.expanded {
-    --header-height: 240px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }*/
 
   .header-content {
     position: relative;
@@ -198,44 +203,10 @@
     display: block;
   }
 
-  /*.expanded-content {
-    padding: 0 1rem;
-    transform: translateY(-20px);
-    opacity: 0;
-    transition:
-      transform 0.3s ease-out,
-      opacity 0.3s ease-out;
-  }*/
-
-  /*.header.expanded .expanded-content {
-    transform: translateY(0);
-    opacity: 1;
-  }*/
-
   main {
-    padding-top: var(--header-height, 70px);
     min-height: 100vh;
     transition: padding-top 0.3s ease-out;
   }
-
-  /*.expand-btn {
-    margin: 0;
-    padding: 0;
-    background: none;
-    border: 0;
-    outline: 0;
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    font-size: 20px;
-    line-height: 1;
-  }*/
-
-  /*.expand-btn img {
-    display: block;
-    width: 20px;
-    height: 20px;
-  }*/
 
   nav {
     display: flex;
@@ -371,5 +342,10 @@
 
   nav ul li:last-child > .social-icons > img {
     height: 24px;
+  }
+
+  .player-container {
+    padding-top: calc(var(--header-height, 70px) + 2rem);
+    padding-bottom: 2rem;
   }
 </style>

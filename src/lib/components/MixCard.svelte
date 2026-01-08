@@ -21,7 +21,7 @@
 
   {#if showTags && mix.tags && mix.tags.length > 0}
     <div class="mix-tags hug">
-      {#each mix.tags.slice(0, 3) as tag (tag.key)}
+      {#each mix.tags.slice(0, 3) as tag, index (`${tag.url}-${index}`)}
         <button
           type="button"
           class="mix-tag"

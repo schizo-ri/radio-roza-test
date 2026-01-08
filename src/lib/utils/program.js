@@ -115,11 +115,6 @@ const program = [
     show_start: '00:00',
   },
   {
-    title: 'Chill Pill',
-    day: 'Monday',
-    show_start: '00:00',
-  },
-  {
     title: 'Space is the place',
     day: 'Monday',
     show_start: '04:00',

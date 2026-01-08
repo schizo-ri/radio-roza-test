@@ -42,7 +42,7 @@
     <!-- Tags -->
     {#if article.tags && article.tags.length > 0}
       <div class="tags">
-        {#each article.tags.slice(0, 3) as tag (tag)}
+        {#each article.tags.slice(0, 3) as tag (`${article.id}-${tag}`)}
           <a href="/citaj-radio?tag={encodeURIComponent(tag)}" class="tag">#{tag}</a>
         {/each}
         {#if article.tags.length > 3}

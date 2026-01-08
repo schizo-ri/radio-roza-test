@@ -109,8 +109,13 @@
 
   // Provjeri da li je show trenutno aktivan
   function isCurrentShow(show) {
+    if (!currentShow) return false;
+
     return (
-      currentShow && show.full_date === currentShow.full_date && show.title === currentShow.title
+      selectedDay === today &&
+      show.day === currentShow.day &&
+      show.show_start === currentShow.show_start &&
+      show.title === currentShow.title
     );
   }
 </script>
@@ -153,7 +158,7 @@
       </div> -->
 
       <div class="shows-list">
-        {#each groupedProgram[selectedDay] as show (show.full_date + show.title)}
+        {#each groupedProgram[selectedDay] as show, index (`${show.day}-${show.show_start}-${show.title}-${index}`)}
           <div class="show-item" class:current-show={isCurrentShow(show)}>
             <div class="show-time">
               {show.show_start}
