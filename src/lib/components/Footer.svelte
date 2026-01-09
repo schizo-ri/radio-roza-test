@@ -79,11 +79,8 @@
       class="link">Svelte 5</a
     >
     • Audio player pogoni
-    <a
-      href="https://github.com/Dash-Industry-Forum/dash.js"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="link">Dash.js</a
+    <a href="https://hlsjs.video-dev.org" target="_blank" rel="noopener noreferrer" class="link"
+      >HLS.js</a
     >
   </p>
 </footer>

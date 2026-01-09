@@ -55,7 +55,7 @@
       class="logo-link"
       aria-current={page.url.pathname === '/about' ? 'page' : undefined}
     >
-      <img src="/brand/rr_red_outline_transparent_rounded.svg" alt="Logo" width="44" height="44" />
+      <img src="/brand/rr_red_rounded.svg" alt="Logo" width="44" height="44" />
       <span class="sr-only">Radio Roža</span></a
     >
 
@@ -249,14 +249,13 @@
   </div>
 </section>
 
-<FullBleed>
-  <div class="player-container">
-    <Player
-      src="https://radio.radio-roza.org/hls/radioroza/live.m3u8"
-      fullsize={page.url.pathname === '/'}
-    />
-  </div>
-</FullBleed>
+<div class="player-container">
+  <Player
+    src="https://radio.radio-roza.org/hls/radioroza/live.m3u8"
+    fullsize={page.url.pathname === '/'}
+    style="padding-top: calc(var(--header-height, 60px) + 2rem); padding-bottom: 2rem"
+  />
+</div>
 
 <main>
   {@render children()}
@@ -398,7 +397,7 @@
     text-decoration: none;
     /*font-family: var(--display-font);*/
     color: var(--dark);
-    font-weight: 400;
+    font-weight: 500;
     font-size: 1.1rem;
     letter-spacing: -0.5px;
     text-transform: uppercase;
@@ -637,8 +636,8 @@
     overflow: hidden;
   }
 
-  .player-container {
+  /*.player-container {
     padding-top: calc(var(--header-height, 60px) + 2rem);
     padding-bottom: 2rem;
-  }
+  }*/
 </style>

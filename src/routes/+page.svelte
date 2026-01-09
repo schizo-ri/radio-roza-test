@@ -56,49 +56,6 @@
 </FullBleed>
 
 <style>
-  .header {
-    display: grid;
-    grid-template-columns: 120px minmax(0, 1fr);
-    grid-template-rows: repeat(2, 60px);
-    grid-template-areas:
-      'logo title'
-      'logo description';
-    grid-gap: 1rem;
-    align-content: center;
-    padding-top: 4rem;
-    padding-bottom: 4rem;
-
-    max-width: var(--max-content-width);
-    flex-grow: 1;
-  }
-
-  .logo {
-    grid-area: logo;
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-
-  .title {
-    grid-area: title;
-    /*font-family: var(--display-font);*/
-    font-size: 3.2rem;
-    font-weight: 500;
-    /*letter-spacing: -2px;*/
-    /*text-transform: uppercase;*/
-    color: white;
-  }
-
-  .description {
-    grid-area: description;
-    /*font-family: var(--display-font);*/
-    font-size: 1.6rem;
-    font-weight: 400;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: white;
-  }
-
   .spacer {
     padding-top: 2rem;
     padding-bottom: 2rem;
@@ -155,7 +112,8 @@
     color: var(--dark);
     text-decoration: none;
     font-weight: 800;
-    width: 380px;
+    width: 80cqw;
+    max-width: 380px;
     transition: transform 0.1s ease-in-out;
   }
 

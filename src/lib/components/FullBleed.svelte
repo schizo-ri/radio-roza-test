@@ -1,5 +1,5 @@
 <script>
-  let { children, background = true, variant = 'primary', className = '' } = $props();
+  let { children, background = true, variant = 'primary', class: className = '' } = $props();
   import Wrapper from '$lib/components/Wrapper.svelte';
 </script>
 

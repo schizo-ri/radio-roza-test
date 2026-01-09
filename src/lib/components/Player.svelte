@@ -3,12 +3,13 @@
   import { browser } from '$app/environment';
   import Hls from 'hls.js';
   import SpinningVinyl from './SpinningVinyl.svelte';
+  import Wrapper from '$lib/components/Wrapper.svelte';
   // temporary solution until we have a better way to handle program
   import { getCurrentShow, getNextShow } from '$lib/utils/program';
   import { getAlbumArt } from '$lib/utils/artwork';
 
   const src = 'https://radio.radio-roza.org/hls/radioroza/live.m3u8';
-  let { autoplay = false, fullsize = false, ...props } = $props();
+  let { autoplay = false, fullsize = false, class: className = '', ...props } = $props();
 
   let showStickyPlayer = $state(false);
   let mainPlayerElement;
@@ -454,150 +455,222 @@
   });
 </script>
 
-<audio bind:this={audioElement} bind:volume bind:muted preload="none"></audio>
+<div class="player-container">
+  <audio bind:this={audioElement} bind:volume bind:muted preload="none"></audio>
+  <Wrapper>
+    <div class="background-overlay" style="--album-art: url({getArtworkSrc('large')})"></div>
+    <!-- Main Player -->
+    <div class="audio-player {className}" class:fullsize bind:this={mainPlayerElement} {...props}>
+      <div class="toggle-container">
+        <SpinningVinyl bind:playing={isPlaying} style="position: absolute; inset: 0; z-index: 1;" />
+        <button class="play" onclick={togglePlay} disabled={loading}>
+          {#if isPlaying}
+            <img src="/icons/stop_fill_white.svg" alt="Stop" width="24" height="24" />
+          {:else}
+            <img src="/icons/play_fill_white.svg" alt="Play" width="28" height="28" />
+          {/if}
+        </button>
+      </div>
 
-<!-- Main Player -->
-<div class="audio-player" class:fullsize bind:this={mainPlayerElement} {...props}>
-  <div class="toggle-container">
-    <SpinningVinyl bind:playing={isPlaying} style="position: absolute; inset: 0; z-index: 1;" />
-    <button class="play" onclick={togglePlay} disabled={loading}>
-      {#if isPlaying}
-        <img src="/icons/stop_fill_white.svg" alt="Stop" width="24" height="24" />
-      {:else}
-        <img src="/icons/play_fill_white.svg" alt="Play" width="28" height="28" />
+      <section class="now-playing" aria-label="Now playing">
+        <dl class="track-info" aria-live="polite">
+          <dt class="sr-only">Track title</dt>
+          <dd class="track-title">{nowPlaying.title}</dd>
+          <dt class="sr-only">Artist</dt>
+          <dd class="track-artist">{nowPlaying.artist}</dd>
+        </dl>
+      </section>
+
+      <section class="albumart">
+        <img src={getArtworkSrc('medium')} alt={nowPlaying.title} width="200" height="200" />
+      </section>
+
+      {#if duration > 0}
+        <section class="progress">
+          <div class="progress-container">
+            <div class="progress-visual">
+              <div class="progress-played" style="width: {(currentTime / duration) * 100}%"></div>
+              <div class="progress-remaining"></div>
+            </div>
+            <input
+              type="range"
+              class="progress-input"
+              min="0"
+              max={duration}
+              step="1"
+              bind:value={currentTime}
+              onchange={() => seek(currentTime)}
+              aria-label="Seek"
+            />
+          </div>
+          <button class="skip-to-live" onclick={skipToLive}>
+            <img src="/icons/skip-to-end.svg" alt="Skip to End" />
+          </button>
+          <div class="time-display">
+            <span class="current-time">{formatTime(currentTime)}</span>
+            {#if duration > 0}
+              <span class="separator">/</span>
+              <span class="duration">{formatTime(duration)}</span>
+            {/if}
+          </div>
+        </section>
       {/if}
-    </button>
-  </div>
 
-  <section class="now-playing" aria-label="Now playing">
-    <dl class="track-info" aria-live="polite">
-      <dt class="sr-only">Track title</dt>
-      <dd class="track-title">{nowPlaying.title}</dd>
-      <dt class="sr-only">Artist</dt>
-      <dd class="track-artist">{nowPlaying.artist}</dd>
-    </dl>
-  </section>
+      <section class="show-info">
+        {#if currentShow}
+          <div class="current-show">
+            <span class="show-start">{currentShow.show_start}</span>
+            <span class="show-title">{currentShow.title}</span>
+          </div>
+        {/if}
 
-  <section class="albumart">
-    <img src={getArtworkSrc('medium')} alt={nowPlaying.title} width="200" height="200" />
-  </section>
+        {#if nextShow}
+          <div class="next-show">
+            <span class="show-start">{nextShow.show_start}</span>
+            <span class="show-title">{nextShow.title}</span>
+          </div>
+        {/if}
+      </section>
 
-  {#if duration > 0}
-    <section class="progress">
-      <div class="progress-container">
-        <div class="progress-visual">
-          <div class="progress-played" style="width: {(currentTime / duration) * 100}%"></div>
-          <div class="progress-remaining"></div>
-        </div>
+      <section class="volume-control">
+        <button class="volume-btn" onclick={toggleMute}>
+          {#if muted}
+            <img src="/icons/volume-x-white.svg" alt="Muted" />
+          {:else if volume < 0.25}
+            <img src="/icons/volume-white.svg" alt="Low Volume" />
+          {:else if volume > 0.75}
+            <img src="/icons/volume-2-white.svg" alt="High Volume" />
+          {:else}
+            <img src="/icons/volume-1-white.svg" alt="Medium Volume" />
+          {/if}
+        </button>
         <input
           type="range"
-          class="progress-input"
+          class="volume-slider"
           min="0"
-          max={duration}
-          step="1"
-          bind:value={currentTime}
-          onchange={() => seek(currentTime)}
-          aria-label="Seek"
+          max="1"
+          step="0.01"
+          bind:value={volume}
+          onchange={() => setVolume(volume)}
+          aria-label="Volume"
         />
-      </div>
-      <button class="skip-to-live" onclick={skipToLive}>
-        <img src="/icons/skip-to-end.svg" alt="Skip to End" />
-      </button>
-      <div class="time-display">
-        <span class="current-time">{formatTime(currentTime)}</span>
-        {#if duration > 0}
-          <span class="separator">/</span>
-          <span class="duration">{formatTime(duration)}</span>
-        {/if}
-      </div>
-    </section>
-  {/if}
+      </section>
 
-  <section class="show-info">
-    {#if currentShow}
-      <div class="current-show">
-        <span class="show-start">{currentShow.show_start}</span>
-        <span class="show-title">{currentShow.title}</span>
-      </div>
-    {/if}
-
-    {#if nextShow}
-      <div class="next-show">
-        <span class="show-start">{nextShow.show_start}</span>
-        <span class="show-title">{nextShow.title}</span>
-      </div>
-    {/if}
-  </section>
-
-  <section class="volume-control">
-    <button class="volume-btn" onclick={toggleMute}>
-      {#if muted}
-        <img src="/icons/volume-x-white.svg" alt="Muted" />
-      {:else if volume < 0.25}
-        <img src="/icons/volume-white.svg" alt="Low Volume" />
-      {:else if volume > 0.75}
-        <img src="/icons/volume-2-white.svg" alt="High Volume" />
-      {:else}
-        <img src="/icons/volume-1-white.svg" alt="Medium Volume" />
+      {#if error}
+        <div class="error">
+          <img src="/icons/warning-white.svg" alt="Error" />
+          {error}
+        </div>
       {/if}
-    </button>
-    <input
-      type="range"
-      class="volume-slider"
-      min="0"
-      max="1"
-      step="0.01"
-      bind:value={volume}
-      onchange={() => setVolume(volume)}
-      aria-label="Volume"
-    />
-  </section>
-
-  {#if error}
-    <div class="error">
-      <img src="/icons/warning-white.svg" alt="Error" />
-      {error}
     </div>
-  {/if}
-</div>
 
-<!-- Sticky Mini Player -->
-<div class="sticky-player" class:visible={showStickyPlayer}>
-  <div class="mini-content">
-    <img
-      class="mini-cover"
-      src={getArtworkSrc('thumbnail')}
-      alt={nowPlaying.title}
-      width="40"
-      height="40"
-    />
-    <button class="mini-play" onclick={togglePlay} disabled={loading}>
-      {#if isPlaying}
-        <img src="/icons/stop_fill_white.svg" alt="Stop" width="20" height="20" />
-      {:else}
-        <img src="/icons/play_fill_white.svg" alt="Play" width="24" height="24" />
-      {/if}
-    </button>
-    <div class="mini-info">
-      <div class="mini-title">{nowPlaying.title}</div>
-      <div class="mini-artist">{nowPlaying.artist}</div>
+    <!-- Sticky Mini Player -->
+    <div class="sticky-player" class:visible={showStickyPlayer}>
+      <Wrapper>
+        <div class="mini-grid">
+          <div class="mini-content">
+            <img
+              class="mini-cover"
+              src={getArtworkSrc('thumbnail')}
+              alt={nowPlaying.title}
+              width="40"
+              height="40"
+            />
+            <button class="mini-play" onclick={togglePlay} disabled={loading}>
+              {#if isPlaying}
+                <img src="/icons/stop_fill_white.svg" alt="Stop" width="20" height="20" />
+              {:else}
+                <img src="/icons/play_fill_white.svg" alt="Play" width="24" height="24" />
+              {/if}
+            </button>
+            <div class="mini-info">
+              <div class="mini-title">{nowPlaying.title}</div>
+              <div class="mini-artist">{nowPlaying.artist}</div>
+            </div>
+          </div>
+          <section class="volume-control">
+            <button class="volume-btn" onclick={toggleMute}>
+              {#if muted}
+                <img src="/icons/volume-x.svg" alt="Muted" />
+              {:else if volume < 0.25}
+                <img src="/icons/volume.svg" alt="Low Volume" />
+              {:else if volume > 0.75}
+                <img src="/icons/volume-2.svg" alt="High Volume" />
+              {:else}
+                <img src="/icons/volume-1.svg" alt="Medium Volume" />
+              {/if}
+            </button>
+            <input
+              type="range"
+              class="volume-slider"
+              min="0"
+              max="1"
+              step="0.01"
+              bind:value={volume}
+              onchange={() => setVolume(volume)}
+              aria-label="Volume"
+            />
+          </section>
+        </div>
+      </Wrapper>
     </div>
-  </div>
+  </Wrapper>
 </div>
 
 <style>
+  .player-container {
+    position: relative;
+  }
+
   .audio-player {
     display: grid;
     grid-template-areas:
-      'albumart play now-playing now-playing'
-      'albumart play now-playing now-playing'
-      'albumart play progress progress'
-      'albumart show-info show-info show-info'
-      'albumart error error volume';
-    grid-template-columns: 200px 60px minmax(200px, 1fr) minmax(0, 120px);
-    grid-template-rows: 25px 25px 12px 50px 56px;
+      'play now-playing now-playing'
+      'play now-playing now-playing'
+      'play progress progress'
+      'show-info show-info show-info'
+      'error error volume';
+    grid-template-columns: 60px minmax(200px, 1fr) minmax(0, 120px);
+    grid-template-rows: 25px 25px 12px 50px 25px;
     grid-column-gap: 16px;
     grid-row-gap: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .background-overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-image: var(--album-art);
+    background-size: contain;
+    background-position: left center;
+    background-repeat: no-repeat;
+    z-index: -1;
+  }
+
+  .background-overlay::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      45deg,
+      rgba(220, 38, 38, 0.8),
+      rgba(185, 28, 28, 0.85) 20%,
+      rgba(153, 27, 27, 0.9) 75%,
+      rgba(127, 29, 29, 0.92) 90%,
+      rgba(69, 10, 10, 0.95) 100%
+    );
+    z-index: 1;
+  }
+
+  .audio-player > *:not(.background-overlay) {
+    position: relative;
+    z-index: 2;
   }
 
   .error {
@@ -612,7 +685,7 @@
   }
 
   .albumart {
-    grid-area: albumart;
+    display: none;
   }
 
   .albumart img {
@@ -673,6 +746,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-shadow: 2px 2px 4px var(--primary-800);
   }
 
   .track-artist {
@@ -686,6 +760,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     text-transform: uppercase;
+    text-shadow: 2px 2px 4px var(--primary-800);
   }
 
   .progress {
@@ -825,7 +900,7 @@
 
   .volume-control {
     grid-area: volume;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: flex-end;
     gap: 8px;
@@ -868,6 +943,7 @@
     background: var(--dark);
     cursor: pointer;
     border: 0;
+    filter: drop-shadow(0px 0px 2px var(--primary-900));
   }
 
   .volume-slider::-webkit-slider-thumb:hover {
@@ -892,6 +968,7 @@
     background: white;
     cursor: pointer;
     border: 0;
+    filter: drop-shadow(0px 0px 2px var(--primary-900));
   }
 
   .volume-slider::-moz-range-thumb:hover {
@@ -928,12 +1005,17 @@
     transform: translateY(0);
   }
 
+  .mini-grid {
+    display: grid;
+    grid-template-areas: 'content volume';
+    grid-template-columns: minmax(200px, 1fr) 120px;
+  }
+
   .mini-content {
+    grid-area: content;
     display: flex;
     align-items: center;
     gap: 1rem;
-    max-width: 1200px;
-    margin: 0 auto;
     padding: 0.75rem 1rem;
     max-height: 60px;
   }
@@ -1008,5 +1090,31 @@
 
   .mini-play > * {
     pointer-events: none;
+  }
+
+  @media (min-width: 768px) {
+    .audio-player {
+      grid-template-areas:
+        'albumart play now-playing now-playing'
+        'albumart play now-playing now-playing'
+        'albumart play progress progress'
+        'albumart show-info show-info show-info'
+        'albumart error error volume';
+      grid-template-columns: 200px 60px minmax(200px, 1fr) minmax(0, 120px);
+      grid-template-rows: 25px 25px 12px 50px 56px;
+    }
+
+    .albumart {
+      display: block;
+      grid-area: albumart;
+    }
+
+    .background-overlay {
+      background-image: none;
+    }
+
+    .volume-control {
+      display: flex;
+    }
   }
 </style>
