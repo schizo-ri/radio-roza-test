@@ -555,10 +555,8 @@
 
   {#if error}
     <div class="error">
-      <span>
-        <img src="/icons/warning-white.svg" alt="Error" />
-        {error}
-      </span>
+      <img src="/icons/warning-white.svg" alt="Error" />
+      {error}
     </div>
   {/if}
 </div>
@@ -595,7 +593,7 @@
       'albumart play now-playing now-playing'
       'albumart play progress progress'
       'albumart show-info show-info show-info'
-      'error error error volume';
+      'albumart error error volume';
     grid-template-columns: 200px 60px minmax(200px, 1fr) minmax(0, 120px);
     grid-template-rows: 25px 25px 12px 50px 56px;
     grid-column-gap: 16px;
@@ -608,6 +606,17 @@
     font-size: 12px;
     align-self: start;
     padding-top: 8px;
+    display: flex;
+    gap: 1ch;
+    align-items: center;
+  }
+
+  .albumart {
+    grid-area: albumart;
+  }
+
+  .albumart img {
+    border-radius: 4px;
   }
 
   .toggle-container {
@@ -930,16 +939,26 @@
   }
 
   .mini-cover {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     border-radius: 4px;
     flex-shrink: 0;
     object-fit: cover;
   }
 
+  /* Sakrij na malim ekranima */
+  @media (max-width: 640px) {
+    .mini-cover {
+      display: none;
+    }
+  }
+
   .mini-info {
     flex: 1;
     min-width: 0; /* Za text truncation */
+    min-height: 40px;
+    display: flex;
+    flex-direction: column;
   }
 
   .mini-title {
@@ -950,6 +969,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     margin: 0;
+    flex: 1;
   }
 
   .mini-artist {
@@ -959,6 +979,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     margin: 0;
+    flex: 1;
   }
 
   .mini-play {
