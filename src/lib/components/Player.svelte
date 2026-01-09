@@ -935,7 +935,7 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 0.75rem 1rem;
-    max-height: 70px;
+    max-height: 60px;
   }
 
   .mini-cover {

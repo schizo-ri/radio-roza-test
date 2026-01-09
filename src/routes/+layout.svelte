@@ -55,7 +55,7 @@
       class="logo-link"
       aria-current={page.url.pathname === '/about' ? 'page' : undefined}
     >
-      <img src="/brand/rr_red_outline_transparent_rounded.svg" alt="Logo" width="50" height="50" />
+      <img src="/brand/rr_red_outline_transparent_rounded.svg" alt="Logo" width="44" height="44" />
       <span class="sr-only">Radio Roža</span></a
     >
 
@@ -66,7 +66,7 @@
       aria-label="Toggle navigation menu"
       aria-expanded={mobileMenuOpen}
     >
-      MENI
+      Ima još...
     </button>
 
     <!-- Desktop navigation -->
@@ -219,77 +219,30 @@
             aria-current={page.url.pathname === '/projekti' ? 'page' : undefined}
             onclick={() => (mobileMenuOpen = false)}>Projekti</a
           >
-          <button
-            type="button"
-            class="mobile-submenu-toggle"
-            aria-label="Toggle submenu"
-            onclick={() => (projectsVisible = !projectsVisible)}
-          >
-            <span class="sr-only">Pokaži projekte</span>
-            <img src="/icons/caret_down.svg" alt="Down" width="16" height="16" />
-          </button>
-          <ul class="mobile-submenu" class:visible={projectsVisible}>
-            <li>
-              <a
-                href="/projekti/ziroskop"
-                onclick={() => {
-                  projectsVisible = false;
-                  mobileMenuOpen = false;
-                }}>Žiroskop</a
-              >
-            </li>
-            <li>
-              <a
-                href="/projekti/korona-kid"
-                onclick={() => {
-                  projectsVisible = false;
-                  mobileMenuOpen = false;
-                }}>Korona kid</a
-              >
-            </li>
-            <li>
-              <a
-                href="/projekti/odasiljac"
-                onclick={() => {
-                  projectsVisible = false;
-                  mobileMenuOpen = false;
-                }}>Odašiljač</a
-              >
-            </li>
-            <li>
-              <a
-                href="/projekti/17-bitnih"
-                onclick={() => {
-                  projectsVisible = false;
-                  mobileMenuOpen = false;
-                }}>17-bitnih</a
-              >
-            </li>
-          </ul>
         </li>
         <li class="mobile-social-section">
           <div class="mobile-social-grid">
             <a href="https://facebook.com/radiorozha" class="mobile-social-link">
-              <img src="/icons/socials/facebook.svg" alt="Facebook" />
-              <span>Facebook</span>
+              <img src="/icons/socials/facebook.svg" width="36" height="36" alt="Facebook" />
+              <span class="sr-only">Facebook</span>
             </a>
             <a href="https://www.instagram.com/radio.rozari/" class="mobile-social-link">
-              <img src="/icons/socials/instagram.svg" alt="Instagram" />
-              <span>Instagram</span>
+              <img src="/icons/socials/instagram.svg" width="36" height="36" alt="Instagram" />
+              <span class="sr-only">Instagram</span>
             </a>
             <a href="https://mixcloud.com/RadioRoza" class="mobile-social-link">
-              <img src="/icons/socials/mixcloud.svg" alt="Mixcloud" />
-              <span>Mixcloud</span>
+              <img src="/icons/socials/mixcloud.svg" width="36" height="36" alt="Mixcloud" />
+              <span class="sr-only">Mixcloud</span>
             </a>
             <a href="https://youtube.com/@radioroza9811" class="mobile-social-link">
-              <img src="/icons/socials/youtube.svg" alt="YouTube" />
-              <span>YouTube</span>
-            </a>
-            <a href="https://buymeacoffee.com//RadioRoza" class="mobile-social-link">
-              <img src="/icons/socials/bmc-logo.svg" alt="Buy me a coffee" />
-              <span>Support us</span>
+              <img src="/icons/socials/youtube.svg" width="36" height="36" alt="YouTube" />
+              <span class="sr-only">YouTube</span>
             </a>
           </div>
+          <a href="https://buymeacoffee.com//RadioRoza" class="mobile-support-link">
+            <img src="/icons/socials/bmc-logo.svg" height="24" alt="Buy me a coffee" />
+            <span>Support us</span>
+          </a>
         </li>
       </ul>
     </nav>
@@ -324,7 +277,7 @@
     transition:
       height 0.15s ease-out,
       box-shadow 0.15s ease-out;
-    height: var(--header-height, 70px);
+    height: var(--header-height, 60px);
     max-width: 100cqw;
   }
 
@@ -334,7 +287,7 @@
     align-items: center;
     justify-content: space-between;
     background-color: white;
-    height: 70px; /* bazna visina */
+    height: 60px; /* bazna visina */
     padding: 0 1rem;
   }
 
@@ -353,16 +306,15 @@
     transition: padding-top 0.3s ease-out;
   }
 
-  /* Mobile nav trigger styles */
+  /* Mobile nav trigger styles - Default: mobile */
   .mobile-nav-trigger {
-    display: none;
-    padding: 0.5rem 1rem;
-    background: white;
-    border: 2px solid var(--primary-600);
-    color: var(--primary-600);
-    font-weight: 600;
-    font-size: 0.9rem;
-    letter-spacing: 0.5px;
+    display: block;
+    padding: 0.4rem 1rem;
+    background: transparent;
+    border: 2px solid var(--primary-900);
+    color: var(--primary-900);
+    font-weight: 500;
+    /*letter-spacing: 0.5px;*/
     text-transform: uppercase;
     cursor: pointer;
     border-radius: 4px;
@@ -380,7 +332,7 @@
   }
 
   .mobile-nav-trigger:focus-visible {
-    outline: 2px solid var(--primary-800);
+    outline: 2px solid var(--primary-400);
     outline-offset: 2px;
   }
 
@@ -389,9 +341,9 @@
     color: white;
   }
 
-  /* Desktop navigation */
+  /* Desktop navigation - Default: hidden on mobile */
   .desktop-nav {
-    display: flex;
+    display: none;
     align-items: center;
     padding: 1rem 0;
   }
@@ -405,17 +357,17 @@
     align-items: center;
   }
 
-  /* Mobile navigation */
+  /* Mobile navigation - Default: full-width mobile */
   .mobile-nav {
     position: fixed;
-    top: 70px;
+    top: 60px;
     right: 0;
-    width: 300px;
-    /*max-width: 85vw;*/
-    height: calc(100vh - 70px);
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - 60px);
     background: white;
-    border-left: 1px solid #eee;
-    box-shadow: -4px 0 32px rgba(0, 0, 0, 0.1);
+    border-top: 1px solid #eee;
+    box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.1);
     transform: translateX(100%);
     opacity: 0;
     visibility: hidden;
@@ -569,6 +521,7 @@
     font-size: 1.1rem;
     letter-spacing: -0.5px;
     text-transform: uppercase;
+    text-align: center;
     border-bottom: 1px solid #f5f5f5;
     transition: all 0.3s ease;
   }
@@ -585,100 +538,43 @@
     border-left: 4px solid var(--primary-600);
   }
 
-  .mobile-projects {
-    position: relative;
-  }
-
-  .mobile-projects > .mobile-link {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: none;
-  }
-
-  .mobile-submenu-toggle {
-    background: none;
-    border: none;
-    padding: 0.5rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.3s ease;
-  }
-
-  .mobile-submenu-toggle:focus-visible {
-    outline: 2px solid var(--primary-600);
-    border-radius: 2px;
-  }
-
-  .mobile-submenu {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    background-color: var(--primary-25, #fef7f7);
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-  }
-
-  .mobile-submenu.visible {
-    max-height: 300px;
-    border-bottom: 1px solid #f5f5f5;
-  }
-
-  .mobile-submenu a {
-    display: block;
-    padding: 0.75rem 2.5rem;
-    text-decoration: none;
-    color: var(--dark);
-    font-size: 1rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-  }
-
-  .mobile-submenu a:hover {
-    background-color: var(--primary-100);
-    color: var(--primary-700);
-    padding-left: 3rem;
-  }
-
   .mobile-social-section {
-    margin-top: 2rem;
-    padding: 1.5rem;
-    background-color: var(--primary-25, #fef7f7);
-    border-top: 1px solid #eee;
+    margin-top: 1rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    /*align-items: center;*/
+    gap: 1rem;
   }
 
   .mobile-social-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(36px, 1fr));
     gap: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
   }
 
   .mobile-social-link {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem;
+    justify-content: center;
     text-decoration: none;
-    color: var(--dark);
-    background: white;
-    border-radius: 8px;
-    border: 1px solid #eee;
-    transition: all 0.3s ease;
+    transition: all 0.1s ease;
   }
 
   .mobile-social-link:hover {
     background-color: var(--primary-50);
-    border-color: var(--primary-200);
+    /*border-color: var(--primary-200);*/
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    /*box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);*/
   }
 
   .mobile-social-link img {
-    width: 24px;
-    height: 24px;
+    width: 36px;
+    height: 36px;
+    display: block;
+    pointer-events: none;
   }
 
   .mobile-social-link span {
@@ -686,51 +582,63 @@
     font-weight: 500;
   }
 
-  /* Responsive breakpoints */
-  @media (max-width: 1024px) {
-    .desktop-nav {
-      display: none;
+  .mobile-support-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    color: var(--dark);
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    transition: all 0.1s ease;
+  }
+
+  /* Mobile-first responsive breakpoints */
+
+  /* Small phones */
+  @media (min-width: 421px) {
+    .mobile-nav {
+      width: 300px;
+      max-width: 85vw;
+      left: auto;
+      border-top: none;
+      border-left: 1px solid #eee;
+      box-shadow: -4px 0 32px rgba(0, 0, 0, 0.1);
     }
 
-    /*.burger-menu {
+    .mobile-link {
+      text-align: left;
+    }
+  }
+
+  /* Tablets and up */
+  @media (min-width: 481px) {
+    .header-content {
+      padding: 0 1rem;
+    }
+  }
+
+  /* Desktop and up */
+  @media (min-width: 1025px) {
+    .desktop-nav {
       display: flex;
-    }*/
+    }
 
     .mobile-nav-trigger {
-      display: block;
+      display: none;
     }
   }
 
-  @media (max-width: 420px) {
-    .mobile-nav {
-      width: 100vw;
-      right: 0;
-      left: 0;
-      border-left: none;
-      border-top: 1px solid #eee;
-      box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.1);
-    }
-  }
-
-  @media (max-width: 480px) {
-    .header-content {
-      padding: 0 0.75rem;
-    }
-
-    .mobile-social-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  /* Prevent body scroll when mobile menu is open */
-  @media (max-width: 1024px) {
-    :global(body.mobile-menu-open) {
-      overflow: hidden;
-    }
+  /* Prevent body scroll when mobile menu is open - mobile only */
+  :global(body.mobile-menu-open) {
+    overflow: hidden;
   }
 
   .player-container {
-    padding-top: calc(var(--header-height, 70px) + 2rem);
+    padding-top: calc(var(--header-height, 60px) + 2rem);
     padding-bottom: 2rem;
   }
 </style>
