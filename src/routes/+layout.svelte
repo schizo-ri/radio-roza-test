@@ -607,7 +607,15 @@
   /* Mobile-first responsive breakpoints */
 
   /* Small phones */
-  @media (min-width: 421px) {
+  @media (min-width: 430px) {
+    .header-content {
+      padding: 0 1rem;
+    }
+
+    .name {
+      display: inline-block;
+    }
+
     .mobile-nav {
       width: 300px;
       max-width: 85vw;
@@ -622,19 +630,8 @@
     }
   }
 
-  /* Tablets and up */
-  @media (min-width: 481px) {
-    .header-content {
-      padding: 0 1rem;
-    }
-
-    .name {
-      display: inline-block;
-    }
-  }
-
   /* Desktop and up */
-  @media (min-width: 1025px) {
+  @media (min-width: 1200px) {
     .desktop-nav {
       display: flex;
     }

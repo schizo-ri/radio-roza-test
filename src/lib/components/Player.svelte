@@ -644,8 +644,8 @@
     width: 100%;
     height: 100%;
     background-image: var(--album-art);
-    background-size: contain;
-    background-position: left center;
+    background-size: auto calc(100% - 60px);
+    background-position: left 0 top 60px;
     background-repeat: no-repeat;
     z-index: -1;
   }
