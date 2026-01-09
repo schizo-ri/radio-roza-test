@@ -198,10 +198,17 @@ body {
     'Segoe UI',
     Roboto,
     sans-serif;
+  /*font-size: 20px;*/
+  /* used fonts are too small with designers size so font-size-adjust is disabled for now */
+  /*font-size-adjust: 0.5;*/
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   text-rendering: optimizeLegibility;
+  accent-color: var(--primary-700);
+  scroll-behavior: smooth;
 }
 
 img,

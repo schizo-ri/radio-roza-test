@@ -1,7 +1,6 @@
 <script>
   import { page } from '$app/state';
   import Player from '$lib/components/Player.svelte';
-  import FullBleed from '$lib/components/FullBleed.svelte';
   import favicon from '$lib/assets/favicon.svg';
   import '../app.css';
 
@@ -56,7 +55,7 @@
       aria-current={page.url.pathname === '/about' ? 'page' : undefined}
     >
       <img src="/brand/rr_red_rounded.svg" alt="Logo" width="44" height="44" />
-      <span class="sr-only">Radio Roža</span></a
+      <span class="name">Radio Roža</span></a
     >
 
     <button
@@ -294,10 +293,20 @@
     display: flex;
     align-items: center;
     height: 100%;
+    text-decoration: none;
   }
 
   .logo-link img {
     display: block;
+  }
+
+  .name {
+    display: none;
+    font-family: var(--display-font);
+    font-weight: 800;
+    font-size: 2rem;
+    color: var(--primary-700);
+    margin-left: 1rem;
   }
 
   main {
@@ -617,6 +626,10 @@
   @media (min-width: 481px) {
     .header-content {
       padding: 0 1rem;
+    }
+
+    .name {
+      display: inline-block;
     }
   }
 
