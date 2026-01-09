@@ -6,7 +6,8 @@ export const articles = [
     id: 'art_001',
     title: 'Nova sezona Elektronskog Pulsa donosi svjetske DJ zvijezde',
     slug: 'nova-sezona-elektronskog-pulsa-svjetske-dj-zvijezde',
-    excerpt: 'DJ Novak najavljuje ekskluzivne goste iz Berlina, Londona i Detroita koji će obilježiti proljetnu sezonu najpopularnije elektroničke emisije.',
+    excerpt:
+      'DJ Novak najavljuje ekskluzivne goste iz Berlina, Londona i Detroita koji će obilježiti proljetnu sezonu najpopularnije elektroničke emisije.',
     content: `<p>Nakon uspješne zimske sezone, emisija Elektronski Puls priprema niz uzbudljivih epizoda s gostima koji definiraju svjetsku elektroničku scenu. DJ Novak ekskluzivno za Radio Rožu otkriva imena koja će gostovati u emisiji tijekom sljedećih mjeseci.</p>
 
     <p>"Ova sezona bit će posebna jer dovodimo umjetnike koji rijetko gostuju u Hrvatskoj. Razgovarali smo s nekoliko legendarnih imena iz Berghaina, fabric-a i Movement festivala," kaže Novak.</p>
@@ -34,7 +35,7 @@ export const articles = [
       large: '/images/articles/elektronski-puls-nova-sezona-large.jpg',
       alt: 'DJ Novak u studiju Radio Rože',
       caption: 'DJ Novak priprema novu sezonu Elektronskog Pulsa',
-      credits: 'Foto: Marko Špoljar'
+      credits: 'Foto: Marko Špoljar',
     },
     gallery: [
       {
@@ -42,8 +43,8 @@ export const articles = [
         medium: '/images/articles/gallery/berghain-medium.jpg',
         large: '/images/articles/gallery/berghain-large.jpg',
         alt: 'Berghain klub u Berlinu',
-        caption: 'Legendardni Berghain odakle dolaze gosti emisije'
-      }
+        caption: 'Legendardni Berghain odakle dolaze gosti emisije',
+      },
     ],
     status: 'published', // draft, published, archived, scheduled
     publishedDate: '2024-01-10T10:00:00Z',
@@ -60,16 +61,26 @@ export const articles = [
       {
         type: 'mixcloud',
         url: 'https://www.mixcloud.com/widget/iframe/?feed=/elektronskipuls/preview/',
-        title: 'Elektronski Puls - Preview Mix'
-      }
+        title: 'Elektronski Puls - Preview Mix',
+      },
     ],
     seo: {
       metaTitle: 'Nova sezona Elektronskog Pulsa - Svjetske DJ zvijezde | Radio Roža',
-      metaDescription: 'DJ Novak najavljuje ekskluzivne goste iz Berlina, Londona i Detroita. Ben Klock, Marcel Dettmann i Jeff Mills u emisiji Elektronski Puls.',
-      keywords: ['elektronski puls', 'techno', 'dj novak', 'berghain', 'ben klock', 'jeff mills', 'radio roža'],
+      metaDescription:
+        'DJ Novak najavljuje ekskluzivne goste iz Berlina, Londona i Detroita. Ben Klock, Marcel Dettmann i Jeff Mills u emisiji Elektronski Puls.',
+      keywords: [
+        'elektronski puls',
+        'techno',
+        'dj novak',
+        'berghain',
+        'ben klock',
+        'jeff mills',
+        'radio roža',
+      ],
       ogImage: '/images/articles/elektronski-puls-nova-sezona-og.jpg',
       ogType: 'article',
-      canonicalUrl: 'https://radio-roza.org/clanci/nova-sezona-elektronskog-pulsa-svjetske-dj-zvijezde'
+      canonicalUrl:
+        'https://radio-roza.org/clanci/nova-sezona-elektronskog-pulsa-svjetske-dj-zvijezde',
     },
     comments: {
       enabled: true,
@@ -79,16 +90,17 @@ export const articles = [
           id: 'comm_001',
           author: 'TechnoLover',
           content: 'Jedva čekam Jeff Mills epizodu!',
-          date: '2024-01-10T11:30:00Z'
-        }
-      ]
-    }
+          date: '2024-01-10T11:30:00Z',
+        },
+      ],
+    },
   },
   {
     id: 'art_002',
     title: 'Intervju: Vlasta Popić o novom albumu "Sjena Grada"',
     slug: 'intervju-vlasta-popic-novi-album-sjena-grada',
-    excerpt: 'Razgovarali smo s članovima benda Vlasta Popić o njihovom drugom studijskom albumu koji istražuje urbanu alijenaciju i nostalgiju.',
+    excerpt:
+      'Razgovarali smo s članovima benda Vlasta Popić o njihovom drugom studijskom albumu koji istražuje urbanu alijenaciju i nostalgiju.',
     content: `<p>Nakon dvije godine od uspješnog debitantskog albuma, zagrebački indie rock bend Vlasta Popić vraća se s ambicioznim projektom "Sjena Grada". Album koji izlazi 15. veljače predstavlja zreliji i mračniji zvuk benda.</p>
 
     <h2>Evolucija zvuka</h2>
@@ -121,7 +133,7 @@ export const articles = [
       large: '/images/articles/vlasta-popic-intervju-large.jpg',
       alt: 'Bend Vlasta Popić',
       caption: 'Vlasta Popić u studiju tijekom snimanja albuma',
-      credits: 'Foto: Igor Pavlović'
+      credits: 'Foto: Igor Pavlović',
     },
     gallery: [],
     status: 'published',
@@ -139,33 +151,42 @@ export const articles = [
       {
         type: 'youtube',
         url: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-        title: 'Vlasta Popić - Sjena Grada (Official Video)'
+        title: 'Vlasta Popić - Sjena Grada (Official Video)',
       },
       {
         type: 'bandcamp',
         url: 'https://bandcamp.com/EmbeddedPlayer/album=1234567890',
-        title: 'Sjena Grada - Album Stream'
-      }
+        title: 'Sjena Grada - Album Stream',
+      },
     ],
     seo: {
       metaTitle: 'Intervju: Vlasta Popić o novom albumu "Sjena Grada" | Radio Roža',
-      metaDescription: 'Ekskluzivni intervju s bendom Vlasta Popić o njihovom drugom albumu koji istražuje urbanu alijenaciju i nostalgiju Zagreba.',
-      keywords: ['vlasta popić', 'sjena grada', 'indie rock', 'hrvatski bend', 'novi album', 'intervju'],
+      metaDescription:
+        'Ekskluzivni intervju s bendom Vlasta Popić o njihovom drugom albumu koji istražuje urbanu alijenaciju i nostalgiju Zagreba.',
+      keywords: [
+        'vlasta popić',
+        'sjena grada',
+        'indie rock',
+        'hrvatski bend',
+        'novi album',
+        'intervju',
+      ],
       ogImage: '/images/articles/vlasta-popic-intervju-og.jpg',
       ogType: 'article',
-      canonicalUrl: 'https://radio-roza.org/clanci/intervju-vlasta-popic-novi-album-sjena-grada'
+      canonicalUrl: 'https://radio-roza.org/clanci/intervju-vlasta-popic-novi-album-sjena-grada',
     },
     comments: {
       enabled: true,
       count: 45,
-      featured: []
-    }
+      featured: [],
+    },
   },
   {
     id: 'art_003',
     title: 'Klimatski aktivizam kroz glazbu: Kako umjetnici podižu svijest',
     slug: 'klimatski-aktivizam-kroz-glazbu',
-    excerpt: 'Od Radioheada do lokalnih punk bendova - istražujemo kako glazbenici koriste svoju platformu za borbu protiv klimatskih promjena.',
+    excerpt:
+      'Od Radioheada do lokalnih punk bendova - istražujemo kako glazbenici koriste svoju platformu za borbu protiv klimatskih promjena.',
     content: `<p>Glazba oduvijek je bila moćan alat društvenih promjena, a danas sve više umjetnika koristi svoj utjecaj za podizanje svijesti o klimatskoj krizi. Od globalnih zvijezda do underground bendova, glazbena industrija se mobilizira.</p>
 
     <h2>Globalni pokret</h2>
@@ -206,7 +227,7 @@ export const articles = [
       large: '/images/articles/klimatski-aktivizam-glazba-large.jpg',
       alt: 'Koncert na solarnu energiju',
       caption: 'Bend Klimatske Promjene na solar-powered koncertu',
-      credits: 'Foto: Ana Zelenko'
+      credits: 'Foto: Ana Zelenko',
     },
     gallery: [],
     status: 'published',
@@ -223,23 +244,32 @@ export const articles = [
     embeds: [],
     seo: {
       metaTitle: 'Klimatski aktivizam kroz glazbu - Kako umjetnici podižu svijest | Radio Roža',
-      metaDescription: 'Istražujemo kako glazbenici od Radioheada do lokalnih punk bendova koriste svoju platformu za borbu protiv klimatskih promjena.',
-      keywords: ['klimatske promjene', 'glazba', 'aktivizam', 'ekologija', 'održivost', 'festivali'],
+      metaDescription:
+        'Istražujemo kako glazbenici od Radioheada do lokalnih punk bendova koriste svoju platformu za borbu protiv klimatskih promjena.',
+      keywords: [
+        'klimatske promjene',
+        'glazba',
+        'aktivizam',
+        'ekologija',
+        'održivost',
+        'festivali',
+      ],
       ogImage: '/images/articles/klimatski-aktivizam-glazba-og.jpg',
       ogType: 'article',
-      canonicalUrl: 'https://radio-roza.org/clanci/klimatski-aktivizam-kroz-glazbu'
+      canonicalUrl: 'https://radio-roza.org/clanci/klimatski-aktivizam-kroz-glazbu',
     },
     comments: {
       enabled: true,
       count: 67,
-      featured: []
-    }
+      featured: [],
+    },
   },
   {
     id: 'art_004',
     title: 'Jazz u Hrvatskoj: Scena koja ne prestaje iznenađivati',
     slug: 'jazz-u-hrvatskoj-scena-koja-iznenadjuje',
-    excerpt: 'Od zagrebačkih klubova do splitskih festivala - hrvatska jazz scena doživljava renesansu s novom generacijom glazbenika.',
+    excerpt:
+      'Od zagrebačkih klubova do splitskih festivala - hrvatska jazz scena doživljava renesansu s novom generacijom glazbenika.',
     content: `<p>Dok mnogi misle da je jazz "mrtva" glazba, hrvatska scena dokazuje suprotno. Nova generacija glazbenika spaja tradiciju s modernim pristupom, stvarajući jedinstveni zvuk koji privlači sve širu publiku.</p>
 
     <h2>Mladi jazzmeni preuzimaju scenu</h2>
@@ -273,7 +303,7 @@ export const articles = [
       large: '/images/articles/jazz-hrvatska-large.jpg',
       alt: 'Jazz jam session u Boogaloo klubu',
       caption: 'Tipična večer na jam sessionu u zagrebačkom Boogaloo klubu',
-      credits: 'Foto: Marko Jazz Photography'
+      credits: 'Foto: Marko Jazz Photography',
     },
     gallery: [],
     status: 'published',
@@ -291,28 +321,30 @@ export const articles = [
       {
         type: 'spotify',
         url: 'https://open.spotify.com/embed/playlist/37i9dQZF1DX4wta20PHgwo',
-        title: 'Jazz Hrvatska Playlist'
-      }
+        title: 'Jazz Hrvatska Playlist',
+      },
     ],
     seo: {
       metaTitle: 'Jazz u Hrvatskoj: Scena koja ne prestaje iznenađivati | Radio Roža',
-      metaDescription: 'Hrvatska jazz scena doživljava renesansu. Od zagrebačkih klubova do splitskih festivala, nova generacija glazbenika stvara jedinstveni zvuk.',
+      metaDescription:
+        'Hrvatska jazz scena doživljava renesansu. Od zagrebačkih klubova do splitskih festivala, nova generacija glazbenika stvara jedinstveni zvuk.',
       keywords: ['jazz', 'hrvatska', 'klubovi', 'festivali', 'glazbenici', 'zagreb', 'split'],
       ogImage: '/images/articles/jazz-hrvatska-og.jpg',
       ogType: 'article',
-      canonicalUrl: 'https://radio-roza.org/clanci/jazz-u-hrvatskoj-scena-koja-iznenadjuje'
+      canonicalUrl: 'https://radio-roza.org/clanci/jazz-u-hrvatskoj-scena-koja-iznenadjuje',
     },
     comments: {
       enabled: true,
       count: 34,
-      featured: []
-    }
+      featured: [],
+    },
   },
   {
     id: 'art_005',
     title: 'DIY kultura: Kako osnovati community radio',
     slug: 'diy-kultura-kako-osnovati-community-radio',
-    excerpt: 'Praktični vodič za osnivanje nezavisne radio stanice - od legalne procedure do tehničke opreme.',
+    excerpt:
+      'Praktični vodič za osnivanje nezavisne radio stanice - od legalne procedure do tehničke opreme.',
     content: `<p>Community radio stanice su glas lokalnih zajednica. Ako razmišljate o osnivanju vlastite, evo što trebate znati.</p>
 
     <h2>Zašto community radio?</h2>
@@ -390,7 +422,7 @@ export const articles = [
       large: '/images/articles/diy-community-radio-large.jpg',
       alt: 'DIY radio studio setup',
       caption: 'Osnovni setup za community radio stanicu',
-      credits: 'Foto: Radio Roža arhiva'
+      credits: 'Foto: Radio Roža arhiva',
     },
     gallery: [
       {
@@ -398,15 +430,15 @@ export const articles = [
         medium: '/images/articles/gallery/studio-setup-medium.jpg',
         large: '/images/articles/gallery/studio-setup-large.jpg',
         alt: 'Studio setup',
-        caption: 'Primjer osnovnog studio setupa'
+        caption: 'Primjer osnovnog studio setupa',
       },
       {
         small: '/images/articles/gallery/mixer-small.jpg',
         medium: '/images/articles/gallery/mixer-medium.jpg',
         large: '/images/articles/gallery/mixer-large.jpg',
         alt: 'Audio mixer',
-        caption: 'Profesionalni audio mixer za radio'
-      }
+        caption: 'Profesionalni audio mixer za radio',
+      },
     ],
     status: 'published',
     publishedDate: '2024-01-06T11:00:00Z',
@@ -422,11 +454,20 @@ export const articles = [
     embeds: [],
     seo: {
       metaTitle: 'DIY: Kako osnovati community radio - Praktični vodič | Radio Roža',
-      metaDescription: 'Detaljni vodič za osnivanje nezavisne radio stanice. Od pravne procedure i tehničke opreme do programske sheme i financiranja.',
-      keywords: ['community radio', 'diy', 'radio stanica', 'vodič', 'oprema', 'hakom', 'koncesija'],
+      metaDescription:
+        'Detaljni vodič za osnivanje nezavisne radio stanice. Od pravne procedure i tehničke opreme do programske sheme i financiranja.',
+      keywords: [
+        'community radio',
+        'diy',
+        'radio stanica',
+        'vodič',
+        'oprema',
+        'hakom',
+        'koncesija',
+      ],
       ogImage: '/images/articles/diy-community-radio-og.jpg',
       ogType: 'article',
-      canonicalUrl: 'https://radio-roza.org/clanci/diy-kultura-kako-osnovati-community-radio'
+      canonicalUrl: 'https://radio-roza.org/clanci/diy-kultura-kako-osnovati-community-radio',
     },
     comments: {
       enabled: true,
@@ -436,20 +477,9 @@ export const articles = [
           id: 'comm_002',
           author: 'BudućiRadijaš',
           content: 'Hvala na ovom vodiču! Baš razmišljamo o pokretanju radio stanice u Osijeku.',
-          date: '2024-01-06T15:30:00Z'
-        }
-      ]
-    }
+          date: '2024-01-06T15:30:00Z',
+        },
+      ],
+    },
   },
-  {
-    id: 'art_006',
-    title: 'Punk nije mrtav: Underground scena cvjeta u hrvatskim gradovima',
-    slug: 'punk-nije-mrtav-underground-scena-hrvatska',
-    excerpt: 'Od zagrebačke Močvare do riječkog Palača, punk i hardcore scena pokazuje vitalnost kakvu nije imala desetljećima.',
-    content: `<p>Dok mainstream mediji ignoriraju, hrvatska punk i hardcore scena prolazi kroz zlatno doba. Novi bendovi nicaju, stari se vraćaju, a publika je gladnija nego ikad.</p>
-
-    <h2>Nova generacija preuzima</h2>
-    <p>Bendovi poput Nered, Čudna Šuma i Nezadovoljni Građani pune klubove diljem Hrvatske. "Mladi su ljuti i imaju razloga biti. Punk je njihov ventil," kaže Lucija Kovačević, fotografkinja scene.</p>
-
-    <h2>Močvara - epicentar scene</h2>
-    <p>Zagrebačka
+];
