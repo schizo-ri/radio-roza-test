@@ -271,6 +271,7 @@
 
   const fetchNowPlaying = async () => {
     try {
+      console.log('Fetching now playing...');
       const res = await fetch(nowPlayingFullUrl);
       const data = await res.json();
 
@@ -644,8 +645,9 @@
     width: 100%;
     height: 100%;
     background-image: var(--album-art);
-    background-size: auto calc(100% - 60px);
-    background-position: left 0 top 60px;
+    /*background-size: auto calc(100% - 60px);*/
+    background-size: 100%;
+    /*background-position: left 0 top 60px;*/
     background-repeat: no-repeat;
     z-index: -1;
   }
@@ -1005,18 +1007,12 @@
     transform: translateY(0);
   }
 
-  .mini-grid {
-    display: grid;
-    grid-template-areas: 'content volume';
-    grid-template-columns: minmax(200px, 1fr) 120px;
-  }
-
   .mini-content {
     grid-area: content;
     display: flex;
     align-items: center;
     gap: 1rem;
-    padding: 0.75rem 1rem;
+    padding: 0.75rem 0;
     max-height: 60px;
   }
 
@@ -1111,6 +1107,12 @@
 
     .background-overlay {
       background-image: none;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-areas: 'content volume';
+      grid-template-columns: minmax(200px, 1fr) 120px;
     }
 
     .volume-control {

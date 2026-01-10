@@ -34,7 +34,7 @@
     if (
       mobileMenuOpen &&
       !event.target.closest('.mobile-nav') &&
-      !event.target.closest('.mobile-nav-trigger')
+      !event.target.closest('.mobile-nav-burger')
     ) {
       mobileMenuOpen = false;
     }
@@ -58,7 +58,7 @@
       <span class="name">Radio Roža</span></a
     >
 
-    <button
+    <!-- <button
       class="mobile-nav-trigger"
       class:open={mobileMenuOpen}
       onclick={toggleMobileMenu}
@@ -66,6 +66,34 @@
       aria-expanded={mobileMenuOpen}
     >
       Ima još...
+    </button> -->
+    <!-- burger button -->
+    <button
+      class="mobile-nav-burger"
+      class:open={mobileMenuOpen}
+      onclick={toggleMobileMenu}
+      aria-label="Toggle navigation menu"
+      aria-expanded={mobileMenuOpen}
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+      <!-- <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="feather feather-menu"
+      >
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg> -->
     </button>
 
     <!-- Desktop navigation -->
@@ -170,7 +198,7 @@
 
     <!-- Mobile navigation -->
     <nav class="mobile-nav" class:open={mobileMenuOpen}>
-      <ul>
+      <ul class="mobile-nav-list">
         <li>
           <a
             href="/"
@@ -315,14 +343,13 @@
   }
 
   /* Mobile nav trigger styles - Default: mobile */
-  .mobile-nav-trigger {
+  /*.mobile-nav-trigger {
     display: block;
     padding: 0.4rem 1rem;
     background: transparent;
     border: 2px solid var(--primary-900);
     color: var(--primary-900);
     font-weight: 500;
-    /*letter-spacing: 0.5px;*/
     text-transform: uppercase;
     cursor: pointer;
     border-radius: 4px;
@@ -332,21 +359,63 @@
     position: relative;
     min-width: 100px;
     height: auto;
-  }
+  }*/
 
-  .mobile-nav-trigger:hover {
+  /*.mobile-nav-trigger:hover {
     background: var(--primary-600);
     color: white;
-  }
+  }*/
 
-  .mobile-nav-trigger:focus-visible {
+  /*.mobile-nav-trigger:focus-visible {
     outline: 2px solid var(--primary-400);
     outline-offset: 2px;
-  }
+  }*/
 
-  .mobile-nav-trigger.open {
+  /*.mobile-nav-trigger.open {
     background: var(--primary-600);
     color: white;
+  }*/
+
+  .mobile-nav-burger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 40px;
+    height: 24px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin: 0;
+    padding: 0;
+    border: 0 solid transparent;
+    border-radius: 4px;
+    outline: 0 solid transparent;
+    background-color: transparent;
+  }
+
+  .mobile-nav-burger span {
+    width: 100%;
+    height: 4px;
+    background: var(--primary-700);
+    border-radius: 4px;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .mobile-nav-burger.open span:nth-child(1) {
+    transform: translateY(10px) rotate(45deg);
+  }
+
+  .mobile-nav-burger.open span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .mobile-nav-burger.open span:nth-child(3) {
+    transform: translateY(-10px) rotate(-45deg);
+  }
+
+  .mobile-nav-burger:focus-visible {
+    outline: 2px solid var(--primary-400);
+    outline-offset: 8px;
   }
 
   /* Desktop navigation - Default: hidden on mobile */
@@ -374,14 +443,13 @@
     width: 100vw;
     height: calc(100vh - 60px);
     background: white;
-    border-top: 1px solid #eee;
-    box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.1);
+    /*border-top: 1px solid #eee;*/
+    /*box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.1);*/
     transform: translateX(100%);
     opacity: 0;
     visibility: hidden;
     transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
     z-index: 999;
-    overflow-y: auto;
   }
 
   .mobile-nav.open {
@@ -390,13 +458,15 @@
     visibility: visible;
   }
 
-  .mobile-nav ul {
+  .mobile-nav-list {
     list-style: none;
     margin: 0;
     padding: 1rem 0;
+    overflow-y: auto;
+    height: 100%;
   }
 
-  .mobile-nav li {
+  .mobile-nav-list li {
     margin: 0;
   }
 
@@ -620,9 +690,6 @@
       width: 300px;
       max-width: 85vw;
       left: auto;
-      border-top: none;
-      border-left: 1px solid #eee;
-      box-shadow: -4px 0 32px rgba(0, 0, 0, 0.1);
     }
 
     .mobile-link {
@@ -631,23 +698,31 @@
   }
 
   /* Desktop and up */
-  @media (min-width: 1200px) {
+  @media (min-width: 1025px) {
     .desktop-nav {
       display: flex;
     }
 
-    .mobile-nav-trigger {
+    .mobile-nav-burger {
+      display: none;
+    }
+
+    .name {
       display: none;
     }
   }
 
+  @media (min-width: 1200px) {
+    .name {
+      display: inline-block;
+    }
+  }
   /* Prevent body scroll when mobile menu is open - mobile only */
   :global(body.mobile-menu-open) {
     overflow: hidden;
   }
 
-  /*.player-container {
-    padding-top: calc(var(--header-height, 60px) + 2rem);
-    padding-bottom: 2rem;
-  }*/
+  :global(html:has(body.mobile-menu-open)) {
+    overflow: hidden;
+  }
 </style>
