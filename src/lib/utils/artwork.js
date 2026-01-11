@@ -27,6 +27,11 @@ async function searchMusicBrainz(artist, track) {
       },
     });
 
+    if (response.status === 404) {
+      console.log('MusicBrainz not found');
+      return null;
+    }
+
     const data = await response.json();
 
     if (data.recordings && data.recordings.length > 0) {
@@ -49,8 +54,13 @@ async function getCoverArt(mbid) {
 
   try {
     const response = await fetch(url);
-    const data = await response.json();
 
+    if (response.status === 404) {
+      console.log('CoverArt not found');
+      return null;
+    }
+
+    const data = await response.json();
     // Dohvati front cover
     const frontCover = data.images.find((img) => img.front === true);
 
@@ -86,7 +96,7 @@ async function getAlbumArt(artist, track) {
   if (coverArt) {
     return coverArt;
   }
-
+  console.log('Trying iTunes');
   // 2. probaj Itunes
   const coverArtItunes = await getAlbumArtItunes(artist, track);
 
@@ -97,4 +107,44 @@ async function getAlbumArt(artist, track) {
   return null;
 }
 
-export { getAlbumArt };
+async function getArtistFanart(artist) {
+  try {
+    const url = `https://www.theaudiodb.com/api/v1/json/2/search.php?s=${encodeURIComponent(artist)}`;
+
+    console.log('Fetching artist data from TheAudioDB');
+
+    const response = await fetch(url);
+
+    if (response.status === 404) {
+      console.log('Artist not found');
+      return null;
+    }
+
+    const data = await response.json();
+
+    console.log('Fanart', data);
+
+    if (data.artists && data.artists.length > 0) {
+      const artistData = data.artists[0];
+      return {
+        fanart: artistData.strArtistFanart, // Landscape pozadina
+        fanart2: artistData.strArtistFanart2,
+        fanart3: artistData.strArtistFanart3,
+        banner: artistData.strArtistBanner, // Wide banner
+        logo: artistData.strArtistLogo,
+        thumb: artistData.strArtistThumb,
+        bio: artistData.strArtistBiographyEN,
+        genre: artistData.strArtistGenre,
+      };
+    }
+
+    console.log('No fanart found for this artist');
+
+    return null;
+  } catch (error) {
+    console.error('Nema fanart za ovog artista', error.message);
+    return null;
+  }
+}
+
+export { getAlbumArt, getArtistFanart };

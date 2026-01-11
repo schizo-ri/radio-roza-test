@@ -6,7 +6,7 @@
   import Wrapper from '$lib/components/Wrapper.svelte';
   // temporary solution until we have a better way to handle program
   import { getCurrentShow, getNextShow } from '$lib/utils/program';
-  import { getAlbumArt } from '$lib/utils/artwork';
+  import { getAlbumArt, getArtistFanart } from '$lib/utils/artwork';
 
   const src = 'https://radio.radio-roza.org/hls/radioroza/live.m3u8';
   let { autoplay = false, fullsize = false, class: className = '', ...props } = $props();
@@ -94,6 +94,14 @@
     return art;
   }
 
+  function getFanartSrc() {
+    if (nowPlaying.artistFanart) {
+      console.log('artistFanart', nowPlaying.artistFanart);
+      return nowPlaying.artistFanart.banner || nowPlaying.artistFanart.fanart;
+    }
+    return null;
+  }
+
   function updateMediaSessionMetadata() {
     if (!nowPlaying.title || !nowPlaying.artist) return;
 
@@ -157,14 +165,14 @@
 
           try {
             if (duration > 0 && isFinite(duration)) {
-              targetTime = Math.max(0, duration - 5);
+              targetTime = Math.max(0, duration - 7);
             } else if (hls && typeof hls.liveSyncPosition !== 'undefined') {
-              targetTime = Math.max(0, hls.liveSyncPosition - 5);
+              targetTime = Math.max(0, hls.liveSyncPosition - 7);
             } else {
               const buffered = audioElement.buffered;
               if (buffered.length > 0) {
                 const bufferedEnd = buffered.end(buffered.length - 1);
-                targetTime = Math.max(0, bufferedEnd - 5);
+                targetTime = Math.max(0, bufferedEnd - 7);
               }
             }
 
@@ -271,7 +279,6 @@
 
   const fetchNowPlaying = async () => {
     try {
-      console.log('Fetching now playing...');
       const res = await fetch(nowPlayingFullUrl);
       const data = await res.json();
 
@@ -288,6 +295,8 @@
       if (artist && !ignore_artists.includes(artist.toLowerCase())) {
         const albumArt = await getAlbumArt(artist, title);
         nowPlaying.artwork = albumArt;
+        const artistFanart = await getArtistFanart(artist);
+        nowPlaying.artistFanart = artistFanart;
       }
 
       // Update Media Session metadata when nowPlaying changes
@@ -313,8 +322,10 @@
       // }
 
       if (data !== nowPlaying.text) {
-        fetchNowPlaying();
-        updateMediaSessionMetadata();
+        setTimeout(() => {
+          fetchNowPlaying();
+          updateMediaSessionMetadata();
+        }, 5000);
       }
     } catch (error) {
       console.error('Error fetching now playing:', error);
@@ -324,15 +335,15 @@
   const skipToLive = () => {
     if (audioElement) {
       if (duration > 0 && isFinite(duration)) {
-        audioElement.currentTime = Math.max(0, duration - 5);
+        audioElement.currentTime = Math.max(0, duration - 7);
       } else if (hls && typeof hls.liveSyncPosition !== 'undefined') {
-        audioElement.currentTime = Math.max(0, hls.liveSyncPosition - 5);
+        audioElement.currentTime = Math.max(0, hls.liveSyncPosition - 7);
       } else {
         // For live streams, use buffered range end
         const buffered = audioElement.buffered;
         if (buffered.length > 0) {
           const bufferedEnd = buffered.end(buffered.length - 1);
-          audioElement.currentTime = Math.max(0, bufferedEnd - 5);
+          audioElement.currentTime = Math.max(0, bufferedEnd - 7);
         } else {
           // Fallback: seek to a large value and let browser clamp it
           audioElement.currentTime = 99999;
@@ -459,7 +470,10 @@
 <div class="player-container">
   <audio bind:this={audioElement} bind:volume bind:muted preload="none"></audio>
   <Wrapper>
-    <div class="background-overlay" style="--album-art: url({getArtworkSrc('large')})"></div>
+    <div
+      class="background-overlay"
+      style="--art: url({nowPlaying.artistFanart ? getFanartSrc() : getArtworkSrc('large')});"
+    ></div>
     <!-- Main Player -->
     <div class="audio-player {className}" class:fullsize bind:this={mainPlayerElement} {...props}>
       <div class="toggle-container">
@@ -483,7 +497,7 @@
       </section>
 
       <section class="albumart">
-        <img src={getArtworkSrc('medium')} alt={nowPlaying.title} width="200" height="200" />
+        <img src={getArtworkSrc('medium')} alt={nowPlaying.title} width="240" height="240" />
       </section>
 
       {#if duration > 0}
@@ -644,10 +658,12 @@
     inset: 0;
     width: 100%;
     height: 100%;
-    background-image: var(--album-art);
+    /*background-image: var(--album-art);*/
+    background-image: var(--art);
     /*background-size: auto calc(100% - 60px);*/
     background-size: 100%;
     /*background-position: left 0 top 60px;*/
+    background-position: left 0 top 30%;
     background-repeat: no-repeat;
     z-index: -1;
   }
@@ -1096,8 +1112,8 @@
         'albumart play progress progress'
         'albumart show-info show-info show-info'
         'albumart error error volume';
-      grid-template-columns: 200px 60px minmax(200px, 1fr) minmax(0, 120px);
-      grid-template-rows: 25px 25px 12px 50px 56px;
+      grid-template-columns: 240px 60px minmax(200px, 1fr) minmax(0, 120px);
+      grid-template-rows: 25px 25px 12px 50px 96px;
     }
 
     .albumart {
@@ -1106,7 +1122,7 @@
     }
 
     .background-overlay {
-      background-image: none;
+      /*background-image: none;*/
     }
 
     .mini-grid {

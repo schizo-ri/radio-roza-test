@@ -280,7 +280,7 @@
   <Player
     src="https://radio.radio-roza.org/hls/radioroza/live.m3u8"
     fullsize={page.url.pathname === '/'}
-    style="padding-top: calc(var(--header-height, 60px) + 2rem); padding-bottom: 2rem"
+    style="padding-top: calc(var(--header-height, 60px) + 4rem); padding-bottom: 4rem"
   />
 </div>
 
