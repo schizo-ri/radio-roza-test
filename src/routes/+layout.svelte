@@ -164,7 +164,11 @@
             <span class="sr-only">Pokaži projekte</span>
             <img src="/icons/caret_down.svg" alt="Down" width="20" height="20" />
           </button>
-          <ul id="projects-submenu" class="submenu" style:display={projectsVisible ? 'block' : 'none'}>
+          <ul
+            id="projects-submenu"
+            class="submenu"
+            style:display={projectsVisible ? 'block' : 'none'}
+          >
             <li>
               <a href="/projekti/ziroskop" onclick={() => (projectsVisible = false)}>Žiroskop</a>
             </li>
@@ -297,7 +301,7 @@
   <Player
     src="https://radio.radio-roza.org/hls/radioroza/live.m3u8"
     fullsize={page.url.pathname === '/'}
-    style="padding-top: calc(var(--header-height, 60px) + 4rem); padding-bottom: 4rem"
+    style="padding-top: calc(var(--header-height, 60px) + 3rem); padding-bottom: 3rem"
   />
 </div>
 
@@ -335,7 +339,9 @@
     border-bottom: 1px solid #eee;
     background-color: white;
     box-shadow: 0 4px 32px hsl(4deg 5% 2% / 0.1);
-    transition: height 0.15s ease-out, box-shadow 0.15s ease-out;
+    transition:
+      height 0.15s ease-out,
+      box-shadow 0.15s ease-out;
     height: var(--header-height, 60px);
     max-width: 100cqw;
   }
@@ -430,7 +436,8 @@
     height: 4px;
     background: var(--primary-700);
     border-radius: 4px;
-    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    transition:
+      transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275),
       opacity 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
@@ -481,7 +488,8 @@
     transform: translateX(100%);
     opacity: 0;
     visibility: hidden;
-    transition: transform 0.2s cubic-bezier(0.645, 0.045, 0.355, 1),
+    transition:
+      transform 0.2s cubic-bezier(0.645, 0.045, 0.355, 1),
       opacity 0.2s cubic-bezier(0.645, 0.045, 0.355, 1),
       visibility 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
     z-index: 999;
@@ -636,7 +644,10 @@
     text-transform: uppercase;
     text-align: center;
     border-bottom: 1px solid #f5f5f5;
-    transition: background-color 0.2s ease, color 0.2s ease, padding-left 0.2s ease;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      padding-left 0.2s ease;
   }
 
   .mobile-link:hover {
@@ -673,7 +684,9 @@
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    transition: background-color 0.1s ease, transform 0.1s ease;
+    transition:
+      background-color 0.1s ease,
+      transform 0.1s ease;
   }
 
   .mobile-social-link:hover {
@@ -706,7 +719,9 @@
     background: white;
     border-radius: 8px;
     border: 1px solid #eee;
-    transition: background-color 0.1s ease, border-color 0.1s ease;
+    transition:
+      background-color 0.1s ease,
+      border-color 0.1s ease;
   }
 
   /* Mobile-first responsive breakpoints */

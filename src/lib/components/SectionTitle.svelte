@@ -7,7 +7,7 @@
 <style>
   h2 {
     font-family: var(--display-font);
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: 800;
   }
 </style>

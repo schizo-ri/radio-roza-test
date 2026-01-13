@@ -403,9 +403,11 @@
         return;
       }
 
-      // Preserve current artwork while loading new (prevents flash to empty)
-      const previousArtwork = nowPlaying.artwork;
-      const previousFanart = nowPlaying.artistFanart;
+      // Check if artist changed - only preserve artwork from same artist
+      const sameArtist =
+        artist && nowPlaying.artist && artist.toLowerCase() === nowPlaying.artist.toLowerCase();
+      const previousArtwork = sameArtist ? nowPlaying.artwork : null;
+      const previousFanart = sameArtist ? nowPlaying.artistFanart : null;
 
       let newArtwork = null;
       let newFanart = null;
@@ -422,6 +424,7 @@
       }
 
       // Single atomic update - no intermediate states that cause flashing
+      // Only preserve previous artwork if same artist (prevents showing wrong fanart)
       nowPlaying = {
         artist,
         title,
@@ -429,8 +432,8 @@
         album,
         genre,
         art,
-        artwork: newArtwork || previousArtwork, // Keep old if new not found
-        artistFanart: newFanart || previousFanart,
+        artwork: newArtwork || previousArtwork,
+        artistFanart: newFanart || previousFanart, // Will be null if different artist has no fanart
       };
 
       // Update Media Session metadata when nowPlaying changes
