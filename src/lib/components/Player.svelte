@@ -61,6 +61,10 @@
   });
 
   let nowPlayingInterval = $state(null);
+  let fetchDebounceTimeout = null;
+  let isFetching = false;
+  let networkErrorCount = 0;
+  const maxNetworkRetries = 5;
   let nowPlaying = $state({
     artist: 'Radio Roza',
     title: 'Live Stream',
@@ -70,36 +74,93 @@
     text: 'Radio Roža - Live Stream',
   });
 
-  // Helper function to get the best artwork size for the context
-  function getArtworkSrc(size = 'medium') {
-    // First check if we have structured artwork from getAlbumArt
-    if (nowPlaying.artwork) {
-      switch (size) {
-        case 'thumbnail':
-          return nowPlaying.artwork.thumbnail;
-        case 'medium':
-          return nowPlaying.artwork.medium || nowPlaying.artwork.thumbnail;
-        case 'large':
-          return (
-            nowPlaying.artwork.large || nowPlaying.artwork.medium || nowPlaying.artwork.thumbnail
-          );
-        default:
-          return nowPlaying.artwork.medium || nowPlaying.artwork.thumbnail;
-      }
+  // Derived artwork sources - memoized to prevent unnecessary recalculations
+  const artworkThumbnail = $derived(nowPlaying.artwork?.thumbnail || nowPlaying.art);
+
+  const artworkMedium = $derived(
+    nowPlaying.artwork?.medium || nowPlaying.artwork?.thumbnail || nowPlaying.art
+  );
+
+  const artworkLarge = $derived(
+    nowPlaying.artwork?.large ||
+      nowPlaying.artwork?.medium ||
+      nowPlaying.artwork?.thumbnail ||
+      nowPlaying.art
+  );
+
+  const fanartSrc = $derived(
+    nowPlaying.artistFanart?.banner || nowPlaying.artistFanart?.fanart || null
+  );
+
+  // Computed progress percentage
+  const progressPercent = $derived(duration > 0 ? (currentTime / duration) * 100 : 0);
+
+  // Buffer health monitoring
+  let bufferHealth = $state('healthy'); // 'healthy' | 'degrading' | 'critical'
+
+  // Update buffer health when playing
+  $effect(() => {
+    if (!audioElement || !isPlaying) {
+      bufferHealth = 'healthy';
+      return;
     }
 
-    // Fallback to old art field with default replacement
-    const art = nowPlaying.art;
+    const buffered = audioElement.buffered;
+    if (buffered.length === 0) {
+      bufferHealth = 'critical';
+      return;
+    }
 
-    return art;
+    const bufferedEnd = buffered.end(buffered.length - 1);
+    const bufferAhead = bufferedEnd - currentTime;
+
+    if (bufferAhead < 2) {
+      bufferHealth = 'critical';
+    } else if (bufferAhead < 5) {
+      bufferHealth = 'degrading';
+    } else {
+      bufferHealth = 'healthy';
+    }
+  });
+
+  // Helper for Media Session (still needed as it takes size param)
+  function getArtworkSrc(size = 'medium') {
+    switch (size) {
+      case 'thumbnail':
+        return artworkThumbnail;
+      case 'medium':
+        return artworkMedium;
+      case 'large':
+        return artworkLarge;
+      default:
+        return artworkMedium;
+    }
   }
 
-  function getFanartSrc() {
-    if (nowPlaying.artistFanart) {
-      console.log('artistFanart', nowPlaying.artistFanart);
-      return nowPlaying.artistFanart.banner || nowPlaying.artistFanart.fanart;
+  // Preload an image to ensure it's cached before displaying
+  function preloadImage(src) {
+    if (!src) return Promise.resolve();
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = resolve;
+      img.onerror = resolve; // Don't block on errors
+      img.src = src;
+    });
+  }
+
+  // Preload all artwork images before updating state
+  async function preloadArtworkImages(artwork, fanart) {
+    const urls = [];
+    if (artwork) {
+      if (artwork.thumbnail) urls.push(artwork.thumbnail);
+      if (artwork.medium) urls.push(artwork.medium);
+      if (artwork.large) urls.push(artwork.large);
     }
-    return null;
+    if (fanart) {
+      if (fanart.banner) urls.push(fanart.banner);
+      else if (fanart.fanart) urls.push(fanart.fanart);
+    }
+    await Promise.all(urls.map(preloadImage));
   }
 
   function updateMediaSessionMetadata() {
@@ -148,10 +209,53 @@
       navigator.mediaSession.setActionHandler('stop', () => {
         pause();
       });
+
+      // For live radio, seekforward skips to live
+      navigator.mediaSession.setActionHandler('seekforward', () => {
+        skipToLive();
+      });
+
+      // Seek backward by 30 seconds (if available)
+      navigator.mediaSession.setActionHandler('seekbackward', () => {
+        if (audioElement && currentTime > 30) {
+          audioElement.currentTime = Math.max(0, currentTime - 30);
+        }
+      });
+
+      // Skip to live when next track is pressed
+      navigator.mediaSession.setActionHandler('nexttrack', () => {
+        skipToLive();
+      });
     } catch (error) {
       console.warn('Error setting up Media Session handlers:', error);
     }
   }
+
+  // Update Media Session position state for lock screen time display
+  function updateMediaSessionPosition() {
+    if (!browser || !('mediaSession' in navigator) || !navigator.mediaSession.setPositionState) {
+      return;
+    }
+
+    try {
+      if (duration > 0 && isFinite(duration)) {
+        navigator.mediaSession.setPositionState({
+          duration: duration,
+          playbackRate: 1,
+          position: Math.min(currentTime, duration),
+        });
+      }
+    } catch {
+      // Position state may not be supported
+    }
+  }
+
+  // Update position when time changes (throttled via timeupdate)
+  $effect(() => {
+    if (isPlaying && duration > 0) {
+      updateMediaSessionPosition();
+    }
+  });
 
   function play() {
     if (audioElement) {
@@ -278,31 +382,63 @@
   const ignore_artists = ['radio roža', 'radio roza', 'jingl'];
 
   const fetchNowPlaying = async () => {
+    // Prevent concurrent fetches
+    if (isFetching) return;
+    isFetching = true;
+
     try {
       const res = await fetch(nowPlayingFullUrl);
       const data = await res.json();
 
       if (!data?.now_playing?.song) {
+        isFetching = false;
         return;
       }
 
       const { artist, title, text, album, genre, art } = data.now_playing.song;
 
-      // Update basic now playing info
-      nowPlaying = { artist, title, text, album, genre, art };
-
-      // Update album art using iTunes API
-      if (artist && !ignore_artists.includes(artist.toLowerCase())) {
-        const albumArt = await getAlbumArt(artist, title);
-        nowPlaying.artwork = albumArt;
-        const artistFanart = await getArtistFanart(artist);
-        nowPlaying.artistFanart = artistFanart;
+      // Skip if same song (text contains "artist - title")
+      if (text === nowPlaying.text) {
+        isFetching = false;
+        return;
       }
+
+      // Preserve current artwork while loading new (prevents flash to empty)
+      const previousArtwork = nowPlaying.artwork;
+      const previousFanart = nowPlaying.artistFanart;
+
+      let newArtwork = null;
+      let newFanart = null;
+
+      // Fetch artwork in parallel (not sequentially) for faster loading
+      if (artist && !ignore_artists.includes(artist.toLowerCase())) {
+        [newArtwork, newFanart] = await Promise.all([
+          getAlbumArt(artist, title),
+          getArtistFanart(artist),
+        ]);
+
+        // Preload images before updating state to prevent flash
+        await preloadArtworkImages(newArtwork, newFanart);
+      }
+
+      // Single atomic update - no intermediate states that cause flashing
+      nowPlaying = {
+        artist,
+        title,
+        text,
+        album,
+        genre,
+        art,
+        artwork: newArtwork || previousArtwork, // Keep old if new not found
+        artistFanart: newFanart || previousFanart,
+      };
 
       // Update Media Session metadata when nowPlaying changes
       updateMediaSessionMetadata();
     } catch (error) {
       console.error('Error fetching now playing:', error);
+    } finally {
+      isFetching = false;
     }
   };
 
@@ -314,18 +450,15 @@
       if (!data) {
         return;
       }
-      // if jingle skip change
-      // we don't know if it is jingle or show for now, so skipping
-      // we should check duration if available in future
-      // if (ignore_artists.includes(data.split(' - ').at(0).toLowerCase())) {
-      //   return;
-      // }
 
+      // Only trigger fetch if song actually changed
       if (data !== nowPlaying.text) {
-        setTimeout(() => {
+        // Debounce: cancel any pending fetch and schedule a new one
+        // This prevents multiple rapid fetches during metadata transitions
+        clearTimeout(fetchDebounceTimeout);
+        fetchDebounceTimeout = setTimeout(() => {
           fetchNowPlaying();
-          updateMediaSessionMetadata();
-        }, 5000);
+        }, 3000); // Wait 3s for metadata to stabilize
       }
     } catch (error) {
       console.error('Error fetching now playing:', error);
@@ -357,6 +490,11 @@
       hls = new Hls({
         enableWorker: true,
         lowLatencyMode: true,
+        maxBufferLength: 20, // Max 20 seconds buffered
+        maxMaxBufferLength: 30, // Never exceed 30 seconds
+        maxBufferSize: 60 * 1024 * 1024, // 60MB max buffer
+        maxBufferHole: 0.5, // Gap tolerance
+        highBufferWatchdogPeriod: 3, // Check buffer every 3s
       });
 
       hls.loadSource(src);
@@ -374,8 +512,17 @@
         if (data.fatal) {
           switch (data.type) {
             case Hls.ErrorTypes.NETWORK_ERROR:
-              error = 'Došlo je do greške prilikom povezivanja. Pokušavam ponovno...';
-              hls.startLoad();
+              if (networkErrorCount < maxNetworkRetries) {
+                // Exponential backoff: 1s, 2s, 4s, 8s, 16s (capped at 30s)
+                const backoffMs = Math.min(1000 * Math.pow(2, networkErrorCount), 30000);
+                error = `Greška prilikom povezivanja. Pokušavam ponovno za ${Math.ceil(backoffMs / 1000)}s...`;
+                setTimeout(() => {
+                  hls.startLoad();
+                }, backoffMs);
+                networkErrorCount++;
+              } else {
+                error = 'Stream nije dostupan. Molimo osvježite stranicu.';
+              }
               break;
             case Hls.ErrorTypes.MEDIA_ERROR:
               error = 'Došlo je do greške prilikom reprodukcije. Pokušavam ponovno...';
@@ -388,6 +535,14 @@
           }
         }
       });
+
+      // Reset error count on successful load
+      hls.on(Hls.Events.FRAG_LOADED, () => {
+        if (networkErrorCount > 0) {
+          networkErrorCount = 0;
+          error = null;
+        }
+      });
     } else if (audioElement.canPlayType('application/vnd.apple.mpegurl')) {
       // Safari native HLS support
       audioElement.src = src;
@@ -398,10 +553,16 @@
       error = 'HLS not supported in this browser';
     }
 
-    // Audio event listeners
+    // Audio event listeners - throttled to ~6 FPS to reduce re-renders
+    let lastTimeUpdate = 0;
     const updateTime = () => {
-      currentTime = audioElement.currentTime;
-      duration = audioElement.duration || 0;
+      const now = Date.now();
+      if (now - lastTimeUpdate > 166) {
+        // ~6 FPS (1000ms / 6)
+        currentTime = audioElement.currentTime;
+        duration = audioElement.duration || 0;
+        lastTimeUpdate = now;
+      }
     };
 
     const updatePlayState = () => {
@@ -442,8 +603,8 @@
     // Fetch immediately
     fetchNowPlaying();
 
-    // Then fetch every second
-    nowPlayingInterval = setInterval(fetchNowPlayingSimple, 1000);
+    // Poll for metadata changes (5s is sufficient - metadata doesn't change faster)
+    nowPlayingInterval = setInterval(fetchNowPlayingSimple, 5000);
 
     // Update time every minute to trigger show updates
     const timeUpdateInterval = setInterval(() => {
@@ -453,6 +614,7 @@
     return () => {
       clearInterval(nowPlayingInterval);
       clearInterval(timeUpdateInterval);
+      clearTimeout(fetchDebounceTimeout);
       if (hls) {
         hls.destroy();
       }
@@ -462,6 +624,8 @@
         audioElement.removeEventListener('pause', updatePlayState);
         audioElement.removeEventListener('loadstart', handleLoadStart);
         audioElement.removeEventListener('canplay', handleCanPlay);
+        audioElement.removeEventListener('loadedmetadata', handleLoadedMetadata);
+        audioElement.removeEventListener('progress', handleProgress);
       }
     };
   });
@@ -470,10 +634,7 @@
 <div class="player-container">
   <audio bind:this={audioElement} bind:volume bind:muted preload="none"></audio>
   <Wrapper>
-    <div
-      class="background-overlay"
-      style="--art: url({nowPlaying.artistFanart ? getFanartSrc() : getArtworkSrc('large')});"
-    ></div>
+    <div class="background-overlay" style="--art: url({fanartSrc || artworkLarge});"></div>
     <!-- Main Player -->
     <div class="audio-player {className}" class:fullsize bind:this={mainPlayerElement} {...props}>
       <div class="toggle-container">
@@ -497,14 +658,14 @@
       </section>
 
       <section class="albumart">
-        <img src={getArtworkSrc('medium')} alt={nowPlaying.title} width="240" height="240" />
+        <img src={artworkMedium} alt={nowPlaying.title} width="240" height="240" />
       </section>
 
       {#if duration > 0}
         <section class="progress">
           <div class="progress-container">
             <div class="progress-visual">
-              <div class="progress-played" style="width: {(currentTime / duration) * 100}%"></div>
+              <div class="progress-played" style="width: {progressPercent}%"></div>
               <div class="progress-remaining"></div>
             </div>
             <input
@@ -515,7 +676,11 @@
               step="1"
               bind:value={currentTime}
               onchange={() => seek(currentTime)}
-              aria-label="Seek"
+              aria-label="Seek through stream"
+              aria-valuemin={0}
+              aria-valuemax={duration}
+              aria-valuenow={currentTime}
+              aria-valuetext="{formatTime(currentTime)} of {formatTime(duration)}"
             />
           </div>
           <button class="skip-to-live" onclick={skipToLive}>
@@ -576,6 +741,11 @@
           <img src="/icons/warning-white.svg" alt="Error" />
           {error}
         </div>
+      {:else if bufferHealth === 'critical' && isPlaying}
+        <div class="buffering">
+          <span class="buffering-spinner"></span>
+          Učitavanje...
+        </div>
       {/if}
     </div>
 
@@ -586,7 +756,7 @@
           <div class="mini-content">
             <img
               class="mini-cover"
-              src={getArtworkSrc('thumbnail')}
+              src={artworkThumbnail}
               alt={nowPlaying.title}
               width="40"
               height="40"
@@ -666,6 +836,7 @@
     background-position: left 0 top 30%;
     background-repeat: no-repeat;
     z-index: -1;
+    transition: background-image 0.4s ease-in-out;
   }
 
   .background-overlay::after {
@@ -691,7 +862,8 @@
     z-index: 2;
   }
 
-  .error {
+  .error,
+  .buffering {
     grid-area: error;
     color: #fff;
     font-size: 12px;
@@ -702,12 +874,28 @@
     align-items: center;
   }
 
+  .buffering-spinner {
+    width: 12px;
+    height: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
   .albumart {
     display: none;
   }
 
   .albumart img {
     border-radius: 4px;
+    transition: opacity 0.3s ease-in-out;
   }
 
   .toggle-container {
@@ -1038,6 +1226,7 @@
     border-radius: 4px;
     flex-shrink: 0;
     object-fit: cover;
+    transition: opacity 0.3s ease-in-out;
   }
 
   /* Sakrij na malim ekranima */
@@ -1119,10 +1308,6 @@
     .albumart {
       display: block;
       grid-area: albumart;
-    }
-
-    .background-overlay {
-      /*background-image: none;*/
     }
 
     .mini-grid {

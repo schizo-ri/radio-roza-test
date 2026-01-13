@@ -1,3 +1,7 @@
+// Simple in-memory caches to avoid repeated API calls
+const artworkCache = new Map();
+const fanartCache = new Map();
+
 async function getAlbumArtItunes(artist, track) {
   const query = `${artist} ${track}`;
   const url = `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=song&limit=1`;
@@ -90,43 +94,58 @@ async function getAlbumArtMusicBrainz(artist, track) {
 }
 
 async function getAlbumArt(artist, track) {
+  const cacheKey = `${artist}|${track}`.toLowerCase();
+
+  // Check cache first
+  if (artworkCache.has(cacheKey)) {
+    return artworkCache.get(cacheKey);
+  }
+
   // 1. probaj MusicBrainz
   const coverArt = await getAlbumArtMusicBrainz(artist, track);
 
   if (coverArt) {
+    artworkCache.set(cacheKey, coverArt);
     return coverArt;
   }
+
   console.log('Trying iTunes');
   // 2. probaj Itunes
   const coverArtItunes = await getAlbumArtItunes(artist, track);
 
   if (coverArtItunes) {
+    artworkCache.set(cacheKey, coverArtItunes);
     return coverArtItunes;
   }
 
+  // Cache null results too to avoid repeated failed lookups
+  artworkCache.set(cacheKey, null);
   return null;
 }
 
 async function getArtistFanart(artist) {
+  const cacheKey = artist.toLowerCase();
+
+  // Check cache first
+  if (fanartCache.has(cacheKey)) {
+    return fanartCache.get(cacheKey);
+  }
+
   try {
     const url = `https://www.theaudiodb.com/api/v1/json/2/search.php?s=${encodeURIComponent(artist)}`;
-
-    console.log('Fetching artist data from TheAudioDB');
 
     const response = await fetch(url);
 
     if (response.status === 404) {
-      console.log('Artist not found');
+      fanartCache.set(cacheKey, null);
       return null;
     }
 
     const data = await response.json();
 
-    console.log('Fanart', data);
-
     if (data.artists && data.artists.length > 0) {
       const artistData = data.artists[0];
-      return {
+      const result = {
         fanart: artistData.strArtistFanart, // Landscape pozadina
         fanart2: artistData.strArtistFanart2,
         fanart3: artistData.strArtistFanart3,
@@ -136,13 +155,16 @@ async function getArtistFanart(artist) {
         bio: artistData.strArtistBiographyEN,
         genre: artistData.strArtistGenre,
       };
+      fanartCache.set(cacheKey, result);
+      return result;
     }
 
-    console.log('No fanart found for this artist');
-
+    // Cache null results too
+    fanartCache.set(cacheKey, null);
     return null;
   } catch (error) {
     console.error('Nema fanart za ovog artista', error.message);
+    fanartCache.set(cacheKey, null);
     return null;
   }
 }

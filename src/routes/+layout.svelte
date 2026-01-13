@@ -14,13 +14,18 @@
 
   // Control body scroll when mobile menu is open
   $effect(() => {
-    if (typeof document !== 'undefined') {
-      if (mobileMenuOpen) {
-        document.body.classList.add('mobile-menu-open');
-      } else {
-        document.body.classList.remove('mobile-menu-open');
-      }
+    if (mobileMenuOpen) {
+      document.body.classList.add('mobile-menu-open');
+    } else {
+      document.body.classList.remove('mobile-menu-open');
     }
+  });
+
+  // Auto-close mobile menu on route change
+  $effect(() => {
+    page.url.pathname; // Track route changes
+    mobileMenuOpen = false;
+    projectsVisible = false;
   });
 
   function toggleMobileMenu() {
@@ -46,6 +51,8 @@
 </svelte:head>
 
 <svelte:window onclick={handleClickOutside} />
+
+<a href="#main-content" class="skip-link">Preskoči na sadržaj</a>
 
 <section class="header">
   <div class="header-content">
@@ -74,6 +81,7 @@
       onclick={toggleMobileMenu}
       aria-label="Toggle navigation menu"
       aria-expanded={mobileMenuOpen}
+      aria-controls="mobile-nav-menu"
     >
       <span></span>
       <span></span>
@@ -100,36 +108,43 @@
     <nav class="desktop-nav">
       <ul>
         <li>
-          <a href="/" class="link" aria-current={page.url.pathname === '/' ? 'page' : undefined}
-            >Home</a
+          <a
+            href="/"
+            class="link"
+            aria-current={page.url.pathname === '/' ? 'page' : undefined}
+            data-sveltekit-preload-data="hover">Home</a
           >
         </li>
         <li>
           <a
             href="/citaj-radio"
             class="link"
-            aria-current={page.url.pathname === '/citaj-radio' ? 'page' : undefined}>Čitaj radio</a
+            aria-current={page.url.pathname === '/citaj-radio' ? 'page' : undefined}
+            data-sveltekit-preload-data="hover">Čitaj radio</a
           >
         </li>
         <li>
           <a
             href="/program"
             class="link"
-            aria-current={page.url.pathname === '/program' ? 'page' : undefined}>Program</a
+            aria-current={page.url.pathname === '/program' ? 'page' : undefined}
+            data-sveltekit-preload-data="hover">Program</a
           >
         </li>
         <li>
           <a
             href="/emisije"
             class="link"
-            aria-current={page.url.pathname === '/emisije' ? 'page' : undefined}>Emisije</a
+            aria-current={page.url.pathname === '/emisije' ? 'page' : undefined}
+            data-sveltekit-preload-data="hover">Emisije</a
           >
         </li>
         <li>
           <a
             href="/o-nama"
             class="link"
-            aria-current={page.url.pathname === '/o-nama' ? 'page' : undefined}>O nama</a
+            aria-current={page.url.pathname === '/o-nama' ? 'page' : undefined}
+            data-sveltekit-preload-data="hover">O nama</a
           >
         </li>
         <li class="projects">
@@ -141,13 +156,15 @@
           <button
             type="button"
             class="submenu-toggle"
-            aria-label="Toggle submenu"
+            aria-label="Toggle projects submenu"
+            aria-expanded={projectsVisible}
+            aria-controls="projects-submenu"
             onclick={() => (projectsVisible = !projectsVisible)}
           >
             <span class="sr-only">Pokaži projekte</span>
             <img src="/icons/caret_down.svg" alt="Down" width="20" height="20" />
           </button>
-          <ul class="submenu" style:visibility={projectsVisible ? 'visible' : 'hidden'}>
+          <ul id="projects-submenu" class="submenu" style:display={projectsVisible ? 'block' : 'none'}>
             <li>
               <a href="/projekti/ziroskop" onclick={() => (projectsVisible = false)}>Žiroskop</a>
             </li>
@@ -197,7 +214,7 @@
     </nav>
 
     <!-- Mobile navigation -->
-    <nav class="mobile-nav" class:open={mobileMenuOpen}>
+    <nav id="mobile-nav-menu" class="mobile-nav" class:open={mobileMenuOpen}>
       <ul class="mobile-nav-list">
         <li>
           <a
@@ -284,13 +301,31 @@
   />
 </div>
 
-<main>
+<main id="main-content">
   {@render children()}
 </main>
 
 <Footer />
 
 <style>
+  /* Skip link for accessibility - hidden until focused */
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary-600);
+    color: white;
+    padding: 8px 16px;
+    z-index: 10000;
+    text-decoration: none;
+    font-weight: 500;
+    transition: top 0.2s ease;
+  }
+
+  .skip-link:focus {
+    top: 0;
+  }
+
   .header {
     position: fixed;
     top: 0;
@@ -300,9 +335,7 @@
     border-bottom: 1px solid #eee;
     background-color: white;
     box-shadow: 0 4px 32px hsl(4deg 5% 2% / 0.1);
-    transition:
-      height 0.15s ease-out,
-      box-shadow 0.15s ease-out;
+    transition: height 0.15s ease-out, box-shadow 0.15s ease-out;
     height: var(--header-height, 60px);
     max-width: 100cqw;
   }
@@ -384,7 +417,6 @@
     width: 40px;
     height: 24px;
     cursor: pointer;
-    transition: all 0.2s ease;
     margin: 0;
     padding: 0;
     border: 0 solid transparent;
@@ -398,7 +430,8 @@
     height: 4px;
     background: var(--primary-700);
     border-radius: 4px;
-    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+      opacity 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
   .mobile-nav-burger.open span:nth-child(1) {
@@ -440,15 +473,17 @@
     top: 60px;
     right: 0;
     left: 0;
-    width: 100vw;
-    height: calc(100vh - 60px);
+    width: 100%;
+    height: calc(100svh - 60px);
     background: white;
     /*border-top: 1px solid #eee;*/
     /*box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.1);*/
     transform: translateX(100%);
     opacity: 0;
     visibility: hidden;
-    transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transition: transform 0.2s cubic-bezier(0.645, 0.045, 0.355, 1),
+      opacity 0.2s cubic-bezier(0.645, 0.045, 0.355, 1),
+      visibility 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
     z-index: 999;
   }
 
@@ -601,7 +636,7 @@
     text-transform: uppercase;
     text-align: center;
     border-bottom: 1px solid #f5f5f5;
-    transition: all 0.3s ease;
+    transition: background-color 0.2s ease, color 0.2s ease, padding-left 0.2s ease;
   }
 
   .mobile-link:hover {
@@ -638,7 +673,7 @@
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    transition: all 0.1s ease;
+    transition: background-color 0.1s ease, transform 0.1s ease;
   }
 
   .mobile-social-link:hover {
@@ -671,7 +706,7 @@
     background: white;
     border-radius: 8px;
     border: 1px solid #eee;
-    transition: all 0.1s ease;
+    transition: background-color 0.1s ease, border-color 0.1s ease;
   }
 
   /* Mobile-first responsive breakpoints */
@@ -718,11 +753,28 @@
     }
   }
   /* Prevent body scroll when mobile menu is open - mobile only */
+  :global(html) {
+    scrollbar-gutter: stable;
+  }
+
   :global(body.mobile-menu-open) {
     overflow: hidden;
   }
 
-  :global(html:has(body.mobile-menu-open)) {
-    overflow: hidden;
+  /* Focus-visible styles for keyboard navigation */
+  .link:focus-visible {
+    outline: 2px solid var(--primary-400);
+    outline-offset: 2px;
+  }
+
+  .mobile-link:focus-visible {
+    outline: 2px solid var(--primary-400);
+    outline-offset: -2px;
+  }
+
+  .mobile-social-link:focus-visible,
+  .mobile-support-link:focus-visible {
+    outline: 2px solid var(--primary-400);
+    outline-offset: 2px;
   }
 </style>
