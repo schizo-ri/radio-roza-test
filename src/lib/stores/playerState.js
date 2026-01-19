@@ -15,16 +15,13 @@ export const streamPlayerPlaying = writable(false);
 
 // Callbacks for controlling the stream player (set by Player.svelte)
 let streamPauseCallback = null;
-let streamResumeCallback = null;
 
-export function registerStreamPlayer(pauseFn, resumeFn) {
+export function registerStreamPlayer(pauseFn) {
   streamPauseCallback = pauseFn;
-  streamResumeCallback = resumeFn;
 }
 
 export function unregisterStreamPlayer() {
   streamPauseCallback = null;
-  streamResumeCallback = null;
 }
 
 // Call this when Mixcloud player starts playing

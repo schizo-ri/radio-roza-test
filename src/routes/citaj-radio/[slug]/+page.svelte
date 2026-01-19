@@ -7,7 +7,7 @@
   $: article = data.article;
   $: relatedArticles = article ? getRelatedArticles(article, 3) : [];
 
-  function addStructuredData(node) {
+  function addStructuredData() {
     if (!article) return;
 
     const script = document.createElement('script');

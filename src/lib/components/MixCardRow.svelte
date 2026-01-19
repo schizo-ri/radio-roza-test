@@ -19,11 +19,6 @@
     // Open embedded Mixcloud player instead of external link
     currentMixcloudMix.set(mix);
   }
-
-  function handleTagClick(e, tag) {
-    e.stopPropagation();
-    window.open(tag.url, '_blank', 'noopener,noreferrer');
-  }
 </script>
 
 <article class="card" class:compact>

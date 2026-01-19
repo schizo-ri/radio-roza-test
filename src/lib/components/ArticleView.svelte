@@ -142,6 +142,7 @@
     <!-- Article content -->
     <div class="article-content">
       <!-- Content is sanitized in mockArticles.js -->
+      <!-- eslint-disable-next-line svelte/no-at-html-tags -->
       {@html article.content}
     </div>
 
@@ -154,6 +155,7 @@
           <div class="embed-container">
             <h3>🎵 Listen on Bandcamp</h3>
             <!-- Bandcamp embed URLs are controlled and safe -->
+            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
             {@html renderBandcampEmbed(article.embeds.bandcamp)}
           </div>
         {/if}
@@ -162,6 +164,7 @@
           <div class="embed-container">
             <h3>▶️ Watch on YouTube</h3>
             <!-- YouTube embed URLs are controlled and safe -->
+            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
             {@html renderYouTubeEmbed(article.embeds.youtube)}
           </div>
         {/if}

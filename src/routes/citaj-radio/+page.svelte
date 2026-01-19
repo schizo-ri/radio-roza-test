@@ -1,5 +1,5 @@
 <script>
-  import { page } from '$app/stores';
+  // import { page } from '$app/stores';
   import PageTitle from '$lib/components/PageTitle.svelte';
   import Wrapper from '$lib/components/Wrapper.svelte';
   import ArticleCard from '$lib/components/ArticleCard.svelte';
@@ -8,24 +8,24 @@
 
   $: articles = data.articles;
   $: categories = data.categories;
-  $: authors = data.authors;
-  $: filters = data.filters;
+  // $: authors = data.authors;
+  // $: filters = data.filters;
 
-  function getFeaturedToggleUrl() {
-    const url = new URL($page.url);
-    if (filters.featured) {
-      url.searchParams.delete('featured');
-    } else {
-      url.searchParams.set('featured', 'true');
-    }
-    return url.toString();
-  }
+  // function getFeaturedToggleUrl() {
+  //   const url = new URL($page.url);
+  //   if (filters.featured) {
+  //     url.searchParams.delete('featured');
+  //   } else {
+  //     url.searchParams.set('featured', 'true');
+  //   }
+  //   return url.toString();
+  // }
 
-  function getRemoveFilterUrl(filterName) {
-    const url = new URL($page.url);
-    url.searchParams.delete(filterName);
-    return url.toString();
-  }
+  // function getRemoveFilterUrl(filterName) {
+  //   const url = new URL($page.url);
+  //   url.searchParams.delete(filterName);
+  //   return url.toString();
+  // }
 </script>
 
 <PageTitle title="Čitaj radio" />
@@ -99,18 +99,18 @@
     padding-bottom: 2rem;
   }
 
-  .no-articles {
+  /*.no-articles {
     text-align: center;
     padding: 3rem 1rem;
     color: var(--muted);
-  }
+  }*/
 
-  .no-articles p {
+  /*.no-articles p {
     margin-bottom: 1rem;
     font-size: 1.1rem;
-  }
+  }*/
 
-  .clear-btn {
+  /*.clear-btn {
     background: var(--primary-600);
     color: white;
     text-decoration: none;
@@ -120,11 +120,11 @@
     cursor: pointer;
     transition: background-color 0.2s;
     display: inline-block;
-  }
+  }*/
 
-  .clear-btn:hover {
+  /*.clear-btn:hover {
     background: var(--primary-700);
-  }
+  }*/
 
   @media (min-width: 700px) {
     .categories {
