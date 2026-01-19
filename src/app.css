@@ -119,6 +119,9 @@
   --secondary-h: 177;
   --secondary-s: 65%;
 
+  --tertiary-h: 50;
+  --tertiary-s: 89%;
+
   /* Lightness scale */
   --primary-950: hsl(var(--primary-h), var(--primary-s), 15%);
   --primary-900: hsl(var(--primary-h), var(--primary-s), 25%);
@@ -146,11 +149,26 @@
   --secondary-50: hsl(var(--secondary-h), var(--secondary-s), 98%);
   --secondary: #32d3cb;
 
+  /* yellow */
+  --tertiary-950: hsl(var(--tertiary-h), var(--tertiary-s), 10%);
+  --tertiary-900: hsl(var(--tertiary-h), var(--tertiary-s), 15%);
+  --tertiary-800: hsl(var(--tertiary-h), var(--tertiary-s), 25%);
+  --tertiary-700: hsl(var(--tertiary-h), var(--tertiary-s), 32.5%);
+  --tertiary-600: hsl(var(--tertiary-h), var(--tertiary-s), 40%);
+  --tertiary-500: hsl(var(--tertiary-h), var(--tertiary-s), 47.5%);
+  --tertiary-400: hsl(var(--tertiary-h), var(--tertiary-s), 55%);
+  --tertiary-300: hsl(var(--tertiary-h), var(--tertiary-s), 62.5%);
+  --tertiary-200: hsl(var(--tertiary-h), var(--tertiary-s), 70%);
+  --tertiary-100: hsl(var(--tertiary-h), var(--tertiary-s), 77.5%);
+  --tertiary-50: hsl(var(--tertiary-h), var(--tertiary-s), 95%);
+  --tertiary: #f2cd18;
+
   --green: hsl(152deg 76% 40% / 1);
   --blue: hsl(204deg 84% 40% / 1);
   --red: var(--primary-600);
   --orange: hsl(40deg 89% 52% / 1);
-  --yellow: hsl(50deg 89% 52% / 1); /* #d3cb32 */
+  /*--yellow: hsl(50deg 89% 52% / 1); /* #d3cb32 */
+  --yellow: var(--tertiary);
 
   --dark: #1c1b1b;
   --muted: #696a6c;
@@ -158,6 +176,8 @@
 
   --font: 'Poppins', sans-serif;
   --display-font: 'Anybody', sans-serif;
+
+  --project-font-size: clamp(1rem, 0.2vw + 16px, 1.5rem);
 
   --max-content-width: min(100%, 1440px);
   --whitespace: 24px;
@@ -256,7 +276,7 @@ button > img:first-child {
 .link {
   color: var(--primary-700);
   text-decoration: none;
-  transition: color 0.2s ease-in-out;
+  transition: color 0.15s ease-in-out;
   font-weight: 500;
 }
 

@@ -7,6 +7,12 @@
   // temporary solution until we have a better way to handle program
   import { getCurrentShow, getNextShow } from '$lib/utils/program';
   import { getAlbumArt, getArtistFanart } from '$lib/utils/artwork';
+  import {
+    registerStreamPlayer,
+    unregisterStreamPlayer,
+    onStreamPlay,
+    onStreamStop
+  } from '$lib/stores/playerState.js';
 
   const src = 'https://radio.radio-roza.org/hls/radioroza/live.m3u8';
   let { autoplay = false, fullsize = false, class: className = '', ...props } = $props();
@@ -290,7 +296,9 @@
 
           // Clear loading state and start playback
           loading = false;
-          audioElement.play().catch((e) => {
+          audioElement.play().then(() => {
+            onStreamPlay(); // Notify store that stream is playing
+          }).catch((e) => {
             console.error('Play failed:', e);
             error = 'Playback failed';
             loading = false;
@@ -315,7 +323,9 @@
             if (loading) {
               console.warn('Initial seek timeout, starting playback anyway');
               loading = false;
-              audioElement.play().catch((e) => {
+              audioElement.play().then(() => {
+                onStreamPlay(); // Notify store that stream is playing
+              }).catch((e) => {
                 console.error('Play failed:', e);
                 error = 'Playback failed';
               });
@@ -327,7 +337,9 @@
       }
 
       // Normal playback for subsequent plays
-      audioElement.play().catch((e) => {
+      audioElement.play().then(() => {
+        onStreamPlay(); // Notify store that stream is playing
+      }).catch((e) => {
         console.error('Play failed:', e);
         error = 'Playback failed';
       });
@@ -337,6 +349,7 @@
   function pause() {
     if (audioElement) {
       audioElement.pause();
+      onStreamStop(); // Notify store that stream stopped
     }
   }
 
@@ -489,6 +502,9 @@
   };
 
   onMount(() => {
+    // Register with global player state for coordination with Mixcloud player
+    registerStreamPlayer(pause, play);
+
     if (Hls.isSupported()) {
       hls = new Hls({
         enableWorker: true,
@@ -615,6 +631,9 @@
     }, 60000); // Update every minute
 
     return () => {
+      // Unregister from global player state
+      unregisterStreamPlayer();
+
       clearInterval(nowPlayingInterval);
       clearInterval(timeUpdateInterval);
       clearTimeout(fetchDebounceTimeout);

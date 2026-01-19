@@ -1,6 +1,4 @@
 <script>
-  import Wrapper from './Wrapper.svelte';
-
   let { children, class: className = '', controls = true, ...rest } = $props();
 
   let containerRef;

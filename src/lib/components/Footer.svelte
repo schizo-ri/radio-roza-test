@@ -88,12 +88,11 @@
 <style>
   footer {
     text-align: center;
-    margin-top: 4rem;
     padding-top: 4rem;
     padding-bottom: 4rem;
     padding-left: 16px;
     padding-right: 16px;
-    /*border-top: 6px solid var(--primary-600);*/
+    background-color: var(--yellow);
   }
 
   p {
@@ -103,11 +102,11 @@
   .link {
     text-decoration: none;
     font-weight: 800;
-    color: var(--primary-800);
+    color: var(--tertiary-900);
   }
 
   .link:hover {
-    color: var(--primary-600);
+    color: var(--tertiary-800);
     text-decoration: underline;
   }
 

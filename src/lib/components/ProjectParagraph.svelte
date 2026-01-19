@@ -6,7 +6,7 @@
 
 <style>
   p {
-    font-size: clamp(1rem, 1.75vw, 1.25rem);
+    font-size: var(--project-font-size);
     line-height: 2;
     margin-top: 1rem;
     margin-bottom: 1rem;

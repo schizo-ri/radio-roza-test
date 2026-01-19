@@ -1,85 +1,135 @@
 <script>
-  const { title, href } = $props();
+  let { title, href, description = '', image = '' } = $props();
 </script>
 
-<section>
-  <a {href}>{title}</a>
-</section>
+<article class="card">
+  <a {href} class="card-link">
+    <div class="image-container">
+      {#if image}
+        <img src={image} alt={title} loading="lazy" />
+      {:else}
+        <div class="placeholder">
+          <span class="initial">{title.charAt(0)}</span>
+        </div>
+      {/if}
+    </div>
+
+    <div class="content">
+      <h3 class="title">{title}</h3>
+      {#if description}
+        <p class="description">{description}</p>
+      {/if}
+      <span class="read-more">Saznaj više →</span>
+    </div>
+  </a>
+</article>
 
 <style>
-  section {
-    width: clamp(300px, 600px, 90cqw);
-    margin: 0 auto;
+  .card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: white;
+    border-radius: 12px;
+    box-shadow:
+      0 1px 3px rgb(0 0 0 / 0.1),
+      0 1px 2px rgb(0 0 0 / 0.06);
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
   }
 
-  a {
-    display: block;
-    width: min-content;
-    white-space: nowrap;
-    padding: 2rem 3rem;
-    border-radius: 1rem;
-    transform-origin: left top;
-    transform: skewX(0deg);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
-    font-family: var(--display-font);
-    font-weight: 800;
-    font-size: 2.25rem;
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 10px 15px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1);
+  }
+
+  .card-link {
+    display: flex;
+    flex-direction: column;
     text-decoration: none;
-    margin-bottom: 2rem;
-    /*box-shadow:
-      0 4px 6px -1px rgb(0 0 0 / 0.1),
-      0 2px 4px -2px rgb(0 0 0 / 0.1);*/
+    color: inherit;
+    height: 100%;
   }
 
-  section:nth-child(odd) a {
+  .image-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+  }
+
+  .image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .card:hover .image-container img {
+    transform: scale(1.05);
+  }
+
+  .placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-700) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .initial {
+    font-family: var(--display-font);
+    font-size: 4rem;
+    font-weight: 800;
+    color: white;
+    opacity: 0.3;
+  }
+
+  .content {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 0 0 0.5rem 0;
+    color: var(--dark);
+    transition: color 0.2s ease;
+  }
+
+  .card:hover .title {
     color: var(--primary-700);
-    border: 4px solid var(--primary-700);
-    animation: slideInLeftSkew 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   }
 
-  section:nth-child(odd) a:hover {
-    box-shadow:
-      0 20px 25px -5px rgb(0 0 0 / 0.1),
-      0 8px 10px -6px rgb(0 0 0 / 0.1);
-    background-color: var(--primary-50);
+  .description {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--muted);
+    margin: 0 0 1rem 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex: 1;
   }
 
-  section:nth-child(even) a {
-    color: var(--secondary-700);
-    border: 4px solid var(--secondary-700);
-    margin-left: auto;
-    animation: slideInRightSkew 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  .read-more {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--primary-600);
+    transition: color 0.2s ease;
   }
 
-  section:nth-child(even) a:hover {
-    box-shadow:
-      0 20px 25px -5px rgb(0 0 0 / 0.1),
-      0 8px 10px -6px rgb(0 0 0 / 0.1);
-    background-color: var(--secondary-50);
-  }
-
-  @keyframes slideInLeftSkew {
-    from {
-      transform: skewX(0deg);
-    }
-    to {
-      transform: skewX(5deg);
-    }
-  }
-
-  @keyframes slideInRightSkew {
-    from {
-      transform: skewX(0deg);
-    }
-    to {
-      transform: skewX(-5deg);
-    }
-  }
-
-  @media (min-width: 600px) {
-    a {
-      font-size: 3rem;
-    }
+  .card:hover .read-more {
+    color: var(--primary-800);
   }
 </style>

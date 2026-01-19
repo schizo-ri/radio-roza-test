@@ -4,7 +4,7 @@
 
   import HorizontalScroller from '$lib/components/HorizontalScroller.svelte';
   import Wrapper from '$lib/components/Wrapper.svelte';
-  import MixCard from '$lib/components/MixCard.svelte';
+  import MixCardOverlay from '$lib/components/MixCardOverlay.svelte';
 </script>
 
 {#if data}
@@ -12,7 +12,7 @@
     {#if data.data && data.data.length > 0}
       <HorizontalScroller>
         {#each data.data as mix, index (`${mix.url}-${index}`)}
-          <MixCard {mix} showTags={true} />
+          <MixCardOverlay {mix} showTags={true} />
         {/each}
       </HorizontalScroller>
     {:else}

@@ -1,6 +1,9 @@
 <script>
   import { page } from '$app/state';
   import Player from '$lib/components/Player.svelte';
+  import MixcloudPlayer from '$lib/components/MixcloudPlayer.svelte';
+  import Wrapper from '$lib/components/Wrapper.svelte';
+  import FullBleed from '$lib/components/FullBleed.svelte';
   import favicon from '$lib/assets/favicon.svg';
   import '../app.css';
 
@@ -147,6 +150,14 @@
             data-sveltekit-preload-data="hover">O nama</a
           >
         </li>
+        <li>
+          <a
+            href="/kontakt"
+            class="link"
+            aria-current={page.url.pathname === '/kontakt' ? 'page' : undefined}
+            data-sveltekit-preload-data="hover">Kontakt</a
+          >
+        </li>
         <li class="projects">
           <a
             href="/projekti"
@@ -181,6 +192,16 @@
             </li>
             <li>
               <a href="/projekti/17-bitnih" onclick={() => (projectsVisible = false)}>17-bitnih</a>
+            </li>
+            <li>
+              <a href="/projekti/inkluzivni-kotac" onclick={() => (projectsVisible = false)}
+                >Inkluzivni kotač</a
+              >
+            </li>
+            <li>
+              <a href="/projekti/digitalne-rozice" onclick={() => (projectsVisible = false)}
+                >Digitalne rožice</a
+              >
             </li>
           </ul>
         </li>
@@ -260,6 +281,14 @@
             onclick={() => (mobileMenuOpen = false)}>O nama</a
           >
         </li>
+        <li>
+          <a
+            href="/kontakt"
+            class="mobile-link"
+            aria-current={page.url.pathname === '/kontakt' ? 'page' : undefined}
+            onclick={() => (mobileMenuOpen = false)}>Kontakt</a
+          >
+        </li>
         <li class="mobile-projects">
           <a
             href="/projekti"
@@ -309,7 +338,34 @@
   {@render children()}
 </main>
 
+<Wrapper>
+  <section class="join">
+    <h3>Želiš nam se pridružiti?</h3>
+    <p>
+      Imaš ideju za emisiju ili želiš biti dio emisije? Lorem ipsum dolor sit amet, consectetur
+      adipiscing elit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
+      doloremque laudantium.
+    </p>
+    <a class="join-donate-link join-link" href="/kontakt">
+      <img src="/icons/lightbulb.png" alt="Idea" width="32" height="32" />
+      <span>Pošalji nam svoju ideju</span>
+    </a>
+  </section>
+</Wrapper>
+
+<FullBleed variant="secondary">
+  <section class="donate">
+    <h3>Sviđa ti se što radimo?</h3>
+    <a href="/donate" class="join-donate-link donate-link">
+      <img src="/icons/socials/bmc-full-logo.svg" alt="Donate" width="146" height="32" />
+      <span class="sr-only">Podrži nas</span>
+    </a>
+  </section>
+</FullBleed>
+
 <Footer />
+
+<MixcloudPlayer />
 
 <style>
   /* Skip link for accessibility - hidden until focused */
@@ -724,8 +780,66 @@
       border-color 0.1s ease;
   }
 
-  /* Mobile-first responsive breakpoints */
+  .join {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 8rem;
+    margin-bottom: 4rem;
+  }
 
+  .join h3 {
+    color: var(--primary-700);
+    font-family: var(--display-font);
+    font-size: 2.4rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .join p {
+    font-size: 1.2rem;
+    color: var(--dark);
+    margin-bottom: 1rem;
+    max-width: 640px;
+    text-align: center;
+  }
+
+  .donate {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    text-align: center;
+  }
+
+  .donate h3 {
+    color: white;
+    font-family: var(--display-font);
+    font-size: 2rem;
+    font-weight: 400;
+    opacity: 0.9;
+    margin-bottom: 1rem;
+  }
+
+  .join-donate-link {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background-color: white;
+    border: 2px solid var(--yellow);
+    border-radius: 32px;
+    color: var(--dark);
+    text-decoration: none;
+    font-weight: 800;
+    width: 80cqw;
+    max-width: 380px;
+    transition: transform 0.1s ease-in-out;
+  }
+
+  .join-donate-link:hover {
+    transform: scale(1.05);
+  }
   /* Small phones */
   @media (min-width: 430px) {
     .header-content {

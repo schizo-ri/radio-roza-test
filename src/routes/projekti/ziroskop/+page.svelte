@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-  <title>Radio Roža - Žiroskop</title>
+  <title>Žiroskop - Radio Roža</title>
   <meta
     name="description"
     content="Projekt Žiroskop nastao je iz potrebe rješavanja problema nestabilnosti korištenja prostornih resursa za sve izvaninstitucionalne aktere u kulturi, odnosno za svrhu ima razvoj civilno-javnog partnerstva u upravljanju prostorima Filodrammatice, Omladinskog kulturnog centra Palach i Hrvatskog kulturnog doma na Sušaku."
