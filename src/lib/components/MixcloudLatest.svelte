@@ -3,7 +3,6 @@
   let { data } = $props();
 
   import HorizontalScroller from '$lib/components/HorizontalScroller.svelte';
-  import Wrapper from '$lib/components/Wrapper.svelte';
   import MixCardOverlay from '$lib/components/MixCardOverlay.svelte';
 </script>
 
@@ -20,16 +19,7 @@
     {/if}
   </section>
 {:else}
-  <Wrapper>
-    <section class="placeholders">
-      <p>Učitavanje emisija...</p>
-    </section>
-  </Wrapper>
+  <section class="placeholders">
+    <p>Učitavanje emisija...</p>
+  </section>
 {/if}
-
-<style>
-  .mixcloud-latest {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-  }
-</style>

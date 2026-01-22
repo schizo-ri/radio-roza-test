@@ -28,6 +28,7 @@
     justify-content: space-between;
     align-items: baseline;
     position: relative;
+    margin-bottom: 1.5rem;
   }
 
   a {

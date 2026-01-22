@@ -47,7 +47,7 @@
     position: sticky;
     top: var(--header-height, 60px);
     z-index: 100;
-    background: var(--tertiary-500);
+    background: var(--tertiary-400);
     /*border-bottom: 1px solid var(--primary-300);*/
     margin-bottom: 2rem;
   }

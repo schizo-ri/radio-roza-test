@@ -119,7 +119,7 @@
   --secondary-h: 177;
   --secondary-s: 65%;
 
-  --tertiary-h: 50;
+  --tertiary-h: 47;
   --tertiary-s: 89%;
 
   /* Lightness scale */
@@ -151,7 +151,7 @@
 
   /* yellow */
   --tertiary-950: hsl(var(--tertiary-h), var(--tertiary-s), 10%);
-  --tertiary-900: hsl(var(--tertiary-h), var(--tertiary-s), 15%);
+  --tertiary-900: hsl(var(--tertiary-h), var(--tertiary-s), 17.5%);
   --tertiary-800: hsl(var(--tertiary-h), var(--tertiary-s), 25%);
   --tertiary-700: hsl(var(--tertiary-h), var(--tertiary-s), 32.5%);
   --tertiary-600: hsl(var(--tertiary-h), var(--tertiary-s), 40%);
@@ -161,7 +161,7 @@
   --tertiary-200: hsl(var(--tertiary-h), var(--tertiary-s), 70%);
   --tertiary-100: hsl(var(--tertiary-h), var(--tertiary-s), 77.5%);
   --tertiary-50: hsl(var(--tertiary-h), var(--tertiary-s), 95%);
-  --tertiary: #f2cd18;
+  --tertiary: var(--tertiary-400); /* #f2cd18; */
 
   --green: hsl(152deg 76% 40% / 1);
   --blue: hsl(204deg 84% 40% / 1);

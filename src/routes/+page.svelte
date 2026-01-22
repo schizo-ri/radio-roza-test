@@ -1,6 +1,8 @@
 <script>
   import MixcloudLatest from '$lib/components/MixcloudLatest.svelte';
   import ArticlesLatest from '$lib/components/ArticlesLatest.svelte';
+  import AlbumCardFeatured from '$lib/components/AlbumCardFeatured.svelte';
+  import ProgramToday from '$lib/components/ProgramToday.svelte';
   import Wrapper from '$lib/components/Wrapper.svelte';
   import SectionHeader from '$lib/components/SectionHeader.svelte';
 
@@ -25,13 +27,30 @@
 <div class="spacer">
   <Wrapper>
     <SectionHeader title="Čitaj radio" link="Pogledaj sve" href="/citaj-radio" />
+    <ArticlesLatest />
   </Wrapper>
-  <ArticlesLatest />
+</div>
+
+{#if data.albumOfTheWeek}
+  <div class="spacer">
+    <Wrapper>
+      <SectionHeader title="Album tjedna" link="Pogledaj sve" href="/citaj-radio/album-tjedna" />
+      <AlbumCardFeatured album={data.albumOfTheWeek} />
+    </Wrapper>
+  </div>
+{/if}
+
+<div class="spacer">
+  <Wrapper>
+    <SectionHeader title="Program danas" link="Cijeli program" href="/program" />
+    <ProgramToday />
+  </Wrapper>
 </div>
 
 <style>
   .spacer {
     padding-top: 2rem;
     padding-bottom: 2rem;
+    margin-bottom: 2rem;
   }
 </style>

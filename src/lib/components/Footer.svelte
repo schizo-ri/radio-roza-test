@@ -92,7 +92,7 @@
     padding-bottom: 4rem;
     padding-left: 16px;
     padding-right: 16px;
-    background-color: var(--yellow);
+    background-color: var(--tertiary-400);
   }
 
   p {

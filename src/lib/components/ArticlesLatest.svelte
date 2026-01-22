@@ -30,49 +30,29 @@
 </script>
 
 {#if loading}
-  <Wrapper>
-    <section class="placeholders">
-      <p>Učitavanje članaka...</p>
-    </section>
-  </Wrapper>
+  <section class="placeholders">
+    <p>Učitavanje članaka...</p>
+  </section>
 {:else}
   <section class="articles-latest">
-    <Wrapper>
-      {#if articles && articles.length > 0}
-        <!-- <HorizontalScroller> -->
-        <div class="grid">
-          {#each articles as article (article.id)}
-            <ArticleCard {article} showTags={true} />
-          {/each}
-        </div>
-        <!-- </HorizontalScroller> -->
-      {:else}
-        <p>Nema članaka za prikazati</p>
-      {/if}
-    </Wrapper>
+    {#if articles && articles.length > 0}
+      <!-- <HorizontalScroller> -->
+      <div class="grid">
+        {#each articles as article (article.id)}
+          <ArticleCard {article} showTags={true} />
+        {/each}
+      </div>
+      <!-- </HorizontalScroller> -->
+    {:else}
+      <p>Nema članaka za prikazati</p>
+    {/if}
   </section>
 {/if}
 
 <style>
-  .articles-latest {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-  }
-
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 1rem;
-  }
-
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 1.5rem;
-  }
-
-  .articles-latest h2 {
-    font-size: 2rem;
   }
 </style>
