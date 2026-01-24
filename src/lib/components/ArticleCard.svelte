@@ -42,12 +42,9 @@
     <!-- Tags -->
     {#if article.tags && article.tags.length > 0}
       <div class="tags">
-        {#each article.tags.slice(0, 3) as tag (`${article.id}-${tag}`)}
+        {#each article.tags as tag (`${article.id}-${tag}`)}
           <a href="/citaj-radio?tag={encodeURIComponent(tag)}" class="tag">#{tag}</a>
         {/each}
-        {#if article.tags.length > 3}
-          <span class="tag-more">+{article.tags.length - 3} more</span>
-        {/if}
       </div>
     {/if}
   </div>
@@ -55,53 +52,17 @@
 
 <style>
   .card {
-    border: 2px solid transparent;
-    box-shadow: 0 2px 16px -4px rgba(0, 0, 0, 0.05);
-    width: clamp(280px, 320px, 400px);
+    width: max(280px, 560px);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    transition: border-color 0.15s;
     position: relative;
-  }
-
-  .card:hover {
-    border-color: var(--secondary-500);
-  }
-
-  .image {
-    position: relative;
-    height: 200px;
-    overflow: hidden;
-  }
-
-  .image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  /*.category-tag {
-    position: absolute;
-    bottom: 1rem;
-    left: 1rem;
-    color: white;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    backdrop-filter: blur(4px);
-  }*/
-
-  .content {
-    padding: 1.5rem;
   }
 
   .title {
     margin: 0 0 0.75rem 0;
     font-size: 1.25rem;
-    line-height: 1.4;
+    line-height: 1.25;
   }
 
   .title a {
@@ -112,11 +73,11 @@
 
   .title a:hover {
     color: var(--secondary-700);
+    text-decoration: underline;
   }
 
   .excerpt {
     color: var(--muted);
-    line-height: 1.6;
     margin: 0 0 1rem 0;
     display: -webkit-box;
     -webkit-line-clamp: 3;
@@ -153,7 +114,7 @@
   }
 
   .author-name {
-    font-weight: 600;
+    font-weight: 500;
     color: var(--dark);
     font-size: 0.875rem;
     text-decoration: none;
@@ -161,7 +122,7 @@
   }
 
   .author-name:hover {
-    color: var(--secondary-600);
+    color: var(--secondary-700);
     text-decoration: underline;
   }
 
@@ -171,7 +132,7 @@
   }
 
   .read-time {
-    color: #6b7280;
+    color: var(--muted);
     font-size: 0.75rem;
     font-weight: 500;
   }
@@ -184,8 +145,8 @@
   }
 
   .tag {
-    background: #f3f4f6;
-    color: #374151;
+    background: var(--light);
+    color: var(--dark);
     padding: 0.25rem 0.5rem;
     border-radius: 12px;
     font-size: 0.75rem;
@@ -198,35 +159,5 @@
   .tag:hover {
     background: var(--secondary-700);
     color: white;
-    transform: translateY(-1px);
   }
-
-  .tag-more {
-    color: #6b7280;
-    font-size: 0.75rem;
-    font-style: italic;
-  }
-
-  /*.embeds-indicator {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-
-  .embed-badge {
-    padding: 0.25rem 0.5rem;
-    border-radius: 8px;
-    font-size: 0.75rem;
-    font-weight: 500;
-  }
-
-  .embed-badge.bandcamp {
-    background: #1da1f2;
-    color: white;
-  }
-
-  .embed-badge.youtube {
-    background: #ff0000;
-    color: white;
-  }*/
 </style>

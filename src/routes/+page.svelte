@@ -5,6 +5,7 @@
   import ProgramToday from '$lib/components/ProgramToday.svelte';
   import Wrapper from '$lib/components/Wrapper.svelte';
   import SectionHeader from '$lib/components/SectionHeader.svelte';
+  import ArticleFeatured from '$lib/components/ArticleFeatured.svelte';
 
   let { data } = $props();
 </script>
@@ -27,6 +28,7 @@
 <div class="spacer">
   <Wrapper>
     <SectionHeader title="Čitaj radio" link="Pogledaj sve" href="/citaj-radio" />
+    <ArticleFeatured />
     <ArticlesLatest />
   </Wrapper>
 </div>

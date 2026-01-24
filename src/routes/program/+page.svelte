@@ -1,6 +1,7 @@
 <script>
   import PageTitle from '$lib/components/PageTitle.svelte';
   import ProgramWeek from '$lib/components/ProgramWeek.svelte';
+  import TextWrapper from '$lib/components/TextWrapper.svelte';
 </script>
 
 <svelte:head>
@@ -8,13 +9,16 @@
   <meta name="description" content="Tjedni program Radio Rože" />
 </svelte:head>
 
-<main class="program-container">
-  <PageTitle title="Tjedni Program" />
+<PageTitle title="Tjedni Program" />
+
+<section class="wrapper-section">
+  <!-- <TextWrapper> -->
   <ProgramWeek />
-</main>
+  <!-- </TextWrapper> -->
+</section>
 
 <style>
-  .program-container {
+  .wrapper-section {
     max-width: 1000px;
     margin: 0 auto;
   }

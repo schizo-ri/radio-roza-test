@@ -68,6 +68,7 @@
     </header>
 
     <div class="album-content">
+      <!-- eslint-disable-next-line svelte/no-at-html-tags -->
       {@html album.content}
     </div>
   {/if}

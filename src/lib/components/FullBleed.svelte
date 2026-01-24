@@ -4,7 +4,7 @@
 </script>
 
 <div class="container {background ? 'background' : ''} {className}" data-variant={variant}>
-  <Wrapper class={background && variant === 'split' ? 'split-background' : ''}>
+  <Wrapper>
     {@render children()}
   </Wrapper>
 </div>
@@ -15,9 +15,9 @@
 
     --_noise-size: 6.5%;
 
-    background-image: var(--_noise-texture), var(--_gradient);
-    background-size: var(--_noise-size), auto;
-    background-position: center, center;
+    /*background-image: var(--_noise-texture), var(--_gradient);*/
+    /*background-size: var(--_noise-size), auto;*/
+    /*background-position: center, center;*/
   }
 
   .background {
@@ -29,6 +29,7 @@
       var(--primary-800) 90%,
       var(--primary-900) 100%
     );
+    /*background-image: var(--_gradient);*/
   }
 
   .background[data-variant='secondary'] {
@@ -40,23 +41,7 @@
       var(--secondary-800) 90%,
       var(--secondary-900) 100%
     );
-  }
-
-  .background[data-variant='split'] {
-    background-image: var(--_noise-texture);
-  }
-
-  :global(.split-background > div) {
-    background-image: linear-gradient(
-      90deg,
-      var(--primary-500) 0%,
-      var(--primary-600) 10%,
-      var(--primary-700) 30%,
-      var(--primary-800) 50%,
-      var(--secondary-800) 50%,
-      var(--secondary-700) 70%,
-      var(--secondary-600) 90%,
-      var(--secondary-500) 100%
-    );
+    /*background-image: var(--_gradient);*/
+    background-color: var(--secondary-700);
   }
 </style>

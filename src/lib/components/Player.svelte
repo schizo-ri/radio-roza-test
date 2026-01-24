@@ -11,7 +11,7 @@
     registerStreamPlayer,
     unregisterStreamPlayer,
     onStreamPlay,
-    onStreamStop
+    onStreamStop,
   } from '$lib/stores/playerState.js';
 
   const src = 'https://radio.radio-roza.org/hls/radioroza/live.m3u8';
@@ -296,13 +296,16 @@
 
           // Clear loading state and start playback
           loading = false;
-          audioElement.play().then(() => {
-            onStreamPlay(); // Notify store that stream is playing
-          }).catch((e) => {
-            console.error('Play failed:', e);
-            error = 'Playback failed';
-            loading = false;
-          });
+          audioElement
+            .play()
+            .then(() => {
+              onStreamPlay(); // Notify store that stream is playing
+            })
+            .catch((e) => {
+              console.error('Play failed:', e);
+              error = 'Playback failed';
+              loading = false;
+            });
         };
 
         // Wait for enough data to be available before seeking and playing
@@ -323,12 +326,15 @@
             if (loading) {
               console.warn('Initial seek timeout, starting playback anyway');
               loading = false;
-              audioElement.play().then(() => {
-                onStreamPlay(); // Notify store that stream is playing
-              }).catch((e) => {
-                console.error('Play failed:', e);
-                error = 'Playback failed';
-              });
+              audioElement
+                .play()
+                .then(() => {
+                  onStreamPlay(); // Notify store that stream is playing
+                })
+                .catch((e) => {
+                  console.error('Play failed:', e);
+                  error = 'Playback failed';
+                });
             }
           }, 3000);
         }
@@ -337,12 +343,15 @@
       }
 
       // Normal playback for subsequent plays
-      audioElement.play().then(() => {
-        onStreamPlay(); // Notify store that stream is playing
-      }).catch((e) => {
-        console.error('Play failed:', e);
-        error = 'Playback failed';
-      });
+      audioElement
+        .play()
+        .then(() => {
+          onStreamPlay(); // Notify store that stream is playing
+        })
+        .catch((e) => {
+          console.error('Play failed:', e);
+          error = 'Playback failed';
+        });
     }
   }
 
@@ -850,15 +859,18 @@
     inset: 0;
     width: 100%;
     height: 100%;
-    /*background-image: var(--album-art);*/
     background-image: var(--art);
-    /*background-size: auto calc(100% - 60px);*/
-    background-size: 100%;
-    /*background-position: left 0 top 60px;*/
-    background-position: left 0 top 30%;
+    background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
     z-index: -1;
     transition: background-image 0.4s ease-in-out;
+  }
+
+  @media (min-width: 1000px) {
+    .background-overlay {
+      background-position: left 0 top 30%;
+    }
   }
 
   .background-overlay::after {

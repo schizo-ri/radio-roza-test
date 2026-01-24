@@ -87,9 +87,15 @@
 
 <style>
   .shows-list {
-    border: 1px solid var(--light);
     border-radius: 8px;
     overflow: hidden;
+    border-bottom: 1px solid var(--light);
+  }
+
+  @media (min-width: 1000px) {
+    .shows-list {
+      border: 1px solid var(--light);
+    }
   }
 
   .show-item {

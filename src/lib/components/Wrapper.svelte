@@ -21,8 +21,6 @@
 
     margin-right: 0;
     margin-left: 0;
-
-    max-width: 100cqw;
   }
 
   @media (min-width: 1344px) {

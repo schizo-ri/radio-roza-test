@@ -374,7 +374,7 @@
     top: -40px;
     left: 0;
     background: var(--primary-600);
-    color: white;
+    color: var(--white, #fff);
     padding: 8px 16px;
     z-index: 10000;
     text-decoration: none;
@@ -393,7 +393,7 @@
     right: 0;
     z-index: 1000;
     border-bottom: 1px solid #eee;
-    background-color: white;
+    background-color: var(--white, #fff);
     box-shadow: 0 4px 32px hsl(4deg 5% 2% / 0.1);
     transition:
       height 0.15s ease-out,
@@ -407,7 +407,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: white;
+    background-color: var(--white, #fff);
     height: 60px; /* bazna visina */
     padding: 0 1rem;
   }
@@ -458,7 +458,7 @@
 
   /*.mobile-nav-trigger:hover {
     background: var(--primary-600);
-    color: white;
+    color: var(--white, #fff);
   }*/
 
   /*.mobile-nav-trigger:focus-visible {
@@ -468,7 +468,7 @@
 
   /*.mobile-nav-trigger.open {
     background: var(--primary-600);
-    color: white;
+    color: var(--white, #fff);
   }*/
 
   .mobile-nav-burger {
@@ -812,7 +812,7 @@
   }
 
   .donate h3 {
-    color: white;
+    color: var(--white, #fff);
     font-family: var(--display-font);
     font-size: 2rem;
     font-weight: 400;
@@ -826,7 +826,7 @@
     align-items: center;
     gap: 0.5rem;
     padding: 1rem;
-    background-color: white;
+    background-color: var(--white, #fff);
     border: 2px solid var(--yellow);
     border-radius: 32px;
     color: var(--dark);

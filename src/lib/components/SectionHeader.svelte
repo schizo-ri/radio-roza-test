@@ -32,7 +32,7 @@
   }
 
   a {
-    color: var(--primary-800);
+    color: var(--primary-700);
     text-decoration: none;
   }
 

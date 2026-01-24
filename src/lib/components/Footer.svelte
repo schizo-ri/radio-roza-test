@@ -88,8 +88,8 @@
 <style>
   footer {
     text-align: center;
-    padding-top: 4rem;
-    padding-bottom: 4rem;
+    padding-top: 6rem;
+    padding-bottom: 8rem;
     padding-left: 16px;
     padding-right: 16px;
     background-color: var(--tertiary-400);

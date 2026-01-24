@@ -113,57 +113,58 @@
 
 :root {
   /* Base color in HSL for easy variants */
-  --primary-h: 357;
-  --primary-s: 65%;
+  --primary-h: 350;
+  --primary-s: 72%;
 
-  --secondary-h: 177;
+  --secondary-h: 156;
   --secondary-s: 65%;
 
-  --tertiary-h: 47;
-  --tertiary-s: 89%;
+  --tertiary-h: 46;
+  --tertiary-s: 92%;
 
   /* Lightness scale */
-  --primary-950: hsl(var(--primary-h), var(--primary-s), 15%);
-  --primary-900: hsl(var(--primary-h), var(--primary-s), 25%);
-  --primary-800: hsl(var(--primary-h), var(--primary-s), 35%);
-  --primary-700: hsl(var(--primary-h), var(--primary-s), 45%);
-  --primary-600: hsl(var(--primary-h), var(--primary-s), 55%);
-  --primary-500: hsl(var(--primary-h), var(--primary-s), 65%);
-  --primary-400: hsl(var(--primary-h), var(--primary-s), 75%);
-  --primary-300: hsl(var(--primary-h), var(--primary-s), 85%);
-  --primary-200: hsl(var(--primary-h), var(--primary-s), 90%);
-  --primary-100: hsl(var(--primary-h), var(--primary-s), 95%);
-  --primary-50: hsl(var(--primary-h), var(--primary-s), 98%);
-  --primary: #d3323a;
+  --primary-950: hsl(var(--primary-h) var(--primary-s) 15% / 1);
+  --primary-900: hsl(var(--primary-h) var(--primary-s) 25% / 1);
+  --primary-800: hsl(var(--primary-h) var(--primary-s) 35% / 1);
+  --primary-700: hsl(var(--primary-h) var(--primary-s) 45% / 1);
+  --primary-600: hsl(var(--primary-h) var(--primary-s) 55% / 1);
+  --primary-500: hsl(var(--primary-h) var(--primary-s) 65% / 1);
+  --primary-400: hsl(var(--primary-h) var(--primary-s) 75% / 1);
+  --primary-300: hsl(var(--primary-h) var(--primary-s) 85% / 1);
+  --primary-200: hsl(var(--primary-h) var(--primary-s) 90% / 1);
+  --primary-100: hsl(var(--primary-h) var(--primary-s) 95% / 1);
+  --primary-50: hsl(var(--primary-h) var(--primary-s) 98% / 1);
+  --primary: var(--primary-400);
 
-  --secondary-950: hsl(var(--secondary-h), var(--secondary-s), 15%);
-  --secondary-900: hsl(var(--secondary-h), var(--secondary-s), 25%);
-  --secondary-800: hsl(var(--secondary-h), var(--secondary-s), 35%);
-  --secondary-700: hsl(var(--secondary-h), var(--secondary-s), 45%);
-  --secondary-600: hsl(var(--secondary-h), var(--secondary-s), 55%);
-  --secondary-500: hsl(var(--secondary-h), var(--secondary-s), 65%);
-  --secondary-400: hsl(var(--secondary-h), var(--secondary-s), 75%);
-  --secondary-300: hsl(var(--secondary-h), var(--secondary-s), 85%);
-  --secondary-200: hsl(var(--secondary-h), var(--secondary-s), 90%);
-  --secondary-100: hsl(var(--secondary-h), var(--secondary-s), 95%);
-  --secondary-50: hsl(var(--secondary-h), var(--secondary-s), 98%);
-  --secondary: #32d3cb;
+  --secondary-950: hsl(var(--secondary-h) var(--secondary-s) 15% / 1);
+  --secondary-900: hsl(var(--secondary-h) var(--secondary-s) 25% / 1);
+  --secondary-800: hsl(var(--secondary-h) var(--secondary-s) 35% / 1);
+  --secondary-700: hsl(var(--secondary-h) var(--secondary-s) 45% / 1);
+  --secondary-600: hsl(var(--secondary-h) var(--secondary-s) 55% / 1);
+  --secondary-500: hsl(var(--secondary-h) var(--secondary-s) 65% / 1);
+  --secondary-400: hsl(var(--secondary-h) var(--secondary-s) 75% / 1);
+  --secondary-300: hsl(var(--secondary-h) var(--secondary-s) 85% / 1);
+  --secondary-200: hsl(var(--secondary-h) var(--secondary-s) 90% / 1);
+  --secondary-100: hsl(var(--secondary-h) var(--secondary-s) 95% / 1);
+  --secondary-50: hsl(var(--secondary-h) var(--secondary-s) 98% / 1);
+  --secondary: var(--secondary-400);
 
   /* yellow */
-  --tertiary-950: hsl(var(--tertiary-h), var(--tertiary-s), 10%);
-  --tertiary-900: hsl(var(--tertiary-h), var(--tertiary-s), 17.5%);
-  --tertiary-800: hsl(var(--tertiary-h), var(--tertiary-s), 25%);
-  --tertiary-700: hsl(var(--tertiary-h), var(--tertiary-s), 32.5%);
-  --tertiary-600: hsl(var(--tertiary-h), var(--tertiary-s), 40%);
-  --tertiary-500: hsl(var(--tertiary-h), var(--tertiary-s), 47.5%);
-  --tertiary-400: hsl(var(--tertiary-h), var(--tertiary-s), 55%);
-  --tertiary-300: hsl(var(--tertiary-h), var(--tertiary-s), 62.5%);
-  --tertiary-200: hsl(var(--tertiary-h), var(--tertiary-s), 70%);
-  --tertiary-100: hsl(var(--tertiary-h), var(--tertiary-s), 77.5%);
-  --tertiary-50: hsl(var(--tertiary-h), var(--tertiary-s), 95%);
+  --tertiary-950: hsl(var(--tertiary-h) var(--tertiary-s) 5% / 1);
+  --tertiary-900: hsl(var(--tertiary-h) var(--tertiary-s) 15% / 1);
+  --tertiary-800: hsl(var(--tertiary-h) var(--tertiary-s) 25% / 1);
+  --tertiary-700: hsl(var(--tertiary-h) var(--tertiary-s) 35% / 1);
+  --tertiary-600: hsl(var(--tertiary-h) var(--tertiary-s) 45% / 1);
+  --tertiary-500: hsl(var(--tertiary-h) var(--tertiary-s) 55% / 1);
+  --tertiary-400: hsl(var(--tertiary-h) var(--tertiary-s) 65% / 1);
+  --tertiary-300: hsl(var(--tertiary-h) var(--tertiary-s) 75% / 1);
+  --tertiary-200: hsl(var(--tertiary-h) var(--tertiary-s) 85% / 1);
+  --tertiary-100: hsl(var(--tertiary-h) var(--tertiary-s) 95% / 1);
+  --tertiary-50: hsl(var(--tertiary-h) var(--tertiary-s) 98% / 1);
   --tertiary: var(--tertiary-400); /* #f2cd18; */
 
-  --green: hsl(152deg 76% 40% / 1);
+  /*--green: hsl(152deg 76% 40% / 1);*/
+  --green: var(--secondary-600);
   --blue: hsl(204deg 84% 40% / 1);
   --red: var(--primary-600);
   --orange: hsl(40deg 89% 52% / 1);
@@ -173,6 +174,7 @@
   --dark: #1c1b1b;
   --muted: #696a6c;
   --light: #f3f4f6;
+  --white: hsl(348deg 72% 99.5% / 1);
 
   --font: 'Poppins', sans-serif;
   --display-font: 'Anybody', sans-serif;
@@ -185,9 +187,9 @@
   --header-height: 60px;
 }
 
-@media (min-width: 1485px) {
+@media (min-width: 1488px) {
   :root {
-    --whitespace: calc((100vw - var(--max-content-width) + 24px) / 2);
+    --whitespace: calc((100vw - 1440px) / 2);
   }
 }
 

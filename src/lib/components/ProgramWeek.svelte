@@ -16,9 +16,38 @@
   let today = $state('');
   let selectedDay = $state('Monday');
 
+  // Scroll state
+  let tabsContainer = $state(null);
+  let canScrollLeft = $state(false);
+  let canScrollRight = $state(false);
+  let isOverflowing = $state(false);
+
   onMount(() => {
     today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
     selectedDay = today;
+
+    // Check overflow and scroll position
+    const checkScroll = () => {
+      if (!tabsContainer) return;
+      const { scrollLeft, scrollWidth, clientWidth } = tabsContainer;
+      isOverflowing = scrollWidth > clientWidth;
+      canScrollLeft = scrollLeft > 1;
+      canScrollRight = scrollLeft < scrollWidth - clientWidth - 1;
+    };
+
+    checkScroll();
+
+    // Observe resize
+    const resizeObserver = new ResizeObserver(checkScroll);
+    if (tabsContainer) {
+      resizeObserver.observe(tabsContainer);
+      tabsContainer.addEventListener('scroll', checkScroll);
+    }
+
+    return () => {
+      resizeObserver.disconnect();
+      tabsContainer?.removeEventListener('scroll', checkScroll);
+    };
   });
 
   function switchToDay(day) {
@@ -26,26 +55,75 @@
       selectedDay = day;
     }
   }
+
+  function scrollTabs(direction) {
+    if (!tabsContainer) return;
+    const scrollAmount = 200;
+    tabsContainer.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth',
+    });
+  }
 </script>
 
 <div class="program-week">
   <!-- Tab Navigation -->
-  <div class="tabs-container">
-    <div class="tabs">
-      {#each daysOrder as day (day)}
-        <button
-          class="tab"
-          class:active={selectedDay === day}
-          class:today={today === day}
-          onclick={() => switchToDay(day)}
+  <div class="tabs-wrapper" class:has-overflow={isOverflowing}>
+    {#if isOverflowing && canScrollLeft}
+      <button
+        class="scroll-btn scroll-left"
+        onclick={() => scrollTabs('left')}
+        aria-label="Scroll left"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
         >
-          <span class="tab-name">{dayNames[day]}</span>
-          {#if today === day}
-            <span class="today-indicator">DANAS</span>
-          {/if}
-        </button>
-      {/each}
+          <path d="M15 18l-6-6 6-6" />
+        </svg>
+      </button>
+    {/if}
+
+    <div class="tabs-container" bind:this={tabsContainer}>
+      <div class="tabs">
+        {#each daysOrder as day (day)}
+          <button
+            class="tab"
+            class:active={selectedDay === day}
+            class:today={today === day}
+            onclick={() => switchToDay(day)}
+          >
+            <span class="tab-name">{dayNames[day]}</span>
+            {#if today === day}
+              <span class="today-indicator">DANAS</span>
+            {/if}
+          </button>
+        {/each}
+      </div>
     </div>
+
+    {#if isOverflowing && canScrollRight}
+      <button
+        class="scroll-btn scroll-right"
+        onclick={() => scrollTabs('right')}
+        aria-label="Scroll right"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M9 18l6-6-6-6" />
+        </svg>
+      </button>
+    {/if}
   </div>
 
   <!-- Program Content -->
@@ -56,22 +134,85 @@
 
 <style>
   .program-week {
-    max-width: 1000px;
-    margin: 0 auto;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  /* Tabs Wrapper with arrows */
+  .tabs-wrapper {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    max-width: 100%;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .scroll-btn {
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: 4px;
+    width: 36px;
+    background: white;
+    border: 2px solid var(--primary-200);
+    background-color: var(--white);
+    color: var(--primary-600);
+    cursor: pointer;
+    z-index: 2;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+  }
+
+  .scroll-btn:hover {
+    background: var(--tertiary-100);
+    color: var(--primary-700);
+  }
+
+  .scroll-left {
+    left: 0;
+    border-right: none;
+  }
+
+  .scroll-right {
+    right: 0;
+    border-left: none;
+  }
+
+  /* Show arrows only on non-touch devices */
+  @media (hover: hover) and (pointer: fine) {
+    .scroll-btn {
+      display: flex;
+    }
+
+    .tabs-wrapper.has-overflow .tabs-container {
+      padding-left: 36px;
+      padding-right: 36px;
+    }
+
+    /* Hide scrollbar on desktop when we have arrows */
+    .tabs-wrapper.has-overflow .tabs-container {
+      scrollbar-width: none;
+    }
+
+    .tabs-wrapper.has-overflow .tabs-container::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   /* Tab Navigation */
   .tabs-container {
+    flex: 1;
+    min-width: 0;
     overflow-x: auto;
     overflow-y: hidden;
     scroll-behavior: smooth;
   }
 
   .tabs {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    align-items: end;
-    padding-bottom: 0.5rem;
+    display: flex;
+    padding-bottom: 4px;
   }
 
   .tab {
@@ -82,13 +223,15 @@
     border-left: 0;
     padding: 0.75rem 1rem;
     font-family: var(--display-font);
-    font-weight: 600;
+    font-weight: 800;
     color: var(--primary-600);
     cursor: pointer;
     transition: all 0.15s ease;
     position: relative;
-    min-width: 140px;
+    min-width: 120px;
+    flex: 1 0 auto;
     text-align: center;
+    white-space: nowrap;
   }
 
   .tab:first-child {
@@ -103,16 +246,11 @@
     background: var(--primary-600);
     color: white;
     border-color: var(--primary-600);
-    box-shadow: 0 4px 12px rgba(211, 50, 58, 0.3);
-  }
-
-  .tab.today {
-    border-radius: 8px 8px 0 0;
   }
 
   .tab.today:not(.active) {
-    border-color: var(--yellow);
-    background: var(--primary-50);
+    border-color: var(--tertiary-500);
+    background: var(--tertiary-50);
   }
 
   .tab-name {
@@ -125,11 +263,11 @@
     font-size: 0.7rem;
     font-weight: 800;
     margin-top: 0.1rem;
-    color: var(--yellow);
+    color: var(--tertiary-500);
   }
 
   .tab.active .today-indicator {
-    color: var(--yellow);
+    color: var(--tertiary-500);
   }
 
   /* Program Content */
@@ -147,7 +285,7 @@
     border-top: none;
   }
 
-  /* Responsive adjustments */
+  /* Responsive - touch devices */
   @media (max-width: 767px) {
     .tabs-container {
       margin: 0 calc(-1 * var(--whitespace, 1rem));
@@ -155,33 +293,50 @@
     }
 
     .tab {
-      min-width: 120px;
-      padding: 0.8rem 1rem;
+      min-width: 110px;
+      padding: 0.6rem 0.75rem;
+    }
+
+    .tab-name {
+      font-size: 0.9rem;
     }
   }
 
-  /* Scroll styling */
-  .tabs-container::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
+  @media (min-width: 1000px) {
+    .tabs-wrapper {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .tabs {
+      padding-bottom: 0;
+    }
   }
 
-  .tabs-container::-webkit-scrollbar-track {
-    background: var(--light);
-    border-radius: 2px;
-  }
+  /* Scroll styling for touch devices */
+  @media (hover: none), (pointer: coarse) {
+    .tabs-container::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
 
-  .tabs-container::-webkit-scrollbar-thumb {
-    background: var(--primary-300);
-    border-radius: 2px;
-  }
+    .tabs-container::-webkit-scrollbar-track {
+      background: var(--light);
+      border-radius: 2px;
+    }
 
-  .tabs-container::-webkit-scrollbar-thumb:hover {
-    background: var(--primary-400);
-  }
+    .tabs-container::-webkit-scrollbar-thumb {
+      background: var(--primary-300);
+      border-radius: 2px;
+    }
 
-  .tabs-container {
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary-300) var(--light);
+    .tabs-container::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-400);
+    }
+
+    .tabs-container {
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary-300) var(--light);
+    }
   }
 </style>

@@ -1,8 +1,6 @@
 <script>
   import { getArticles } from '$lib/data/mockArticles.js';
   import { onMount } from 'svelte';
-  // import HorizontalScroller from '$lib/components/HorizontalScroller.svelte';
-  import Wrapper from '$lib/components/Wrapper.svelte';
   import ArticleCard from '$lib/components/ArticleCard.svelte';
 
   // Props
@@ -52,7 +50,7 @@
 <style>
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 560px));
+    gap: 2rem;
   }
 </style>

@@ -137,7 +137,7 @@ export const mockArticles = [
       thumb: '/images/articles/thumb/modular-synth-thumb.jpg',
       small: '/images/articles/small/modular-synth-small.jpg',
       medium: '/images/articles/medium/modular-synth-medium.jpg',
-      large: '/images/articles/large/modular-synth-large.jpg',
+      large: '/images/articles/large/Rampage.jpeg',
       alt: 'Close-up of a modular synthesizer with patch cables',
     },
     author: mockAuthors[0],
@@ -627,6 +627,13 @@ export function getArticles(options = {}) {
  */
 export function getArticle(identifier) {
   return mockArticles.find((article) => article.id === identifier || article.slug === identifier);
+}
+
+/**
+ * Get a featured article
+ */
+export function getFeaturedArticle() {
+  return mockArticles.find((article) => article.featured);
 }
 
 /**
