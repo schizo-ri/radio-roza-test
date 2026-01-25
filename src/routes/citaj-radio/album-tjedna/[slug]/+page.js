@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { getAlbumBySlug, getAlbumsOfTheWeek } from '$lib/data/mock/album-of-the-week.js';
+import { getAlbumBySlug, getAlbumsOfTheWeek } from '$lib/data/articles.js';
 
 export function load({ params }) {
   const album = getAlbumBySlug(params.slug);

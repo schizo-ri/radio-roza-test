@@ -1,4 +1,4 @@
-import { getAlbumsOfTheWeek } from '$lib/data/mock/album-of-the-week.js';
+import { getAlbumsOfTheWeek } from '$lib/data/articles.js';
 
 export function load() {
   const albums = getAlbumsOfTheWeek();

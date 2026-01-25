@@ -1,4 +1,4 @@
-import { getCurrentAlbumOfTheWeek } from '$lib/data/mock/album-of-the-week.js';
+import { getCurrentAlbumOfTheWeek } from '$lib/data/articles.js';
 
 export async function load({ fetch }) {
   const url = `https://api.mixcloud.com/${encodeURIComponent('RadioRoža')}/cloudcasts/?limit=12`;

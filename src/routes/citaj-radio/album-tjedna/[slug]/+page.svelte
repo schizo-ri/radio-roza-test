@@ -3,6 +3,8 @@
   import { generateAuthorAvatarUrl } from '$lib/utils/placeholders.js';
   import AlbumCard from '$lib/components/AlbumCard.svelte';
   import Wrapper from '$lib/components/Wrapper.svelte';
+  import Breadcrumb from '$lib/components/Breadcrumb.svelte';
+  import BackLink from '$lib/components/BackLink.svelte';
 
   let { data } = $props();
 
@@ -10,6 +12,12 @@
   const otherAlbums = $derived(data.otherAlbums);
   const genres = $derived(album?.genre ? album.genre.split(';') : []);
   const authorAvatar = $derived(album ? generateAuthorAvatarUrl(album.author.name, 48) : '');
+
+  const breadcrumbItems = $derived([
+    { label: 'Citaj radio', href: '/citaj-radio' },
+    { label: 'Album tjedna', href: '/citaj-radio/album-tjedna' },
+    { label: album?.albumTitle || '' },
+  ]);
 </script>
 
 <svelte:head>
@@ -24,15 +32,7 @@
 </svelte:head>
 
 <article class="album-page">
-  <nav class="breadcrumb" aria-label="Breadcrumb">
-    <ol>
-      <li><a href="/citaj-radio">Citaj radio</a></li>
-      <li><a href="/citaj-radio/album-tjedna">Album tjedna</a></li>
-      {#if album}
-        <li aria-current="page">{album.albumTitle}</li>
-      {/if}
-    </ol>
-  </nav>
+  <Breadcrumb items={breadcrumbItems} />
 
   {#if album}
     <header class="album-header">
@@ -87,9 +87,7 @@
   </Wrapper>
 {/if}
 
-<div class="navigation-footer">
-  <a href="/citaj-radio/album-tjedna" class="back-link"> ← Svi albumi tjedna </a>
-</div>
+<BackLink href="/citaj-radio/album-tjedna" label="Album tjedna" />
 
 <style>
   .album-page {
@@ -97,51 +95,6 @@
     padding: 2rem 1rem;
     max-width: 900px;
     margin: 0 auto;
-  }
-
-  .breadcrumb {
-    margin-bottom: 2rem;
-  }
-
-  .breadcrumb ol {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    gap: 0.5rem;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  .breadcrumb li {
-    color: var(--muted);
-    font-size: 0.875rem;
-  }
-
-  .breadcrumb li:not(:last-child)::after {
-    content: '/';
-    margin-left: 0.5rem;
-    color: var(--secondary-200);
-  }
-
-  .breadcrumb a {
-    color: var(--secondary-600);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-
-  .breadcrumb a:hover {
-    color: var(--secondary-800);
-    text-decoration: underline;
-  }
-
-  .breadcrumb li[aria-current='page'] {
-    color: var(--dark);
-    font-weight: 500;
-    max-width: 200px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   .album-header {
@@ -274,7 +227,6 @@
   }
 
   .album-content {
-    /*max-width: 700px;*/
     margin: 0 auto;
     line-height: 1.8;
     font-size: 1.05rem;
@@ -305,32 +257,6 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1.5rem;
-  }
-
-  .navigation-footer {
-    max-width: 900px;
-    margin: 0 auto 3rem;
-    padding: 0 1rem;
-    text-align: center;
-  }
-
-  .back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--secondary-600);
-    text-decoration: none;
-    font-weight: 500;
-    padding: 0.75rem 1.5rem;
-    border: 2px solid var(--secondary-300);
-    border-radius: 8px;
-    transition: all 0.2s;
-  }
-
-  .back-link:hover {
-    background: var(--secondary-600);
-    border-color: var(--secondary-600);
-    color: white;
   }
 
   @media (max-width: 600px) {

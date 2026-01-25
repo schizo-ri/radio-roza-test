@@ -1,17 +1,18 @@
-import { getArticles, getCategories, getAuthors } from '$lib/data/mockArticles.js';
+import { getArticles, getCategories, getAuthors } from '$lib/data/articles.js';
 
 export function load({ url }) {
   const kategorija = url.searchParams.get('kategorija');
   const tag = url.searchParams.get('tag');
   const autor = url.searchParams.get('autor');
-  const featured = url.searchParams.get('featured') === 'false';
+  const featuredParam = url.searchParams.get('featured');
   const limit = parseInt(url.searchParams.get('limit')) || 16;
 
   const articles = getArticles({
     category: kategorija,
     tag: tag,
     author: autor,
-    featured,
+    // Only filter by featured if explicitly set in URL
+    ...(featuredParam !== null ? { featured: featuredParam === 'true' } : {}),
     limit,
   });
 
@@ -23,7 +24,7 @@ export function load({ url }) {
       kategorija,
       tag,
       autor,
-      featured,
+      featured: featuredParam,
     },
     totalArticles: articles.length,
   };

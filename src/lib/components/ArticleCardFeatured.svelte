@@ -5,7 +5,7 @@
 
   let { article } = $props();
 
-  const authorAvatar = generateAuthorAvatarUrl(article.author.name, 48);
+  const authorAvatar = $derived(article ? generateAuthorAvatarUrl(article.author.name, 48) : null);
 </script>
 
 {#if article}
@@ -14,7 +14,7 @@
     <!-- Article content -->
     <div class="content">
       <h2 class="title">
-        <a href="/citaj-radio/{article.slug}">
+        <a href="/citaj-radio/{article.category.slug}/{article.slug}">
           {article.title}
         </a>
       </h2>

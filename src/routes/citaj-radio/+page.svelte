@@ -25,12 +25,7 @@
 <Wrapper>
   <section class="categories">
     {#each categories as category (category.id)}
-      <a
-        href={category.slug === 'album-tjedna'
-          ? '/citaj-radio/album-tjedna'
-          : `/citaj-radio/?kategorija=${category.slug}`}
-        class="category"
-      >
+      <a href="/citaj-radio/{category.slug}" class="category">
         <h2>{category.title}</h2>
         <p>{category.description}</p>
       </a>

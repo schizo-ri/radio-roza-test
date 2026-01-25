@@ -1,5 +1,5 @@
 <script>
-  import { getFeaturedArticle } from '$lib/data/mockArticles.js';
+  import { getFeaturedArticle } from '$lib/data/articles.js';
   import { onMount } from 'svelte';
   import ArticleCardFeatured from '$lib/components/ArticleCardFeatured.svelte';
 

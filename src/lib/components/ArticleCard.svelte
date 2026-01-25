@@ -12,7 +12,7 @@
   <!-- Article content -->
   <div class="content">
     <h2 class="title">
-      <a href="/citaj-radio/{article.slug}">
+      <a href="/citaj-radio/{article.category.slug}/{article.slug}">
         {article.title}
       </a>
     </h2>
