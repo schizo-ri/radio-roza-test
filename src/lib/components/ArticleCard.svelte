@@ -1,6 +1,7 @@
 <script>
   import { generateAuthorAvatarUrl } from '$lib/utils/placeholders.js';
   import { formatDate } from '$lib/utils/dates.js';
+  import ArticalCategory from '$lib/components/ArticalCategory.svelte';
 
   let { article } = $props();
 
@@ -40,19 +41,19 @@
     </div>
 
     <!-- Tags -->
-    {#if article.tags && article.tags.length > 0}
-      <div class="tags">
+    <div class="tags">
+      <ArticalCategory category={article.category} />
+      {#if article.tags && article.tags.length > 0}
         {#each article.tags as tag (`${article.id}-${tag}`)}
           <a href="/citaj-radio?tag={encodeURIComponent(tag)}" class="tag">#{tag}</a>
         {/each}
-      </div>
-    {/if}
+      {/if}
+    </div>
   </div>
 </article>
 
 <style>
   .card {
-    width: max(280px, 560px);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -104,7 +105,7 @@
     height: 48px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid #e5e7eb;
+    border: 2px solid var(--dark);
   }
 
   .author-details {
@@ -118,7 +119,7 @@
     color: var(--dark);
     font-size: 0.875rem;
     text-decoration: none;
-    transition: color 0.2s;
+    transition: color 0.15s;
   }
 
   .author-name:hover {
@@ -153,7 +154,7 @@
     font-weight: 500;
     text-decoration: none;
     display: inline-block;
-    transition: all 0.2s;
+    transition: all 0.15s;
   }
 
   .tag:hover {

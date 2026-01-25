@@ -1,4 +1,6 @@
 <script>
+  import Wrapper from './Wrapper.svelte';
+
   let { children, class: className = '', controls = true, ...rest } = $props();
 
   let containerRef;
@@ -19,19 +21,21 @@
 </script>
 
 <div class="wrap">
+  <!-- <Wrapper> -->
   <section class="container {className}" bind:this={containerRef} {...rest}>
     {@render children()}
   </section>
   {#if controls}
     <div class="controls">
       <button type="button" class="arrow left" onclick={scrollLeft}>
-        <img src="/icons/arrow-fat-left.svg" width="16" height="16" alt="Scroll left" />
+        <img src="/icons/arrow-fat-left.svg" width="20" height="20" alt="Scroll left" />
       </button>
       <button type="button" class="arrow right" onclick={scrollRight}>
-        <img src="/icons/arrow-fat-right.svg" width="16" height="16" alt="Scroll right" />
+        <img src="/icons/arrow-fat-right.svg" width="20" height="20" alt="Scroll right" />
       </button>
     </div>
   {/if}
+  <!-- </Wrapper> -->
 </div>
 
 <style>
@@ -42,6 +46,7 @@
   .container {
     --space: var(--whitespace);
     --negative-space: calc(-1 * var(--space));
+
     align-self: start;
     /* Set up container positioning */
     display: grid;
@@ -84,48 +89,60 @@
 
   .controls {
     position: relative;
-    height: 64px;
+    height: 40px;
+    display: none;
   }
 
   .arrow {
     all: unset;
     display: none;
     position: absolute;
-    /*top: calc(50% - 32px);*/
-    top: 16px;
+    top: calc(50% - 32px);
+    /*top: 16px;*/
     cursor: pointer;
     flex-shrink: 0;
     align-items: center;
-    background: var(--primary-600);
-    border: 1px solid var(--primary-600);
+    background: var(--primary-500);
+    border: 2px solid var(--dark);
     color: white;
     border-radius: 50%;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4);
     justify-content: center;
-    height: 32px;
-    width: 32px;
-    opacity: 0.6;
+    height: 40px;
+    width: 40px;
+    /*opacity: 0.6;*/
     transition: opacity 0.2s ease-in-out;
   }
 
   .arrow:hover {
-    opacity: 1;
+    /*opacity: 1;*/
   }
 
   .left {
-    /*left: 12px;*/
-    left: calc(50% - 64px);
+    left: 0px;
+    /*left: calc(50% - 64px);*/
   }
 
   .right {
-    /*right: 12px;*/
-    right: calc(50% - 64px);
+    right: 0px;
+    /*right: calc(50% - 64px);*/
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 1200px) {
+    .controls {
+      display: flex;
+    }
+
     .arrow {
       display: flex;
     }
+    /*.left {
+      left: -32px;
+    }*/
+
+    /*.right {
+      right: -32px;
+    }*/
   }
 
   @media (min-width: 1344px) {
@@ -140,15 +157,5 @@
       margin-left: var(--whitespace);
       margin-right: var(--whitespace);
     }
-  }
-
-  @media (min-width: 1440px) {
-    /*.left {
-      left: -32px;
-    }*/
-
-    /*.right {
-      right: -32px;
-    }*/
   }
 </style>

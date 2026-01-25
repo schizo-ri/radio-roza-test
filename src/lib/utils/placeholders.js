@@ -9,15 +9,23 @@ export function generateAuthorAvatar(name, size = 200) {
   // Create initials from name
   const initials = name
     .split(' ')
-    .map(word => word.charAt(0))
+    .map((word) => word.charAt(0))
     .join('')
     .toUpperCase()
     .slice(0, 2);
 
   // Generate a consistent color based on name
   const colors = [
-    '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7',
-    '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9'
+    '#FF6B6B',
+    '#4ECDC4',
+    '#45B7D1',
+    '#96CEB4',
+    '#FFEAA7',
+    '#DDA0DD',
+    '#98D8C8',
+    '#F7DC6F',
+    '#BB8FCE',
+    '#85C1E9',
   ];
 
   let hash = 0;
@@ -29,15 +37,16 @@ export function generateAuthorAvatar(name, size = 200) {
 
   return `
     <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="${size/2}" cy="${size/2}" r="${size/2}" fill="${backgroundColor}"/>
+      <circle cx="${size / 2}" cy="${size / 2}" r="${size / 2}" fill="${backgroundColor}"/>
       <text
-        x="${size/2}"
-        y="${size/2}"
+        x="${size / 2}"
+        y="${size / 2}"
         text-anchor="middle"
         dominant-baseline="central"
-        fill="white"
-        font-family="Arial, sans-serif"
-        font-size="${size/4}"
+        fill="#1c1b1b"
+        opacity="0.8"
+        font-family="Anybody, sans-serif"
+        font-size="${size / 3}"
         font-weight="bold"
       >
         ${initials}
@@ -55,28 +64,28 @@ export function generateArticlePlaceholder(title, width = 800, height = 600, the
     music: {
       gradient: ['#667eea', '#764ba2'],
       accent: '#f093fb',
-      icon: '♪'
+      icon: '♪',
     },
     electronic: {
       gradient: ['#4facfe', '#00f2fe'],
       accent: '#43e97b',
-      icon: '⚡'
+      icon: '⚡',
     },
     ambient: {
       gradient: ['#a8edea', '#fed6e3'],
       accent: '#d299c2',
-      icon: '◦'
+      icon: '◦',
     },
     jazz: {
       gradient: ['#ffecd2', '#fcb69f'],
       accent: '#ff8a80',
-      icon: '♫'
+      icon: '♫',
     },
     review: {
       gradient: ['#ff9a9e', '#fecfef'],
       accent: '#fda085',
-      icon: '★'
-    }
+      icon: '★',
+    },
   };
 
   const selectedTheme = themes[theme] || themes.music;
@@ -106,11 +115,11 @@ export function generateArticlePlaceholder(title, width = 800, height = 600, the
 
       <!-- Main icon -->
       <text
-        x="${width/2}"
-        y="${height/2 - 30}"
+        x="${width / 2}"
+        y="${height / 2 - 30}"
         text-anchor="middle"
         fill="white"
-        font-family="Arial, sans-serif"
+        font-family="Poppins, sans-serif"
         font-size="72"
         opacity="0.8"
       >
@@ -120,7 +129,7 @@ export function generateArticlePlaceholder(title, width = 800, height = 600, the
       <!-- Title -->
       <rect x="40" y="${height - 100}" width="${width - 80}" height="60" fill="rgba(0,0,0,0.7)" rx="8" filter="url(#shadow)"/>
       <text
-        x="${width/2}"
+        x="${width / 2}"
         y="${height - 65}"
         text-anchor="middle"
         fill="white"
@@ -161,7 +170,7 @@ export function generateArticleImageSet(title, theme = 'music') {
     small: svgToDataUrl(generateArticlePlaceholder(title, 400, 300, theme)),
     medium: svgToDataUrl(generateArticlePlaceholder(title, 800, 600, theme)),
     large: svgToDataUrl(baseSvg),
-    alt: `Placeholder image for article: ${title}`
+    alt: `Placeholder image for article: ${title}`,
   };
 }
 
@@ -178,14 +187,14 @@ export function generateAuthorAvatarUrl(name, size = 200) {
  */
 export function getThemeFromCategory(category) {
   const themeMap = {
-    'electronic': 'electronic',
-    'ambient': 'ambient',
-    'jazz': 'jazz',
-    'review': 'review',
-    'experimental': 'ambient',
+    electronic: 'electronic',
+    ambient: 'ambient',
+    jazz: 'jazz',
+    review: 'review',
+    experimental: 'ambient',
     'indie-rock': 'music',
-    'folk': 'music',
-    'hip-hop': 'electronic'
+    folk: 'music',
+    'hip-hop': 'electronic',
   };
 
   return themeMap[category] || 'music';

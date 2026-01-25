@@ -92,7 +92,7 @@
     padding-bottom: 8rem;
     padding-left: 16px;
     padding-right: 16px;
-    background-color: var(--tertiary-400);
+    background-color: var(--tertiary-300);
   }
 
   p {

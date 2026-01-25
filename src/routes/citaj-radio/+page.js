@@ -4,15 +4,15 @@ export function load({ url }) {
   const kategorija = url.searchParams.get('kategorija');
   const tag = url.searchParams.get('tag');
   const autor = url.searchParams.get('autor');
-  const featured = url.searchParams.get('featured') === 'true';
-  const limit = parseInt(url.searchParams.get('limit')) || 8;
+  const featured = url.searchParams.get('featured') === 'false';
+  const limit = parseInt(url.searchParams.get('limit')) || 16;
 
   const articles = getArticles({
     category: kategorija,
     tag: tag,
     author: autor,
     featured,
-    limit
+    limit,
   });
 
   return {
@@ -23,8 +23,8 @@ export function load({ url }) {
       kategorija,
       tag,
       autor,
-      featured
+      featured,
     },
-    totalArticles: articles.length
+    totalArticles: articles.length,
   };
 }

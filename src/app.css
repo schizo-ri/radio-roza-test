@@ -174,7 +174,9 @@
   --dark: #1c1b1b;
   --muted: #696a6c;
   --light: #f3f4f6;
-  --white: hsl(348deg 72% 99.5% / 1);
+  --white: hsl(4deg 4% 100% / 1);
+  --warm-white: hsl(348deg 24% 99% / 1);
+  --cold-white: hsl(248deg 24% 99% / 1);
 
   --font: 'Poppins', sans-serif;
   --display-font: 'Anybody', sans-serif;

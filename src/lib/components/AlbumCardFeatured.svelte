@@ -164,7 +164,7 @@
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid white;
+    border: 2px solid var(--dark);
   }
 
   .author-name {

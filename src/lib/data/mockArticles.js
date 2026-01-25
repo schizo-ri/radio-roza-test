@@ -145,7 +145,7 @@ export const mockArticles = [
     tags: ['modular-synth', 'electronic', 'synthesis', 'contemporary'],
     publishedDate: '2024-01-15T10:00:00Z',
     readTime: 8,
-    featured: true,
+    featured: false,
     embeds: {
       bandcamp: {
         type: 'album',
@@ -195,9 +195,9 @@ export const mockArticles = [
     `,
     images: {
       thumb: '/images/articles/thumb/field-recording-thumb.jpg',
-      small: '/images/articles/small/field-recording-small.jpg',
+      small: '/images/articles/small/soundscaping.jpg',
       medium: '/images/articles/medium/field-recording-medium.jpg',
-      large: '/images/articles/large/field-recording-large.jpg',
+      large: '/images/articles/large/soundscaping.jpg',
       alt: 'Person with headphones holding a field recorder in a forest',
     },
     author: mockAuthors[1],
@@ -273,7 +273,7 @@ export const mockArticles = [
     tags: ['album-review', 'indie-rock', 'shoegaze', 'post-rock', 'chicago'],
     publishedDate: '2024-02-01T09:15:00Z',
     readTime: 5,
-    featured: true,
+    featured: false,
     embeds: {
       bandcamp: {
         type: 'album',
@@ -551,7 +551,7 @@ export const mockArticles = [
       thumb: '/images/articles/thumb/ambient-healing-thumb.jpg',
       small: '/images/articles/small/ambient-healing-small.jpg',
       medium: '/images/articles/medium/ambient-healing-medium.jpg',
-      large: '/images/articles/large/ambient-healing-large.jpg',
+      large: '/images/articles/large/soundscaping.jpg',
       alt: 'Person in meditation pose with sound waves visualization',
     },
     author: mockAuthors[1],
@@ -559,7 +559,7 @@ export const mockArticles = [
     tags: ['ambient', 'healing', 'therapy', 'neuroscience', 'wellness'],
     publishedDate: '2024-02-18T13:10:00Z',
     readTime: 8,
-    featured: true,
+    featured: false,
     embeds: {
       youtube: {
         type: 'video',
@@ -578,6 +578,226 @@ export const mockArticles = [
         'therapeutic soundscapes',
         'neuroscience',
       ],
+    },
+  },
+
+  {
+    id: 7,
+    title: 'Riječka underground scena: Zvukovi iz podruma koji oblikuju budućnost',
+    slug: 'rijecka-underground-scena-zvukovi-iz-podruma',
+    excerpt:
+      'Istražujemo kako riječki underground prostori i kolektivi stvaraju jedinstvenu glazbenu kulturu koja odolijevia mainstream pritiscima.',
+    content: `
+      <p>Rijeka je oduvijek bila grad koji živi na marginama – geografski, kulturno i glazbeno. Upravo ta <strong>marginalna pozicija</strong> stvorila je plodno tlo za underground scenu koja danas privlači pažnju daleko izvan granica Hrvatske.</p>
+
+      <h2>Prostori otpora</h2>
+      <p>Od legendarnog <em>Palacha</em> do novijih inicijativa poput <strong>Pogona</strong> i raznih squat prostora, Rijeka je uvijek imala mjesta gdje se glazba mogla razvijati bez komercijalnih pritisaka.</p>
+
+      <blockquote>
+        <p>"U Rijeci nikad nismo imali novaca, ali smo uvijek imali prostor za eksperimentiranje. To je naše najveće bogatstvo."</p>
+        <cite>– lokalni glazbenik</cite>
+      </blockquote>
+
+      <h3>Ključni kolektivi i organizatori</h3>
+      <ul>
+        <li><strong>Distune Records</strong> - Izdavačka kuća fokusirana na eksperimentalnu elektroniku</li>
+        <li><strong>KSET Rijeka</strong> - Studentski centar kao inkubator novih bendova</li>
+        <li><strong>Molekula</strong> - Centar za mlade i nezavisnu kulturu</li>
+        <li><strong>Radio Roža</strong> - Community radio koji dokumentira lokalnu scenu</li>
+      </ul>
+
+      <h2>Glazbeni pravci</h2>
+      <p>Riječka scena nikad nije bila homogena. Od <em>noise rocka</em> i <em>post-punka</em> do <em>ambijentalne elektronike</em> i <em>eksperimentalnog hip-hopa</em>, raznolikost je ono što definira ovaj grad.</p>
+
+      <p>Mlađe generacije glazbenika sve više koriste digitalne alate, ali zadržavaju DIY etiku koja je uvijek bila srž riječkog undergrounda. Laptop produkcija susreće analognu toplinu u jedinstvenom zvuku koji je teško replicirati.</p>
+
+      <h2>Budućnost scene</h2>
+      <p>Unatoč ekonomskim izazovima i gentrifikaciji koja prijeti alternativnim prostorima, riječka underground scena pokazuje nevjerojatnu otpornost. Novi prostori se otvaraju, mladi glazbenici preuzimaju baklju, a digitalne platforme omogućuju globalnu vidljivost bez kompromitiranja umjetničke vizije.</p>
+    `,
+    images: {
+      thumb: '/images/articles/thumb/modular-synth-thumb.jpg',
+      small: '/images/articles/small/modular-synth-small.jpg',
+      medium: '/images/articles/medium/modular-synth-medium.jpg',
+      large: '/images/articles/large/Rampage.jpeg',
+      alt: 'Underground koncert u Rijeci',
+    },
+    author: mockAuthors[0],
+    category: mockCategories[0], // Aktualno
+    tags: ['underground', 'rijeka', 'diy', 'lokalna-scena', 'kolektivi'],
+    publishedDate: '2024-02-25T10:00:00Z',
+    readTime: 6,
+    featured: true,
+    seo: {
+      metaTitle: 'Riječka underground scena: Zvukovi iz podruma koji oblikuju budućnost',
+      metaDescription:
+        'Kako riječki underground prostori i kolektivi stvaraju jedinstvenu glazbenu kulturu.',
+      keywords: ['rijeka', 'underground', 'glazbena scena', 'DIY', 'alternativna kultura'],
+    },
+  },
+
+  {
+    id: 8,
+    title: 'Vinilova renesansa: Zašto se vraćamo analognom zvuku',
+    slug: 'vinilova-renesansa-zasto-se-vracamo-analognom-zvuku',
+    excerpt:
+      'Prodaja vinnil ploča raste već petnaest godina zaredom. Istražujemo što stoji iza ove neočekivane renesanse analognog formata.',
+    content: `
+      <p>U doba kada je sva glazba svijeta dostupna jednim klikom, <strong>vinilne ploče</strong> doživljavaju nezaustavljivi povratak. Ovo nije nostalgija – ovo je svjesni izbor nove generacije slušatelja.</p>
+
+      <h2>Brojke koje govore</h2>
+      <p>Prema podacima <em>IFPI-ja</em>, prodaja vinila u 2023. godini premašila je CD prodaju prvi put nakon 1987. godine. U Hrvatskoj, specijalizirane trgovine poput <strong>Dancing Bear</strong> i <strong>Dirty Old Shop</strong> bilježe konstantan rast prometa.</p>
+
+      <h3>Zašto vinyl?</h3>
+      <ul>
+        <li><strong>Ritualni aspekt</strong> - Slušanje postaje svjestan čin, ne pozadinska buka</li>
+        <li><strong>Zvučna toplina</strong> - Analogna reprodukcija nudi drugačiji doživljaj</li>
+        <li><strong>Fizički artefakt</strong> - Artwork, liner notes, taktilni doživljaj</li>
+        <li><strong>Kolekcjonarstvo</strong> - Ograničena izdanja, boje vinila, rariteteti</li>
+      </ul>
+
+      <blockquote>
+        <p>"Streaming je za otkrivanje glazbe. Vinyl je za slušanje glazbe."</p>
+        <cite>– vlasnik riječke trgovine pločama</cite>
+      </blockquote>
+
+      <h2>Lokalna vinyl kultura</h2>
+      <p>Hrvatska vinyl scena živi i diše. Od <em>Record Store Day</em> događanja do sve brojnijih vinyl-only DJ setova, analogni format pronalazi svoje mjesto u digitalnom dobu.</p>
+
+      <p>Lokalni labelii poput <strong>Menart</strong> i <strong>PDV Records</strong> sve češće objavljuju vinyl izdanja domaćih izvođača, prepoznajući da publika želi više od streaminga.</p>
+
+      <h2>Održivost i budućnost</h2>
+      <p>Kritičari upozoravaju na ekološki otisak proizvodnje PVC-a, no industrija odgovara razvojem biorazgradivih alternativa. Budućnost vinila možda leži u inovativnim materijalima koji zadržavaju karakteristike zvuka bez ekološke štete.</p>
+    `,
+    images: {
+      thumb: '/images/articles/thumb/field-recording-thumb.jpg',
+      small: '/images/articles/small/soundscaping.jpg',
+      medium: '/images/articles/medium/field-recording-medium.jpg',
+      large: '/images/articles/large/soundscaping.jpg',
+      alt: 'Kolekcija vinilnih ploča',
+    },
+    author: mockAuthors[2],
+    category: mockCategories[2], // Komentar
+    tags: ['vinyl', 'analog', 'kolekcjonarstvo', 'audio', 'renesansa'],
+    publishedDate: '2024-03-01T14:30:00Z',
+    readTime: 5,
+    featured: false,
+    seo: {
+      metaTitle: 'Vinilova renesansa: Zašto se vraćamo analognom zvuku',
+      metaDescription:
+        'Prodaja vinila raste već petnaest godina. Što stoji iza povratka analognog formata?',
+      keywords: ['vinyl', 'ploče', 'analogni zvuk', 'kolekcjonarstvo', 'glazba'],
+    },
+  },
+
+  {
+    id: 9,
+    title: 'Intervju: Kako je nastala nova generacija hrvatskih elektroničara',
+    slug: 'intervju-nova-generacija-hrvatskih-elektronicar',
+    excerpt:
+      'Razgovaramo s četvero mladih producenata koji definiraju zvuk hrvatske elektronske scene za novo desetljeće.',
+    content: `
+      <p>Hrvatska elektronska scena prolazi kroz period intenzivnog rasta. Nova generacija producenata, odrasla na internetu i globalnim utjecajima, stvara glazbu koja konkurira svjetskim standardima.</p>
+
+      <h2>Digitalni urođenici</h2>
+      <p>Za razliku od prethodnih generacija koje su se morale probijati kroz fizičke barijere distribucije, današnji mladi glazbenici od prvog dana razmišljaju globalno. <strong>Bandcamp</strong>, <strong>SoundCloud</strong> i <strong>YouTube</strong> nisu im alati – to je njihov prirodni habitat.</p>
+
+      <blockquote>
+        <p>"Moj prvi release imao je više slušatelja u Japanu nego u Hrvatskoj. To ti odmah promijeni perspektivu."</p>
+        <cite>– mlada producentica iz Zagreba</cite>
+      </blockquote>
+
+      <h3>Zajednički utjecaji</h3>
+      <ul>
+        <li><strong>UK bass</strong> - Dubstep, grime, garage kao temelj</li>
+        <li><strong>Berlinski techno</strong> - Minimalizam i hipnotički ritam</li>
+        <li><strong>Japanska elektronika</strong> - Teksture i prostornost</li>
+        <li><strong>Lokalna tradicija</strong> - Elementi folklora u novom ruhu</li>
+      </ul>
+
+      <h2>Produkcija bez granica</h2>
+      <p>Laptop je postao studio, a spavaća soba postala je glazbena tvornica. Ali ono što ovu generaciju čini posebnom nije samo pristup tehnologiji – to je njihov <em>mindset</em>.</p>
+
+      <p>Kolaboracije se događaju preko kontinenata, mixevi se šalju putem interneta, a feedback dolazi u realnom vremenu od slušatelja iz cijelog svijeta.</p>
+
+      <h2>Izazovi i prilike</h2>
+      <p>Unatoč globalnoj povezanosti, lokalna infrastruktura ostaje problem. Nedostatak klubova, festivala i medijske podrške znači da mnogi talenti odlaze ili ostaju nevidljivi u vlastitoj zemlji.</p>
+
+      <p>No upravo ta izolacija stvara jedinstveni zvuk – mješavinu globalnih trendova i lokalne specifičnosti koja je prepoznatljiva i autentična.</p>
+    `,
+    images: {
+      thumb: '/images/articles/thumb/bedroom-producer-thumb.jpg',
+      small: '/images/articles/small/bedroom-producer-small.jpg',
+      medium: '/images/articles/medium/bedroom-producer-medium.jpg',
+      large: '/images/articles/large/bedroom-producer-large.jpg',
+      alt: 'Mladi producent za laptopom',
+    },
+    author: mockAuthors[3],
+    category: mockCategories[3], // Čakule
+    tags: ['intervju', 'elektronika', 'producenti', 'hrvatska', 'nova-generacija'],
+    publishedDate: '2024-03-05T11:00:00Z',
+    readTime: 7,
+    featured: false,
+    seo: {
+      metaTitle: 'Intervju: Nova generacija hrvatskih elektroničara',
+      metaDescription:
+        'Razgovor s mladim producentima koji definiraju zvuk hrvatske elektronske scene.',
+      keywords: ['elektronska glazba', 'producenti', 'hrvatska', 'intervju', 'nova generacija'],
+    },
+  },
+
+  {
+    id: 10,
+    title: 'Kada glazba postane politika: Zvuk otpora u doba krize',
+    slug: 'kada-glazba-postane-politika-zvuk-otpora',
+    excerpt:
+      'Od punk pokreta do današnjih digitalnih prosvjeda, glazba je uvijek bila oružje onih bez glasa. Kako zvuči otpor danas?',
+    content: `
+      <p>Glazba i politika oduvijek su bili isprepleteni. Od <em>Woodstocka</em> do <em>Live Aida</em>, od <strong>Azre</strong> do današnjih TikTok himni, zvuk je nosio poruke koje su riječi same po sebi ne bi mogle prenijeti.</p>
+
+      <h2>Kratka povijest glazbenog aktivizma</h2>
+      <p>Jugoslavenski novi val nije bio samo glazbeni pokret – bio je to kulturni i politički čin. Bendovi poput <em>Pankrta</em>, <em>Paraf</em> i <em>Azre</em> artikulirali su frustracije generacije koja je živjela u "blagostanju" koje se raspadalo iznutra.</p>
+
+      <blockquote>
+        <p>"Nismo htjeli srušiti sistem. Htjeli smo da sistem prizna da postoji netko tko ga ne prihvaća."</p>
+        <cite>– veteran jugoslavenskog punka</cite>
+      </blockquote>
+
+      <h3>Današnji oblici otpora</h3>
+      <ul>
+        <li><strong>Benefit koncerti</strong> - Direktna podrška lokalnim zajednicama</li>
+        <li><strong>Viralni prosvjedi</strong> - Pjesme koje postaju himne pokreta</li>
+        <li><strong>DIY izdavaštvo</strong> - Zaobilaženje korporativnih struktura</li>
+        <li><strong>Community radio</strong> - Demokratizacija medijskog prostora</li>
+      </ul>
+
+      <h2>Zvuk današnjice</h2>
+      <p>U doba klimatske krize, rastućih nejednakosti i političke polarizacije, glazba ponovno postaje prostor artikulacije kolektivnih strahova i nada. Ali forma se promijenila.</p>
+
+      <p>Današnji aktivizam je manje manifestiran kroz eksplicitne političke tekstove, a više kroz <strong>načine proizvodnje i distribucije</strong>. Kolektivi, kooperative, pay-what-you-want modeli – sve su to politički činovi u svijetu gdje je glazba postala roba.</p>
+
+      <h2>Može li glazba promijeniti svijet?</h2>
+      <p>Vjerojatno ne – barem ne direktno. Ali glazba može stvoriti prostore gdje se promjena čini mogućom. Može povezati ljude, artikulirati ono neizgovoreno i, makar na trenutak, stvoriti alternativnu stvarnost.</p>
+
+      <p>A to, u doba cinizma i apatije, nije malo.</p>
+    `,
+    images: {
+      thumb: '/images/articles/thumb/jazz-fusion-thumb.jpg',
+      small: '/images/articles/small/jazz-fusion-small.jpg',
+      medium: '/images/articles/medium/jazz-fusion-medium.jpg',
+      large: '/images/articles/large/jazz-fusion-large.jpg',
+      alt: 'Koncert s publikom koja drži transparente',
+    },
+    author: mockAuthors[1],
+    category: mockCategories[2], // Komentar
+    tags: ['politika', 'aktivizam', 'otpor', 'povijest', 'punk'],
+    publishedDate: '2024-03-10T09:30:00Z',
+    readTime: 6,
+    featured: false,
+    seo: {
+      metaTitle: 'Kada glazba postane politika: Zvuk otpora u doba krize',
+      metaDescription:
+        'Od punk pokreta do današnjih digitalnih prosvjeda – kako glazba artikulira otpor.',
+      keywords: ['glazba', 'politika', 'aktivizam', 'punk', 'otpor', 'povijest'],
     },
   },
 ];

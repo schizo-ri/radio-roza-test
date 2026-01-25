@@ -35,7 +35,7 @@
   <section class="articles-latest">
     {#if articles && articles.length > 0}
       <!-- <HorizontalScroller> -->
-      <div class="grid">
+      <div class="articles-grid">
         {#each articles as article (article.id)}
           <ArticleCard {article} showTags={true} />
         {/each}
@@ -48,9 +48,38 @@
 {/if}
 
 <style>
-  .grid {
+  .articles-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 560px));
+    grid-template-columns: minmax(0, 1fr);
     gap: 2rem;
+  }
+
+  @media (min-width: 600px) {
+    .articles-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-rows: minmax(200px, auto);
+    }
+  }
+
+  @media (min-width: 1000px) {
+    .articles-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-auto-rows: auto;
+    }
+
+    :global(.articles-grid > *:last-child) {
+      display: none;
+    }
+  }
+
+  @media (min-width: 1440px) {
+    .articles-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-auto-rows: auto;
+    }
+
+    :global(.articles-grid > *:last-child) {
+      display: flex;
+    }
   }
 </style>

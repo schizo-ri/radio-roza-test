@@ -1,11 +1,11 @@
 <script>
   import Wrapper from '$lib/components/Wrapper.svelte';
-  const { title, subtitle } = $props();
+  const { title, subtitle, variant = 'primary' } = $props();
 </script>
 
 <Wrapper>
   <header>
-    <h1>{title}</h1>
+    <h1 style={`color: var(--${variant}-700)`}>{title}</h1>
     <p>{subtitle}</p>
   </header>
 </Wrapper>
