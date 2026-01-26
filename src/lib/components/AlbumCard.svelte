@@ -1,9 +1,10 @@
 <script>
   import { formatDate } from '$lib/utils/dates.js';
+  import TagList from './TagList.svelte';
 
   let { album } = $props();
 
-  const genres = album.genre ? album.genre.split(';') : [];
+  const genres = $derived(album.genre ? album.genre.split(';') : []);
 </script>
 
 <article class="card">
@@ -31,11 +32,7 @@
     </div>
 
     {#if genres.length > 0}
-      <div class="genres">
-        {#each genres as genre (genre)}
-          <span class="genre">{genre}</span>
-        {/each}
-      </div>
+      <TagList tags={genres} />
     {/if}
   </div>
 </article>
@@ -118,20 +115,5 @@
   .publish-date {
     color: var(--muted);
     font-size: 0.8rem;
-  }
-
-  .genres {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  .genre {
-    background: var(--secondary-100);
-    color: var(--secondary-700);
-    padding: 0.25rem 0.6rem;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 500;
   }
 </style>

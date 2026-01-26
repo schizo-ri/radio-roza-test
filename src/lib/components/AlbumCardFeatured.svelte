@@ -1,9 +1,10 @@
 <script>
   import { generateAuthorAvatarUrl } from '$lib/utils/placeholders.js';
+  import TagList from './TagList.svelte';
 
   let { album } = $props();
 
-  const genres = album.genre ? album.genre.split(';') : [];
+  const genres = $derived(album.genre ? album.genre.split(';') : []);
   const authorAvatar = generateAuthorAvatarUrl(album.author.name, 40);
 </script>
 
@@ -26,11 +27,7 @@
     </p>
 
     {#if genres.length > 0}
-      <div class="genres">
-        {#each genres as genre (genre)}
-          <span class="genre">{genre}</span>
-        {/each}
-      </div>
+      <TagList tags={genres} />
     {/if}
 
     <div class="meta">
@@ -129,21 +126,6 @@
     line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-  }
-
-  .genres {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  .genre {
-    background: var(--secondary-200);
-    color: var(--secondary-800);
-    padding: 0.25rem 0.75rem;
-    border-radius: 16px;
-    font-size: 0.8rem;
-    font-weight: 500;
   }
 
   .meta {

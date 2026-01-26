@@ -1,9 +1,9 @@
 <script>
   import { generateAuthorAvatarUrl } from '$lib/utils/placeholders.js';
   import { formatDate } from '$lib/utils/dates.js';
-  import ArticalCategory from '$lib/components/ArticalCategory.svelte';
+  import TagList from '$lib/components/TagList.svelte';
 
-  let { article } = $props();
+  let { article, currentTags = [] } = $props();
 
   const authorAvatar = generateAuthorAvatarUrl(article.author.name, 48);
 </script>
@@ -41,13 +41,8 @@
     </div>
 
     <!-- Tags -->
-    <div class="tags">
-      <ArticalCategory category={article.category} />
-      {#if article.tags && article.tags.length > 0}
-        {#each article.tags as tag (`${article.id}-${tag}`)}
-          <a href="/citaj-radio?tag={encodeURIComponent(tag)}" class="tag">#{tag}</a>
-        {/each}
-      {/if}
+    <div class="tags-wrapper">
+      <TagList category={article.category} tags={article.tags || []} {currentTags} />
     </div>
   </div>
 </article>
@@ -138,27 +133,7 @@
     font-weight: 500;
   }
 
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+  .tags-wrapper {
     margin-bottom: 1rem;
-  }
-
-  .tag {
-    background: var(--light);
-    color: var(--dark);
-    padding: 0.25rem 0.5rem;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-decoration: none;
-    display: inline-block;
-    transition: all 0.15s;
-  }
-
-  .tag:hover {
-    background: var(--secondary-700);
-    color: white;
   }
 </style>

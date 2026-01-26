@@ -18,7 +18,7 @@
   <meta name="description" content={category.description} />
 </svelte:head>
 
-<PageTitle title={category.title} subtitle={category.description} variant="secondary" />
+<PageTitle title={category.title} subtitle={category.description} />
 
 <Wrapper>
   <Breadcrumb items={breadcrumbItems} />

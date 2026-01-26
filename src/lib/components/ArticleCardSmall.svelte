@@ -1,7 +1,7 @@
 <script>
-  import ArticalCategory from './ArticalCategory.svelte';
+  import TagList from './TagList.svelte';
 
-  let { article } = $props();
+  let { article, currentTags = [] } = $props();
 </script>
 
 <article class="card">
@@ -14,16 +14,8 @@
     </h2>
 
     <!-- Tags -->
-    <div class="tags">
-      {#if article.tags && article.tags.length > 0}
-        <ArticalCategory category={article.category} />
-        {#each article.tags.slice(0, 2) as tag (`${article.id}-${tag}`)}
-          <a href="/citaj-radio?tag={encodeURIComponent(tag)}" class="tag">#{tag}</a>
-        {/each}
-        {#if article.tags.length > 2}
-          <span class="more-tags">+{article.tags.length - 2} more</span>
-        {/if}
-      {/if}
+    <div class="tags-wrapper">
+      <TagList category={article.category} tags={article.tags || []} {currentTags} maxRows={2} />
     </div>
   </div>
 </article>
@@ -53,39 +45,7 @@
     text-decoration: underline;
   }
 
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+  .tags-wrapper {
     margin-bottom: 1rem;
-  }
-
-  .tag {
-    background: var(--light);
-    color: var(--dark);
-    padding: 0.25rem 0.5rem;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-decoration: none;
-    display: inline-block;
-    transition: all 0.15s;
-  }
-
-  .tag:hover {
-    background: var(--secondary-700);
-    color: white;
-  }
-
-  .more-tags {
-    background: var(--light);
-    color: var(--dark);
-    padding: 0.25rem 0.5rem;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-decoration: none;
-    display: inline-block;
-    transition: all 0.15s;
   }
 </style>

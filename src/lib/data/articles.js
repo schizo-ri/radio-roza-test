@@ -55,7 +55,6 @@ export const authors = [
       youtube: 'AlexMusicReviews',
     },
   },
-  // Album reviewers
   {
     id: 5,
     name: 'Marina Jakšić',
@@ -212,7 +211,7 @@ export const articles = [
       <h2>Impact on Contemporary Music</h2>
       <p>Artists like <em>Kaitlyn Aurelia Smith</em>, <em>Alessandro Cortini</em>, and <em>Ben Frost</em> have demonstrated how modular synthesis can enhance both studio recordings and live performances, bringing an element of unpredictability and organic evolution to electronic music.</p>
     `,
-    authorId: 1,
+    authorId: 5,
     categoryId: 1,
     tags: ['modular-synth', 'electronic', 'diy'],
     publishedDate: '2024-01-15T10:00:00Z',
@@ -305,7 +304,7 @@ export const articles = [
 
       <p>As technology continues to evolve and become more accessible, we can expect the bedroom producer movement to grow even stronger, continuing to democratize music creation and challenge traditional industry structures.</p>
     `,
-    authorId: 1,
+    authorId: 6,
     categoryId: 1,
     tags: ['diy', 'electronic', 'lo-fi'],
     publishedDate: '2024-02-08T16:45:00Z',
@@ -329,7 +328,13 @@ export const articles = [
       metaTitle: 'The DIY Revolution: How Bedroom Producers Are Changing Electronic Music',
       metaDescription:
         'Discover how accessible technology has democratized music production, enabling bedroom producers to create innovative electronic music.',
-      keywords: ['DIY music', 'bedroom producer', 'electronic music', 'home studio', 'music production'],
+      keywords: [
+        'DIY music',
+        'bedroom producer',
+        'electronic music',
+        'home studio',
+        'music production',
+      ],
     },
   },
 
@@ -366,7 +371,7 @@ export const articles = [
       <h2>Budućnost scene</h2>
       <p>Unatoč ekonomskim izazovima i gentrifikaciji koja prijeti alternativnim prostorima, riječka underground scena pokazuje nevjerojatnu otpornost. Novi prostori se otvaraju, mladi glazbenici preuzimaju baklju, a digitalne platforme omogućuju globalnu vidljivost bez kompromitiranja umjetničke vizije.</p>
     `,
-    authorId: 1,
+    authorId: 9,
     categoryId: 1,
     tags: ['underground', 'diy', 'festival'],
     publishedDate: '2024-02-25T10:00:00Z',
@@ -381,14 +386,11 @@ export const articles = [
     },
     seo: {
       metaTitle: 'Riječka underground scena: Zvukovi iz podruma koji oblikuju budućnost',
-      metaDescription: 'Kako riječki underground prostori i kolektivi stvaraju jedinstvenu glazbenu kulturu.',
+      metaDescription:
+        'Kako riječki underground prostori i kolektivi stvaraju jedinstvenu glazbenu kulturu.',
       keywords: ['rijeka', 'underground', 'glazbena scena', 'DIY', 'alternativna kultura'],
     },
   },
-
-  // ---------------------------------------------------------------------------
-  // ALBUM-TJEDNA Articles
-  // ---------------------------------------------------------------------------
   {
     id: 2,
     slug: 'field-recordings-found-sound-hidden-orchestra',
@@ -421,9 +423,9 @@ export const articles = [
 
       <p>The editing process is equally crucial. Modern DAWs offer powerful tools for cleaning, processing, and manipulating field recordings while preserving their essential character.</p>
     `,
-    authorId: 2,
+    authorId: 6,
     categoryId: 2,
-    tags: ['field-recording', 'ambient', 'experimental'],
+    tags: ['field-recording', 'ambient', 'experimental', 'soundscapes', 'hidden-sounds'],
     publishedDate: '2024-01-22T14:30:00Z',
     readTime: 6,
     featured: false,
@@ -534,7 +536,7 @@ export const articles = [
 
       <p>The intersection of ambient music and healthcare represents a return to humanity's oldest healing tradition – using sound as medicine.</p>
     `,
-    authorId: 2,
+    authorId: 6,
     categoryId: 2,
     tags: ['ambient', 'field-recording', 'experimental'],
     publishedDate: '2024-02-18T13:10:00Z',
@@ -558,7 +560,13 @@ export const articles = [
       metaTitle: 'Ambient Music as Healing: The Science Behind Therapeutic Soundscapes',
       metaDescription:
         "Discover how neuroscience validates ambient music's therapeutic effects and its growing use in healthcare settings.",
-      keywords: ['ambient music', 'music therapy', 'healing frequencies', 'therapeutic soundscapes', 'neuroscience'],
+      keywords: [
+        'ambient music',
+        'music therapy',
+        'healing frequencies',
+        'therapeutic soundscapes',
+        'neuroscience',
+      ],
     },
     album: null,
   },
@@ -568,7 +576,8 @@ export const articles = [
     id: 101,
     slug: 'emily-scott-robinson-appalachia',
     title: 'Emily Scott Robinson, "Appalachia"',
-    excerpt: 'The new LP from the country singer-songwriter is shot through with a much-needed sentiment: Hope.',
+    excerpt:
+      'The new LP from the country singer-songwriter is shot through with a much-needed sentiment: Hope.',
     content: `<p>When it was time to record her new album—the follow-up to 2021's excellent American Siren—country-folk singer-songwriter Emily Scott Robinson chose to do so at Dreamland Recording Studios, housed in a 130-year-old church sanctuary hidden in the trees outside of Kingston, New York. But the setting and the spiritual center of her work can be found hundreds of miles to the southwest of that location: "Oh, my heart for Appalachia/ Oh, my heart for these blue hills," Robinson sings in "Appalachia," the album's bluegrass-y title track. "Oh, my heart forever captured, beating still."</p>
       <p>The song is both an ode to that magical, mountainous region in the eastern United States and a celebration of resilience, community, and hope framed by the destruction Hurricane Helene brought to western North Carolina in 2024. It's also a showcase for Robinson's stop-you-in-your-tracks voice—crystal-clear, tinged with twang—and her skillful songwriting, which got her signed to Oh Boy Records, the label co-founded by John Prine in 1981.</p>
       <p>Robinson's specialty is telling stories about the human condition in ways that are seemingly simple yet vivid and evocative—like pencil sketches that bloom into Technicolor daydreams when you close your eyes. Appalachia is filled with examples of that gift: The quietly folky "Cast Iron Heart" depicts heartbreak and redemptive love without overdoing its namesake metaphor. "Time Traveler" is a slow-building tune spilling over with precise details about an elderly woman in cognitive decline. On "Dirtbag Saloon," Robinson turns a lilting country waltz into sharp commentary on economic inequality, gentrification, and "progress" at any cost, while in "Bless It All," she pieces together a stirring tale about struggle and perseverance using only an acoustic guitar, a memorable melody, and a lyrical collage of unpaid bills, tested faith, and shoulders to cry on.</p>
@@ -589,7 +598,8 @@ export const articles = [
     },
     seo: {
       metaTitle: 'Emily Scott Robinson, "Appalachia" - Album tjedna - Radio Roza',
-      metaDescription: 'The new LP from the country singer-songwriter is shot through with a much-needed sentiment: Hope.',
+      metaDescription:
+        'The new LP from the country singer-songwriter is shot through with a much-needed sentiment: Hope.',
       keywords: ['Emily Scott Robinson', 'Appalachia', 'country', 'folk', 'album review'],
     },
     album: {
@@ -627,7 +637,8 @@ export const articles = [
     },
     seo: {
       metaTitle: 'Fontaines D.C., "Romance" - Album tjedna - Radio Roza',
-      metaDescription: 'Irish post-punk titans deliver their most ambitious and sonically diverse album yet.',
+      metaDescription:
+        'Irish post-punk titans deliver their most ambitious and sonically diverse album yet.',
       keywords: ['Fontaines D.C.', 'Romance', 'post-punk', 'alternative rock', 'album review'],
     },
     album: {
@@ -682,7 +693,8 @@ export const articles = [
     id: 104,
     slug: 'adrianne-lenker-bright-future',
     title: 'Adrianne Lenker, "Bright Future"',
-    excerpt: "Big Thief's frontwoman delivers her most personal and sonically expansive solo work to date.",
+    excerpt:
+      "Big Thief's frontwoman delivers her most personal and sonically expansive solo work to date.",
     content: `<p>Adrianne Lenker has always possessed the rare ability to make deeply personal songwriting feel universal. With Bright Future, her fourth solo album, the Big Thief frontwoman expands her sonic palette while maintaining the intimate, handcrafted quality that has defined her work.</p>
       <p>Recorded largely live with a small group of collaborators, Bright Future captures the magic of musicians playing together in a room—something increasingly rare in modern production. The result is an album that breathes, its imperfections serving as reminders that real humans made these sounds.</p>
       <p>"Real House" opens the record with fingerpicked guitar and Lenker's voice, multitracked into gentle harmonies. It's a deceptively simple arrangement that reveals new details with each listen: the creak of a chair, the distant hum of an amplifier, the natural reverb of the recording space.</p>
@@ -703,8 +715,16 @@ export const articles = [
     },
     seo: {
       metaTitle: 'Adrianne Lenker, "Bright Future" - Album tjedna - Radio Roza',
-      metaDescription: "Big Thief's frontwoman delivers her most personal and sonically expansive solo work to date.",
-      keywords: ['Adrianne Lenker', 'Bright Future', 'folk', 'indie folk', 'Big Thief', 'album review'],
+      metaDescription:
+        "Big Thief's frontwoman delivers her most personal and sonically expansive solo work to date.",
+      keywords: [
+        'Adrianne Lenker',
+        'Bright Future',
+        'folk',
+        'indie folk',
+        'Big Thief',
+        'album review',
+      ],
     },
     album: {
       artist: 'Adrianne Lenker',
@@ -719,7 +739,8 @@ export const articles = [
     id: 105,
     slug: 'idles-tangk',
     title: 'IDLES, "TANGK"',
-    excerpt: "Bristol's beloved punk provocateurs trade aggression for vulnerability on their fifth studio album.",
+    excerpt:
+      "Bristol's beloved punk provocateurs trade aggression for vulnerability on their fifth studio album.",
     content: `<p>IDLES have built their reputation on righteous anger—songs that confront toxic masculinity, nationalism, and class inequality with unrelenting intensity. TANGK, their fifth album, doesn't abandon these concerns, but it approaches them from an unexpected angle: love.</p>
       <p>"Gift Horse," the album's opening track, sets the tone with Joe Talbot declaring "I want to be loved" over surprisingly gentle instrumentation. It's a vulnerable admission from a frontman better known for screaming than serenading, and it signals the album's willingness to explore emotional territory the band has previously avoided.</p>
       <p>That's not to say TANGK lacks punch. "Roy" is as propulsive as anything in the band's catalog, its driving rhythm and shouted vocals recalling the intensity of their debut. But even here, the lyrics speak to tenderness rather than rage.</p>
@@ -740,7 +761,8 @@ export const articles = [
     },
     seo: {
       metaTitle: 'IDLES, "TANGK" - Album tjedna - Radio Roza',
-      metaDescription: "Bristol's beloved punk provocateurs trade aggression for vulnerability on their fifth studio album.",
+      metaDescription:
+        "Bristol's beloved punk provocateurs trade aggression for vulnerability on their fifth studio album.",
       keywords: ['IDLES', 'TANGK', 'post-punk', 'alternative rock', 'album review'],
     },
     album: {
@@ -756,7 +778,8 @@ export const articles = [
     id: 106,
     slug: 'kim-gordon-the-collective',
     title: 'Kim Gordon, "The Collective"',
-    excerpt: 'The Sonic Youth legend continues her solo evolution with an abrasive, experimental collection.',
+    excerpt:
+      'The Sonic Youth legend continues her solo evolution with an abrasive, experimental collection.',
     content: `<p>At 71, Kim Gordon continues to make music that sounds like nothing else. The Collective, her second solo album, pushes even further into the experimental territory she explored on 2019's No Home Record, creating something that's part noise collage, part industrial meditation, and entirely her own.</p>
       <p>Working primarily with producer Justin Raisen, Gordon has crafted an album that rewards patience and challenges expectations. Opening track "BYE BYE" layers distorted vocals over churning electronics, establishing an atmosphere of beautiful unease that persists throughout the record.</p>
       <p>"I'm a Man" finds Gordon interrogating masculinity with characteristic wit and bite. The production is intentionally abrasive—guitars that sound like machinery, drums that hit like hammer blows—yet there's an underlying groove that makes the whole thing strangely danceable.</p>
@@ -777,8 +800,16 @@ export const articles = [
     },
     seo: {
       metaTitle: 'Kim Gordon, "The Collective" - Album tjedna - Radio Roza',
-      metaDescription: 'The Sonic Youth legend continues her solo evolution with an abrasive, experimental collection.',
-      keywords: ['Kim Gordon', 'The Collective', 'experimental', 'noise rock', 'Sonic Youth', 'album review'],
+      metaDescription:
+        'The Sonic Youth legend continues her solo evolution with an abrasive, experimental collection.',
+      keywords: [
+        'Kim Gordon',
+        'The Collective',
+        'experimental',
+        'noise rock',
+        'Sonic Youth',
+        'album review',
+      ],
     },
     album: {
       artist: 'Kim Gordon',
@@ -832,7 +863,7 @@ export const articles = [
 
       <p><em>"Midnight Reveries"</em> confirms Luna Collective as one of the most promising acts in contemporary indie rock. While not every experiment succeeds, the album's emotional resonance and sonic ambition make it a rewarding listen for both longtime fans and newcomers.</p>
     `,
-    authorId: 4,
+    authorId: 8,
     categoryId: 3,
     tags: ['shoegaze', 'post-rock', 'vinyl'],
     publishedDate: '2024-02-01T09:15:00Z',
@@ -893,7 +924,7 @@ export const articles = [
       <h2>Održivost i budućnost</h2>
       <p>Kritičari upozoravaju na ekološki otisak proizvodnje PVC-a, no industrija odgovara razvojem biorazgradivih alternativa. Budućnost vinila možda leži u inovativnim materijalima koji zadržavaju karakteristike zvuka bez ekološke štete.</p>
     `,
-    authorId: 3,
+    authorId: 7,
     categoryId: 3,
     tags: ['vinyl', 'vintage-gear'],
     publishedDate: '2024-03-01T14:30:00Z',
@@ -908,7 +939,8 @@ export const articles = [
     },
     seo: {
       metaTitle: 'Vinilova renesansa: Zašto se vraćamo analognom zvuku',
-      metaDescription: 'Prodaja vinila raste već petnaest godina. Što stoji iza povratka analognog formata?',
+      metaDescription:
+        'Prodaja vinila raste već petnaest godina. Što stoji iza povratka analognog formata?',
       keywords: ['vinyl', 'ploče', 'analogni zvuk', 'kolekcjonarstvo', 'glazba'],
     },
   },
@@ -948,7 +980,7 @@ export const articles = [
 
       <p>A to, u doba cinizma i apatije, nije malo.</p>
     `,
-    authorId: 2,
+    authorId: 6,
     categoryId: 3,
     tags: ['underground', 'diy', 'live-performance'],
     publishedDate: '2024-03-10T09:30:00Z',
@@ -963,7 +995,8 @@ export const articles = [
     },
     seo: {
       metaTitle: 'Kada glazba postane politika: Zvuk otpora u doba krize',
-      metaDescription: 'Od punk pokreta do današnjih digitalnih prosvjeda – kako glazba artikulira otpor.',
+      metaDescription:
+        'Od punk pokreta do današnjih digitalnih prosvjeda – kako glazba artikulira otpor.',
       keywords: ['glazba', 'politika', 'aktivizam', 'punk', 'otpor', 'povijest'],
     },
   },
@@ -1019,9 +1052,9 @@ export const articles = [
 
       <p>The digital renaissance of jazz fusion proves that tradition and innovation aren't opposing forces – they're dance partners in an ongoing musical conversation.</p>
     `,
-    authorId: 3,
+    authorId: 7,
     categoryId: 4,
-    tags: ['jazz', 'collaboration', 'live-performance'],
+    tags: ['jazz', 'jazz-fusion', 'collaboration', 'live-performance', 'live-looping'],
     publishedDate: '2024-02-12T11:20:00Z',
     readTime: 6,
     featured: false,
@@ -1082,7 +1115,7 @@ export const articles = [
 
       <p>No upravo ta izolacija stvara jedinstveni zvuk – mješavinu globalnih trendova i lokalne specifičnosti koja je prepoznatljiva i autentična.</p>
     `,
-    authorId: 4,
+    authorId: 8,
     categoryId: 4,
     tags: ['interview', 'electronic', 'diy'],
     publishedDate: '2024-03-05T11:00:00Z',
@@ -1097,7 +1130,8 @@ export const articles = [
     },
     seo: {
       metaTitle: 'Intervju: Nova generacija hrvatskih elektroničara',
-      metaDescription: 'Razgovor s mladim producentima koji definiraju zvuk hrvatske elektronske scene.',
+      metaDescription:
+        'Razgovor s mladim producentima koji definiraju zvuk hrvatske elektronske scene.',
       keywords: ['elektronska glazba', 'producenti', 'hrvatska', 'intervju', 'nova generacija'],
     },
   },
@@ -1130,11 +1164,17 @@ export function getArticles(options = {}) {
 
   if (options.category) {
     result = result.filter(
-      (article) => article.category.slug === options.category || article.category.id === options.category
+      (article) =>
+        article.category.slug === options.category || article.category.id === options.category
     );
   }
 
-  if (options.tag) {
+  // Support both single tag (string) and multiple tags (array)
+  if (options.tags) {
+    const tagsArray = Array.isArray(options.tags) ? options.tags : [options.tags];
+    result = result.filter((article) => tagsArray.some((tag) => article.tags.includes(tag)));
+  } else if (options.tag) {
+    // Backwards compatibility for single tag
     result = result.filter((article) => article.tags.includes(options.tag));
   }
 
@@ -1148,7 +1188,9 @@ export function getArticles(options = {}) {
   }
 
   if (options.hasAlbum !== undefined) {
-    result = result.filter((article) => (options.hasAlbum ? article.album !== null : article.album === null));
+    result = result.filter((article) =>
+      options.hasAlbum ? article.album !== null : article.album === null
+    );
   }
 
   // Sort by publish date (newest first)
@@ -1189,7 +1231,8 @@ export function getRelatedArticles(article, limit = 3) {
     .map(enrichArticle)
     .filter(
       (a) =>
-        a.category.id === enrichedArticle.category.id || a.tags.some((tag) => enrichedArticle.tags.includes(tag))
+        a.category.id === enrichedArticle.category.id ||
+        a.tags.some((tag) => enrichedArticle.tags.includes(tag))
     )
     .sort((a, b) => {
       const aScore =
@@ -1314,7 +1357,9 @@ function flattenAlbumData(article) {
  * Get all albums of the week (articles with album data), sorted by publish date
  */
 export function getAlbumsOfTheWeek(options = {}) {
-  return getArticles({ ...options, category: 'album-tjedna', hasAlbum: true }).map(flattenAlbumData);
+  return getArticles({ ...options, category: 'album-tjedna', hasAlbum: true }).map(
+    flattenAlbumData
+  );
 }
 
 /**

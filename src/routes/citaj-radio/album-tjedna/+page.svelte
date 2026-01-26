@@ -23,7 +23,7 @@
   />
 </svelte:head>
 
-<PageTitle title="Album tjedna" subtitle="Radio Roza svesrdno preporuca dobru glazbu" variant="secondary" />
+<PageTitle title="Album tjedna" subtitle="Radio Roza svesrdno preporuca dobru glazbu" />
 
 <Wrapper>
   <Breadcrumb items={breadcrumbItems} />
