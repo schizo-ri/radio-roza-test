@@ -11,7 +11,7 @@
     if (article) {
       // Format the publication date
       const date = new Date(article.publishedDate);
-      formattedDate = date.toLocaleDateString('en-US', {
+      formattedDate = date.toLocaleDateString('hr-HR', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
@@ -78,22 +78,18 @@
             <!-- Social links -->
             {#if article.author.social}
               <div class="social-links">
-                {#if article.author.social.twitter}
-                  <a
-                    href="https://twitter.com/{article.author.social.twitter}"
-                    target="_blank"
-                    rel="noopener"
-                  >
-                    🐦 Twitter
-                  </a>
-                {/if}
                 {#if article.author.social.instagram}
                   <a
                     href="https://instagram.com/{article.author.social.instagram}"
                     target="_blank"
                     rel="noopener"
                   >
-                    📷 Instagram
+                    <img
+                      src="/icons/socials/instagram.svg"
+                      width="12"
+                      height="12"
+                      alt="Instagram"
+                    /> Instagram
                   </a>
                 {/if}
                 {#if article.author.social.bandcamp}
@@ -102,7 +98,7 @@
                     target="_blank"
                     rel="noopener"
                   >
-                    🎵 Bandcamp
+                    <img src="/icons/socials/bandcamp.svg" width="12" height="12" alt="Bandcamp" /> Bandcamp
                   </a>
                 {/if}
                 {#if article.author.social.youtube}
@@ -111,7 +107,7 @@
                     target="_blank"
                     rel="noopener"
                   >
-                    ▶️ YouTube
+                    <img src="/icons/socials/youtube.svg" width="12" height="12" alt="YouTube" /> YouTube
                   </a>
                 {/if}
                 {#if article.author.social.soundcloud}
@@ -120,7 +116,12 @@
                     target="_blank"
                     rel="noopener"
                   >
-                    🎧 SoundCloud
+                    <img
+                      src="/icons/socials/soundcloud.svg"
+                      width="12"
+                      height="12"
+                      alt="SoundCloud"
+                    /> SoundCloud
                   </a>
                 {/if}
               </div>
@@ -130,10 +131,10 @@
 
         <div class="publication-info">
           <time class="publish-date" datetime={article.publishedDate}>
-            Published {formattedDate}
+            Objavljeno {formattedDate}
           </time>
           <div class="read-time">
-            {article.readTime} minute read
+            {article.readTime} minuta
           </div>
         </div>
       </div>
@@ -149,11 +150,11 @@
     <!-- Media embeds -->
     {#if article.embeds}
       <div class="embeds-section">
-        <h2>Related Media</h2>
+        <h2>Povezani sadržaji</h2>
 
         {#if article.embeds.bandcamp}
           <div class="embed-container">
-            <h3>🎵 Listen on Bandcamp</h3>
+            <h3>🎵 Poslušaj na Bandcampu</h3>
             <!-- Bandcamp embed URLs are controlled and safe -->
             <!-- eslint-disable-next-line svelte/no-at-html-tags -->
             {@html renderBandcampEmbed(article.embeds.bandcamp)}
@@ -162,7 +163,7 @@
 
         {#if article.embeds.youtube}
           <div class="embed-container">
-            <h3>▶️ Watch on YouTube</h3>
+            <h3>▶️ Pogledaj na YouTubeu</h3>
             <!-- YouTube embed URLs are controlled and safe -->
             <!-- eslint-disable-next-line svelte/no-at-html-tags -->
             {@html renderYouTubeEmbed(article.embeds.youtube)}
@@ -186,17 +187,17 @@
     <!-- Article footer -->
     <footer class="article-footer">
       <div class="share-section">
-        <h3>Share this article</h3>
+        <h3>Podijeli</h3>
         <div class="share-buttons">
           <a
-            href="https://twitter.com/intent/tweet?text={encodeURIComponent(
-              article.title
-            )}&url={encodeURIComponent(window?.location?.href || '')}"
+            href="https://www.instagram.com/share?url={encodeURIComponent(
+              window?.location?.href || ''
+            )}"
             target="_blank"
             rel="noopener"
-            class="share-button twitter"
+            class="share-button instagram"
           >
-            🐦 Twitter
+            📸 Instagram
           </a>
           <a
             href="https://www.facebook.com/sharer/sharer.php?u={encodeURIComponent(
@@ -217,7 +218,7 @@
               }
             }}
           >
-            📋 Copy Link
+            📋 Kopiraj poveznicu
           </button>
         </div>
       </div>
@@ -225,8 +226,8 @@
   </article>
 {:else}
   <div class="no-article">
-    <h1>Article not found</h1>
-    <p>The requested article could not be loaded.</p>
+    <h1>Nije nađen članak</h1>
+    <p>Nismo uspjeli naći traženi članak.</p>
   </div>
 {/if}
 
@@ -234,10 +235,6 @@
   .article-view {
     max-width: 800px;
     margin: 0 auto;
-    /*padding: 2rem 1rem;*/
-    /*background: white;*/
-    /*border-radius: 12px;*/
-    /*box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);*/
   }
 
   .article-header {
@@ -288,7 +285,7 @@
     height: 80px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid #e5e7eb;
+    border: 2px solid var(--dark);
     flex-shrink: 0;
   }
 
@@ -311,7 +308,7 @@
   }
 
   .author-bio {
-    color: #6b7280;
+    color: var(--muted);
     font-size: 0.875rem;
     line-height: 1.5;
     margin: 0 0 0.75rem 0;
@@ -324,7 +321,7 @@
   }
 
   .social-links a {
-    color: #3b82f6;
+    color: var(--secondary-700);
     text-decoration: none;
     font-size: 0.75rem;
     padding: 0.25rem 0.5rem;
@@ -380,10 +377,10 @@
   }
 
   .article-content :global(blockquote) {
-    border-left: 4px solid #3b82f6;
+    border-left: 4px solid var(--primary-300);
     padding-left: 1rem;
     margin: 1.5rem 0;
-    background: #f8fafc;
+    background: var(--light);
     padding: 1rem 1rem 1rem 2rem;
     border-radius: 0 8px 8px 0;
     font-style: italic;
@@ -472,9 +469,6 @@
 
   .tags-section {
     margin: 3rem 0;
-    padding: 1.5rem;
-    background: #f8fafc;
-    border-radius: 12px;
   }
 
   .tags-section h3 {
@@ -489,21 +483,21 @@
   }
 
   .tag {
-    background: #e2e8f0;
-    color: #475569;
+    background: var(--light);
+    color: var(--dark);
     padding: 0.375rem 0.75rem;
     border-radius: 16px;
     font-size: 0.875rem;
     font-weight: 500;
     text-decoration: none;
     display: inline-block;
-    transition: all 0.2s;
+    transition: all 0.15s;
   }
 
   .tag:hover {
     background: var(--secondary-700);
     color: white;
-    transform: translateY(-1px);
+    /*transform: translateY(-1px);*/
   }
 
   .article-footer {

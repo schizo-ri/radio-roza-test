@@ -121,16 +121,18 @@
   </Wrapper>
 {/if}
 
-<Wrapper>
-  <section class="categories">
-    {#each categories as category (category.id)}
-      <a href="/citaj-radio/{category.slug}" class="category">
-        <h2>{category.title}</h2>
-        <!-- <p>{category.description}</p> -->
-      </a>
-    {/each}
-  </section>
-</Wrapper>
+{#if !hasActiveFilters}
+  <Wrapper>
+    <section class="categories">
+      {#each categories as category (category.id)}
+        <a href="/citaj-radio/{category.slug}" class="category">
+          <h2>{category.title}</h2>
+          <!-- <p>{category.description}</p> -->
+        </a>
+      {/each}
+    </section>
+  </Wrapper>
+{/if}
 
 <Wrapper>
   <section class="new">
@@ -243,6 +245,7 @@
     grid-template-columns: repeat(2, minmax(120px, 1fr));
     grid-template-rows: repeat(2, min-content);
     gap: 1rem;
+    margin-top: 2rem;
     margin-bottom: 3rem;
   }
 

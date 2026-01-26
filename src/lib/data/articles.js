@@ -6,165 +6,9 @@
  * the recommended database schema for easy migration to a real backend.
  */
 
-// =============================================================================
-// AUTHORS
-// =============================================================================
-
-export const authors = [
-  {
-    id: 1,
-    name: 'Elena Rodriguez',
-    slug: 'elena-rodriguez',
-    bio: 'Music journalist and electronic music enthusiast with over 10 years of experience covering underground scenes.',
-    avatar: '/images/authors/elena-rodriguez.svg',
-    social: {
-      twitter: '@elenamusic',
-      instagram: '@elena_sounds',
-    },
-  },
-  {
-    id: 2,
-    name: 'Marcus Chen',
-    slug: 'marcus-chen',
-    bio: 'Sound engineer turned writer, specializing in ambient and experimental music.',
-    avatar: '/images/authors/marcus-chen.svg',
-    social: {
-      twitter: '@marcussound',
-      bandcamp: 'marcuschen',
-    },
-  },
-  {
-    id: 3,
-    name: 'Zara Al-Mahmoud',
-    slug: 'zara-al-mahmoud',
-    bio: 'Cultural critic and DJ focusing on the intersection of technology and traditional music.',
-    avatar: '/images/authors/zara-mahmoud.svg',
-    social: {
-      instagram: '@zarasounds',
-      soundcloud: 'zara-al-mahmoud',
-    },
-  },
-  {
-    id: 4,
-    name: 'Alex Thompson',
-    slug: 'alex-thompson',
-    bio: 'Freelance music writer covering indie rock, shoegaze, and post-punk revival.',
-    avatar: '/images/authors/alex-thompson.svg',
-    social: {
-      twitter: '@alexwrites',
-      youtube: 'AlexMusicReviews',
-    },
-  },
-  {
-    id: 5,
-    name: 'Marina Jakšić',
-    slug: 'marina-jaksic',
-    bio: 'Glazbena kritičarka s fokusom na country i folk glazbu.',
-    avatar: '/images/authors/marina-jaksic.svg',
-    social: {},
-  },
-  {
-    id: 6,
-    name: 'Ivan Gjuro Dragnić',
-    slug: 'ivan-dragnic',
-    bio: 'Rock novinar i promotor alternativne glazbe.',
-    avatar: '/images/authors/ivan-dragnic.svg',
-    social: {},
-  },
-  {
-    id: 7,
-    name: 'Davor Popi Popdankovski',
-    slug: 'davor-popdankovski',
-    bio: 'Jazz entuzijast i glazbeni producent.',
-    avatar: '/images/authors/davor-popdankovski.svg',
-    social: {},
-  },
-  {
-    id: 8,
-    name: 'Tomislav Mile Milićević',
-    slug: 'tomislav-milicevic',
-    bio: 'Folk i indie glazbeni kritičar.',
-    avatar: '/images/authors/tomislav-milicevic.svg',
-    social: {},
-  },
-  {
-    id: 9,
-    name: 'Martina Blečić',
-    slug: 'martina-blecic',
-    bio: 'Punk i alternativna glazba su njezina specijalnost.',
-    avatar: '/images/authors/martina-blecic.svg',
-    social: {},
-  },
-];
-
-// =============================================================================
-// CATEGORIES
-// =============================================================================
-
-export const categories = [
-  {
-    id: 1,
-    slug: 'aktualno',
-    title: 'Aktualno',
-    description: 'Najnovije objave redakcije Radio Rože',
-  },
-  {
-    id: 2,
-    slug: 'album-tjedna',
-    title: 'Album tjedna',
-    description: 'Radio Roža svesrdno preporuča dobru glazbu',
-  },
-  {
-    id: 3,
-    slug: 'komentar',
-    title: 'Komentar',
-    description: 'Komentiramo aktualno i važno',
-  },
-  {
-    id: 4,
-    slug: 'cakule',
-    title: 'Čakule',
-    description: 'Preferiraš li pisano izdanje imamo koju čakulu za tebe',
-  },
-];
-
-// =============================================================================
-// TAGS
-// =============================================================================
-
-export const tags = [
-  'synth-pop',
-  'modular-synth',
-  'field-recording',
-  'drone',
-  'minimal-techno',
-  'post-rock',
-  'shoegaze',
-  'lo-fi',
-  'vintage-gear',
-  'diy',
-  'cassette',
-  'vinyl',
-  'live-performance',
-  'collaboration',
-  'debut-album',
-  'reissue',
-  'interview',
-  'gear-review',
-  'festival',
-  'underground',
-  'country',
-  'folk',
-  'post-punk',
-  'alternative-rock',
-  'jazz',
-  'ambient',
-  'world',
-  'indie-folk',
-  'experimental',
-  'noise-rock',
-  'electronic',
-];
+import { authors } from './authors';
+import { categories } from './categories';
+import { tags } from './tags';
 
 // =============================================================================
 // HELPER: Get author/category by ID
@@ -536,7 +380,7 @@ export const articles = [
 
       <p>The intersection of ambient music and healthcare represents a return to humanity's oldest healing tradition – using sound as medicine.</p>
     `,
-    authorId: 6,
+    authorId: 8,
     categoryId: 2,
     tags: ['ambient', 'field-recording', 'experimental'],
     publishedDate: '2024-02-18T13:10:00Z',

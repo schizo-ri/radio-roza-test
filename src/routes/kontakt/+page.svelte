@@ -1,10 +1,17 @@
+<script>
+  import PageTitle from '$lib/components/PageTitle.svelte';
+</script>
+
 <svelte:head>
   <title>Kontakt - Radio Roža</title>
-  <meta name="description" content="Kontaktirajte Radio Rožu - nezavisnu riječku internetsku radio stanicu." />
+  <meta
+    name="description"
+    content="Kontaktirajte Radio Rožu - nezavisnu riječku internetsku radio stanicu."
+  />
 </svelte:head>
 
 <div class="kontakt-container">
-  <h1>Kontakt</h1>
+  <PageTitle title="Kontakt" />
 
   <section class="contact-section">
     <h2>E-mail</h2>
@@ -45,19 +52,39 @@
   <section class="contact-section">
     <h2>Pratite nas</h2>
     <div class="social-links">
-      <a href="https://facebook.com/radiorozha" class="social-link" target="_blank" rel="noopener noreferrer">
+      <a
+        href="https://facebook.com/radiorozha"
+        class="social-link"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <img src="/icons/socials/facebook.svg" alt="" width="24" height="24" />
         <span>Facebook</span>
       </a>
-      <a href="https://www.instagram.com/radio.rozari/" class="social-link" target="_blank" rel="noopener noreferrer">
+      <a
+        href="https://www.instagram.com/radio.rozari/"
+        class="social-link"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <img src="/icons/socials/instagram.svg" alt="" width="24" height="24" />
         <span>Instagram</span>
       </a>
-      <a href="https://mixcloud.com/RadioRoza" class="social-link" target="_blank" rel="noopener noreferrer">
+      <a
+        href="https://mixcloud.com/RadioRoza"
+        class="social-link"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <img src="/icons/socials/mixcloud.svg" alt="" width="24" height="24" />
         <span>Mixcloud</span>
       </a>
-      <a href="https://youtube.com/@radioroza9811" class="social-link" target="_blank" rel="noopener noreferrer">
+      <a
+        href="https://youtube.com/@radioroza9811"
+        class="social-link"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <img src="/icons/socials/youtube.svg" alt="" width="24" height="24" />
         <span>YouTube</span>
       </a>
@@ -72,15 +99,6 @@
     padding: 2rem;
   }
 
-  h1 {
-    text-align: center;
-    margin-bottom: 2.5rem;
-    color: var(--dark);
-    font-family: var(--display-font);
-    font-size: 2.5rem;
-    font-weight: 800;
-  }
-
   .contact-section {
     margin-bottom: 3rem;
   }
@@ -88,20 +106,21 @@
   h2 {
     color: var(--primary-700);
     font-size: 1.4rem;
-    font-weight: 600;
+    font-weight: 800;
     margin-bottom: 1.25rem;
     padding-bottom: 0.5rem;
     border-bottom: 2px solid var(--primary-100);
   }
 
   .contact-list {
-    background: var(--light);
+    /*background: var(--light);*/
+    border: 2px solid var(--dark);
     border-radius: 8px;
     padding: 1.5rem 2rem;
   }
 
   dt {
-    font-weight: 600;
+    font-weight: 800;
     color: var(--dark);
     margin-top: 1rem;
     margin-bottom: 0.25rem;
@@ -119,6 +138,7 @@
   dd a {
     color: var(--primary-600);
     text-decoration: none;
+    font-weight: 500;
     transition: color 0.15s ease;
   }
 
@@ -134,14 +154,11 @@
   }
 
   .person-card {
-    background: var(--light);
+    /*background: var(--light);*/
+    border: 2px solid var(--dark);
     border-radius: 8px;
     padding: 1.25rem 1.5rem;
     transition: box-shadow 0.2s ease;
-  }
-
-  .person-card:hover {
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   }
 
   .person-card h3 {
@@ -152,13 +169,13 @@
   }
 
   .person-card .role {
-    font-size: 0.9rem;
+    font-size: 1rem;
     color: var(--muted);
     margin: 0 0 0.5rem 0;
   }
 
   .person-card a {
-    font-size: 0.9rem;
+    font-weight: 500;
     color: var(--primary-600);
     text-decoration: none;
     word-break: break-all;
@@ -180,12 +197,15 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 1.25rem;
-    background: var(--light);
+    /*background: var(--light);*/
+    border: 2px solid var(--dark);
     border-radius: 8px;
     text-decoration: none;
     color: var(--dark);
     font-weight: 500;
-    transition: background-color 0.15s ease, transform 0.15s ease;
+    transition:
+      background-color 0.15s ease,
+      transform 0.15s ease;
   }
 
   .social-link:hover {

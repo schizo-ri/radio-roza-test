@@ -49,7 +49,7 @@
   {#if relatedArticles.length > 0}
     <Wrapper>
       <aside class="related-section">
-        <h2>Povezani clanci</h2>
+        <h2>Povezani članci</h2>
         <div class="related-articles">
           {#each relatedArticles as relatedArticle (relatedArticle.id)}
             <ArticleCard article={relatedArticle} />
