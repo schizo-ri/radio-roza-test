@@ -59,11 +59,7 @@
 
 <section class="header">
   <div class="header-content">
-    <a
-      href="/about"
-      class="logo-link"
-      aria-current={page.url.pathname === '/about' ? 'page' : undefined}
-    >
+    <a href="/" class="logo-link" aria-current={page.url.pathname === '/' ? 'page' : undefined}>
       <img src="/brand/rr_red_outline_transparent_rounded.svg" alt="Logo" width="44" height="44" />
       <span class="name">Radio Roža</span></a
     >

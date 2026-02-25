@@ -23,7 +23,7 @@ export const categories = [
   {
     id: 4,
     slug: 'cakule',
-    title: 'Čakule',
-    description: 'Preferiraš li pisano izdanje imamo koju čakulu za tebe',
+    title: 'Ćakule',
+    description: 'Preferiraš li pisano izdanje imamo koju ćakulu za tebe',
   },
 ];

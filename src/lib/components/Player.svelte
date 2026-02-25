@@ -31,6 +31,10 @@
   let loading = $state(false);
   let error = $state(null);
 
+  // Stale buffer detection — if paused longer than this, reload stream on play
+  let lastPausedAt = 0;
+  const STALE_THRESHOLD_MS = 30_000; // 30 seconds
+
   // Add a reactive time variable that updates every minute
   let currentTimeForShows = $state(new Date());
 
@@ -263,6 +267,40 @@
     }
   });
 
+  // Seek to live edge and start playback (used after stream reload)
+  function seekAndPlayLive() {
+    // Wait for enough data before seeking
+    const doSeekAndPlay = () => {
+      skipToLive();
+      loading = false;
+      audioElement
+        .play()
+        .then(() => {
+          onStreamPlay();
+        })
+        .catch((e) => {
+          console.error('Play failed:', e);
+          error = 'Playback failed';
+          loading = false;
+        });
+    };
+
+    if (audioElement.readyState >= 3) {
+      doSeekAndPlay();
+    } else {
+      const handleCanPlay = () => {
+        audioElement.removeEventListener('canplay', handleCanPlay);
+        doSeekAndPlay();
+      };
+      audioElement.addEventListener('canplay', handleCanPlay);
+      // Fallback if canplay never fires
+      setTimeout(() => {
+        audioElement.removeEventListener('canplay', handleCanPlay);
+        if (loading) doSeekAndPlay();
+      }, 5000);
+    }
+  }
+
   function play() {
     if (audioElement) {
       if (!userInteracted) {
@@ -342,6 +380,31 @@
         return; // Don't call play() immediately
       }
 
+      // If paused for a long time, detach + reattach to clear stale SourceBuffers
+      if (lastPausedAt && Date.now() - lastPausedAt > STALE_THRESHOLD_MS && hls) {
+        loading = true;
+        hls.stopLoad();
+        hls.detachMedia();
+        hls.attachMedia(audioElement);
+        hls.loadSource(src);
+
+        // Wait for manifest before seeking to live edge
+        const onManifest = () => {
+          hls.off(Hls.Events.MANIFEST_PARSED, onManifest);
+          clearTimeout(fallback);
+          seekAndPlayLive();
+        };
+        hls.on(Hls.Events.MANIFEST_PARSED, onManifest);
+
+        // Fallback timeout so we never hang
+        const fallback = setTimeout(() => {
+          hls.off(Hls.Events.MANIFEST_PARSED, onManifest);
+          seekAndPlayLive();
+        }, 5000);
+
+        return;
+      }
+
       // Normal playback for subsequent plays
       audioElement
         .play()
@@ -358,6 +421,7 @@
   function pause() {
     if (audioElement) {
       audioElement.pause();
+      lastPausedAt = Date.now();
       onStreamStop(); // Notify store that stream stopped
     }
   }
